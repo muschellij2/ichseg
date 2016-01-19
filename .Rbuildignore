@@ -1,3 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 dependencies_from_cttools\.txt
+^\.travis\.yml$
+
+README\.md
