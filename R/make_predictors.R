@@ -31,7 +31,6 @@
 #' printed
 #' @param ... options passed to \code{\link{get_neighbors}}
 #' @import fslr
-#' @importFrom psych winsor.mean winsor.sd
 #' @export
 #' @return List of a data.frame of Predictors and set of
 #' indices to
@@ -313,17 +312,42 @@ make_predictors <- function(img, mask, roi = NULL,
   }
   rm(list = c("zimgs")); gc(); gc();
 
+#   wmean2 = function(img, mask, trim = 0.2){
+#     x = img[ mask == 1]
+#     mn = psych::winsor.mean(x, trim = trim)
+#     s = psych::winsor.sd(x, trim = trim)
+#     z = (x-mn)/s
+#     img[mask == 1] = z
+#     img[mask == 0] = 0
+#     img = cal_img(img)
+#     return(img)
+#   }
+
   wmean = function(img, mask, trim = 0.2){
-    x = img[ mask == 1]
-    mn = winsor.mean(x, trim = trim)
-    s = winsor.sd(x, trim = trim)
-    z = (x-mn)/s
-    img[mask == 1] = z
-    img[mask == 0] = 0
-    img = cal_img(img)
+    x = img[ mask == 1 ]
+    stopifnot(length(trim) == 1)
+    stopifnot(trim > 0)
+    stopifnot(trim <= 0.5)
+    qtrim <- quantile(x, 
+                      c(trim, 0.5, 1 - trim), 
+                      na.rm = TRUE)
+    xbot <- qtrim[1]
+    xtop <- qtrim[3]
+    
+    if (trim < 0.5) {
+      x[x < xbot] <- xbot
+      x[x > xtop] <- xtop
+    } else {
+      x[!is.na(x)] <- qtrim[2]
+    }
+    
+    mn = mean(x, na.rm=TRUE)
+    s = sd(x, na.rm=TRUE)
+    img = (img-mn)/s
+    img = mask_img(img, mask)
+    img = finite_img(img)
     return(img)
   }
-
 
   if (verbose) {
     message("# Getting Winsorized Image\n")

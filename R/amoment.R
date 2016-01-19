@@ -16,7 +16,6 @@
 #' @param na.rm remove NAs from the moment image calculation
 #' @param remask set areas outside of mask to 0
 #' @param ... Arguments passed to \code{\link{get_neighbors}}
-#' @importFrom gtools permutations
 #' @importFrom magic ashift
 #' @export
 #' @return List of arrays same lenght as moment
@@ -131,7 +130,6 @@ local_moment <- function(
 #' for the wrapped values
 #' @param rep.value Replace wrapped values (edge of image) to this value
 #' @param ... Not used
-#' @importFrom gtools permutations
 #' @importFrom magic ashift
 #' @export
 #' @return Array with same dimensions as image
@@ -159,21 +157,37 @@ get_neighbors <- function(
     mask = array(1, dim=dimg)
   }
   
+  mypermutations = function(winds){
+    windlist = lapply(1:3, function(x) winds)
+    eg = expand.grid(windlist)
+    eg = eg[ order(eg$Var1, eg$Var2, eg$Var3), ]
+    eg = as.matrix(eg)
+    rownames(eg) = NULL
+    colnames(eg) = NULL
+    eg
+  }
+  
   ### initalize array
   ### different ways of parameterizing the "window"
   if (is.null(nvoxels)) {
     stopifnot(!is.null(window))
-    indices <- permutations(window, 3, 
-                            v= (-window/2 + .5):(window/2 - .5), 
-                            repeats.allowed=TRUE)  
+    stopifnot(length(window) == 1)
+    if ((window %% 2) != 1) {
+      stop("window must be odd number")
+    }
+    winds = (-window/2 + .5):(window/2 - .5)
+#     indices <- gtools::permutations(window, 3, 
+#                             v= (-window/2 + .5):(window/2 - .5), 
+#                             repeats.allowed=TRUE)  
   }  else {    
     stopifnot(is.wholenumber(nvoxels))
     stopifnot(is.null(window))
     
     winds <- (-nvoxels):nvoxels	
-    indices <- permutations(length(winds), 3, v = winds, 
-                            repeats.allowed=TRUE)
+#     indices <- gtools::permutations(length(winds), 3, v = winds, 
+#                             repeats.allowed=TRUE)
   }
+  indices = mypermutations(winds)
   
   if (rm.value){
     allzero = apply(indices == 0, 1, all)

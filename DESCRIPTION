@@ -2,8 +2,8 @@ Package: ichseg
 Type: Package
 Title: Intracerebral Hemorrhage Segmentation of X-ray Computed Tomography (CT)
     Images
-Version: 0.0.1
-Date: 2016-01-14
+Version: 0.0.2
+Date: 2016-01-19
 Authors@R: c(person(given = "John", family = "Muschelli", email = "muschellij2@gmail.com",
   role = c("aut", "cre")))
 Maintainer: John Muschelli <muschellij2@gmail.com>
@@ -20,8 +20,6 @@ Imports:
     oro.nifti,
     fslr,
     magic,
-    gtools,
-    randomForest,
-    psych
+    randomForest
 LazyData: TRUE
 RoxygenNote: 5.0.1

@@ -121,19 +121,19 @@ CT_Skull_Strip_robust <- function(
   #############################
   # Removing Neck
   #############################
-  if (remove.neck){
-    if (verbose){
+  if (remove.neck) {
+    if (verbose) {
       message(paste0("# Removing Neck\n"))
     }
     neck_mask = remove_neck(thresh,
-                            rep.value=0,
+                            rep.value = 0,
                             template.file = template.file,
                             template.mask = template.mask,
                             ret_mask = TRUE,
                             swapdim = TRUE,
                             ...)
   } else {
-    neck_mask = niftiarr(img, array(1, dim=dim(img)))
+    neck_mask = niftiarr(img, array(1, dim = dim(img)))
   }
   noneck = mask_img(img, neck_mask)
   noneck = drop_img_dim(noneck)
@@ -141,7 +141,7 @@ CT_Skull_Strip_robust <- function(
   #############################
   # Skull Stripping no-neck image
   #############################
-  if (verbose){
+  if (verbose) {
     message(paste0("# Skull Stripping for COG\n"))
   }
   ss = CT_Skull_Strip(noneck, outfile = outfile, retimg = TRUE,
@@ -197,8 +197,8 @@ CT_Skull_Strip_robust <- function(
   #############################
   # Removing mask if keepmask = FALSE
   #############################
-  if (!keepmask){
-    if (verbose){
+  if (!keepmask) {
+    if (verbose) {
       message("# Removing Mask File\n")
     }
     maskfile = nii.stub(maskfile)
