@@ -1,0 +1,11 @@
+ich_candidate_voxels - no deps
+ich_pred - have_matlab(), ich_candidate_voxels, modlists, remake_img, mask_img, mean_image, spm_bwlabel, ants_apply_transforms
+ich_segment - have.fsl,ich_preprocess,make_predictors
+ich_preprocess - CT_Skull_Strip_robust, CT_Skull_Strip, window_img,registration,ants_apply_transforms
+CT_Skull_Strip_robust - template mask
+remake_img - fslr
+mean_image - ashift (magic package)
+make_predictors - templates, mean image, sd image, local_moment, winsor.mean, winsor.sd,
+otropos
+local_moment - get_neighbors,
+get_neighbors - permutations (gtools),

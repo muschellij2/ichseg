@@ -1,0 +1,27 @@
+Package: ichseg
+Type: Package
+Title: Intracerebral Hemorrhage Segmentation of X-ray Computed Tomography (CT)
+    Images
+Version: 0.0.1
+Date: 2016-01-14
+Authors@R: c(person(given = "John", family = "Muschelli", email = "muschellij2@gmail.com",
+  role = c("aut", "cre")))
+Maintainer: John Muschelli <muschellij2@gmail.com>
+Description: Performs preprocessing on computed tomography (CT) scans, including
+    skull stripping. Computes predictors of intracerebral hemorrhage (ICH) and uses
+    these to predict a binary hemorrhage mask from the data.
+License: GPL-2
+Depends:
+    R (>= 2.10)
+Imports:
+    matlabr,
+    spm12r,
+    extrantsr,
+    oro.nifti,
+    fslr,
+    magic,
+    gtools,
+    randomForest,
+    psych
+LazyData: TRUE
+RoxygenNote: 5.0.1

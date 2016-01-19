@@ -1,0 +1,236 @@
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/ich_logistic_model.Rda")
+ls()
+modlist
+logistic_modlist = modlist
+save(logistic_modlist, file = "~/Dropbox/Packages/cttools/data/logistic_modlist.rda")
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/Reseg_Aggregate_models_Rigid_rf.Rda")
+rf_modlist = modlist
+rf_modlist
+rf_modlist$mod
+library(randomForest)
+rf_modlist$mod
+save(rf_modlist, file = "~/Dropbox/Packages/cttools/data/rf_modlist.rda")
+q('on')
+q('no')
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+length(rf_modlist)
+names(rf_modlist)
+rf_modlist$mod.pauc
+rf_modlist$mod.pauc.cut
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/Reseg_Aggregate_models_Rigid_logistic_smoothed.Rda")
+modlist
+logistic_cutoffs = modlist
+save(logistic_cutoffs, file = "~/Dropbox/Packages/cttools/data/logistic_cutoffs.rda")
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/Reseg_Aggregate_models_Rigid_rf_smoothed.Rda")
+smoothed_rf_cutoffs = modlist
+save(smoothed_rf_cutoffs, file = "~/Dropbox/Packages/cttools/data/smoothed_rf_cutoffs.rda")
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/Reseg_Aggregate_models_Rigid_logistic_smoothed.Rda")
+logistic_cutoffs = modlist
+smoothed_logistic_cutoffs = modlist
+save(logistic_cutoffs, file = "~/Dropbox/Packages/cttools/data/smoothed_logistic_cutoffs.rda")
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/smoothed_logistic_cutoffs.rda")
+save(smoothed_logistic_cutoffs, file = "~/Dropbox/Packages/cttools/data/smoothed_logistic_cutoffs.rda")
+q('no')
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+ls()
+?save()
+save(rf_modlist, file = "/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda", compression_level=9)
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+names(rf_modlist$mod)
+names(rf_modlist$mod$localImportance)
+rf_modlist$mod$localImportance
+sapply(rf_modlist, object.size)
+sapply(rf_modlist$mod, object.size)
+sort(sapply(rf_modlist$mod, object.size))
+?randomForest
+library(randomForest)
+?randomForest
+set.seed(71)#
+iris.rf <- randomForest(Species ~ ., data=iris, importance=TRUE,#
+                        proximity=TRUE)#
+print(iris.rf)#
+## Look at variable importance:#
+round(importance(iris.rf), 2)
+rf
+iris.rf
+trim_rf = function(object){#
+    keep_names = c("forest",  "type",  "na.action",  "forest$cutoff",  "classes",  "terms",  "importance",  "coefs") #
+    object[keep_names]#
+}
+ii = trim_rf(iris.rf)
+ii
+predict(ii, newdata = iris)
+class(ii)
+object = iris.rf
+keep_names = c("forest",  "type",  "na.action",  "forest$cutoff",  "classes",  "terms",  "importance",  "coefs") #
+    object[keep_names]
+keep_names = c("forest",  "type",  "na.action",  "forest$cutoff",  "classes",  "terms",  "importance",  "coefs") #
+    object[[keep_names]]
+names(keep_names)
+trim_rf = function(object){#
+    keep_names = c("forest",  "type",  "na.action",  "forest$cutoff",  "classes",  "terms",  "importance",  "coefs") #
+#
+    nn = names(object)#
+    sd = setdiff(nn, keep_names)#
+    for (icn in seq_along(sd)){#
+        object[[sd[icn]]] = NULL#
+    }#
+}
+ii = trim_rf(iris.rf)
+ii
+trim_rf = function(object){#
+    keep_names = c("forest",  "type",  "na.action",  "forest$cutoff",  "classes",  "terms",  "importance",  "coefs") #
+#
+    nn = names(object)#
+    sd = setdiff(nn, keep_names)#
+    for (icn in seq_along(sd)){#
+        object[[sd[icn]]] = NULL#
+    }#
+    object#
+}
+ii = trim_rf(iris.rf)
+ii
+predict(ii, newdata = iris)
+predict(ii, newdata = iris, type = "prob")
+object.size(iris.rf)
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+save(rf_modlist, file = "/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda", compression_level = 9, compress = TRUE)
+trim_rf = function(object){#
+    keep_names = c("forest",  "type",  "na.action",  "forest$cutoff",  "classes",  "terms",  "importance",  "coefs") #
+#
+    nn = names(object)#
+    sd = setdiff(nn, keep_names)#
+    for (icn in seq_along(sd)){#
+        object[[sd[icn]]] = NULL#
+    }#
+    object#
+}
+rf = rf_modlist$mod
+rf
+library(randomForest)
+rf
+sapply(rf, object.size)
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+save(rf_modlist, file = "/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda", compress = TRUE, compression_level=9)
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+?save
+save(rf_modlist, compress = "xz", file = "/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+q('no')
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+qstat
+rf_modlist$mod
+library(randomForest)
+rf = rf_modlist$mod
+trim_rf = function(object, printable = TRUE){#
+    keep_names = c("forest",  "type",  "na.action",  "forest$cutoff",  "classes",  "terms",  "importance",  "coefs")#
+#
+    if (printable){#
+        keep_names = c(keep_names, #
+        "err.rate", "confusion")#
+    }#
+    keep_names = unique(keep_names)#
+#
+    nn = names(object)#
+    sd = setdiff(nn, keep_names)#
+    for (icn in seq_along(sd)){#
+        object[[sd[icn]]] = NULL#
+    }#
+    object#
+}
+trf = trim_rf(rf)
+trf
+q('')
+q('no')
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+rf = rf_modlist$mod
+trim_rf = function(object, printable = TRUE){#
+    keep_names = c("forest",  "type",  #
+        "na.action",  "forest$cutoff",  #
+        "classes",  "terms",  "importance",  #
+        "coefs")#
+#
+    if (printable){#
+        keep_names = c(keep_names, #
+        "err.rate", "confusion")#
+    }#
+    keep_names = unique(keep_names)#
+#
+    nn = names(object)#
+    sd = setdiff(nn, keep_names)#
+    for (icn in seq_along(sd)){#
+        object[[sd[icn]]] = NULL#
+    }#
+    object#
+}
+trf = trim_rf(rf)
+trf
+library(randomForest)
+trf
+trf = trim_rf(rf, rf)
+names(rf)
+q('no')
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+library(randomForest)
+rf = rf_modlist$mod
+trim_rf = function(object, printable = TRUE){#
+    keep_names = c("forest",  "type",  #
+        "na.action",  "forest$cutoff",  #
+        "classes",  "terms",  "importance",  #
+        "coefs")#
+#
+    if (printable){#
+        keep_names = c(keep_names, #
+        "err.rate", "confusion", #
+        "ntree", "mtry")#
+    }#
+    keep_names = unique(keep_names)#
+#
+    nn = names(object)#
+    sd = setdiff(nn, keep_names)#
+    for (icn in seq_along(sd)){#
+        object[[sd[icn]]] = NULL#
+    }#
+    object#
+}
+trf = trim_rf(rf)
+trf
+rf$call
+rf
+trf
+trim_rf = function(object, printable = TRUE){#
+    keep_names = c("forest",  "type",  #
+        "na.action",  "forest$cutoff",  #
+        "classes",  "terms",  "importance",  #
+        "coefs")#
+#
+    if (printable){#
+        keep_names = c(keep_names, #
+        "err.rate", "confusion", #
+        "ntree", "mtry", "call")#
+    }#
+    keep_names = unique(keep_names)#
+#
+    nn = names(object)#
+    sd = setdiff(nn, keep_names)#
+    for (icn in seq_along(sd)){#
+        object[[sd[icn]]] = NULL#
+    }#
+    object#
+}
+trf = trim_rf(rf)
+trf
+object.size(rf)
+print(object.size(rf), units = "Mb")
+print(object.size(trf), units = "Mb")
+trf
+sort(sapply(trf, object.size))
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+rf_modlist$mod$mtry
+rf_modlist$mod
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/logistic_modlist.rda")
+modlist$mod
+logistic_modlist$mod
+load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
+library(randomForest)
+varImpPlot(rf_modlist$mod)
+q('no')
