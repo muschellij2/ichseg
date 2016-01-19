@@ -234,3 +234,166 @@ load("/Users/johnmuschelli/Dropbox/Packages/cttools/data/rf_modlist.rda")
 library(randomForest)
 varImpPlot(rf_modlist$mod)
 q('no')
+load("/Users/johnmuschelli/Dropbox/Packages/ichseg/data/logistic_modlist.rda")
+logistic_modlist
+logistic_modlist$mod
+coef(logistic_modlist$mod)
+library(tidyr)
+library(broom)
+install.packages("broom")
+library(broom)
+broom(coef(logistic_modlist$mod))
+?broom
+help(package ="broom")
+tidy(logistic_modlist$mod)
+glance(logistic_modlist$mod)
+??lm_tidiers
+tidy
+getMethods("tidy")
+findMethods("tidy")
+?MethodsList
+getMethod("tidy", "lm")
+?getMethod("tidy", "lm")
+selectMethod("tidy", "lm")
+selectMethod("tidy")
+broom:::tidy.lm
+tidy(logistic_modlist$mod, quick = TRUE)
+load("/Users/johnmuschelli/Dropbox/Packages/ichseg/data/logistic_modlist.rda")
+load("logistic_modlist.rda")#
+coefs = broom::tidy(logistic_modlist$mod, quick = TRUE)#
+plyr::rename(coefs$term, c("(Intercept)" = "Intercept", #
+"moment1" = "Neighborhood mean", #
+"moment2" = "Neighborhood sd", #
+"skew" = "Neighborhood skew", #
+"kurtosis" = "Neighborhood kurtosis", #
+"value" = "Image intensity (HU)",#
+"thresh" = "Threshold (>= 40 and <= 80)", #
+"zscore1" = "Z-score plane 1", #
+"zscore2" = "Z-score plane 2", #
+"zscore3" = "Z-score plane 3", #
+"win_z" = "Winsorized z-score (20\% trim)", #
+"pct_thresh" = "Percentage thresholded neighbors", #
+"prob_img" = "Atropos probability image", #
+"pct_zero_neighbor" = "Percent of zero neighbors", #
+"any_zero_neighbor" = "Indicator of any zero neighbors", #
+"dist_centroid" = "Distance to Image centroid", #
+"smooth5" = "Gaussian smooth (5mm$^3$)", #
+"smooth10" = "Gaussian smooth (10mm$^3$)", #
+"smooth20" = "Gaussian smooth (20mm$^3$)", #
+"zscore_template" = "Z-score-to-template image", #
+"flipped_value" = "Contralateral difference"#
+)#
+xtab = xtable(coefs)
+library(xtable)
+load("logistic_modlist.rda")#
+coefs = broom::tidy(logistic_modlist$mod, quick = TRUE)#
+coefs$term = plyr::rename(coefs$term, c("(Intercept)" = "Intercept", #
+"moment1" = "Neighborhood mean", #
+"moment2" = "Neighborhood sd", #
+"skew" = "Neighborhood skew", #
+"kurtosis" = "Neighborhood kurtosis", #
+"value" = "Image intensity (HU)",#
+"thresh" = "Threshold (>= 40 and <= 80)", #
+"zscore1" = "Z-score plane 1", #
+"zscore2" = "Z-score plane 2", #
+"zscore3" = "Z-score plane 3", #
+"win_z" = "Winsorized z-score (20\\% trim)", #
+"pct_thresh" = "Percentage thresholded neighbors", #
+"prob_img" = "Atropos probability image", #
+"pct_zero_neighbor" = "Percent of zero neighbors", #
+"any_zero_neighbor" = "Indicator of any zero neighbors", #
+"dist_centroid" = "Distance to Image centroid", #
+"smooth5" = "Gaussian smooth (5mm$^3$)", #
+"smooth10" = "Gaussian smooth (10mm$^3$)", #
+"smooth20" = "Gaussian smooth (20mm$^3$)", #
+"zscore_template" = "Z-score-to-template image", #
+"flipped_value" = "Contralateral difference"#
+)#
+xtab = xtable(coefs)
+load("logistic_modlist.rda")#
+coefs = broom::tidy(logistic_modlist$mod, quick = TRUE)#
+coefs$term = plyr::rename(coefs$term, c("(Intercept)" = "Intercept", #
+"moment1" = "Neighborhood mean", #
+"moment2" = "Neighborhood sd", #
+"skew" = "Neighborhood skew", #
+"kurtosis" = "Neighborhood kurtosis", #
+"value" = "Image intensity (HU)",#
+"thresh" = "Threshold (>= 40 and <= 80)", #
+"zscore1" = "Z-score plane 1", #
+"zscore2" = "Z-score plane 2", #
+"zscore3" = "Z-score plane 3", #
+"win_z" = "Winsorized z-score (20\\% trim)", #
+"pct_thresh" = "Percentage thresholded neighbors", #
+"prob_img" = "Atropos probability image", #
+"pct_zero_neighbor" = "Percent of zero neighbors", #
+"any_zero_neighbor" = "Indicator of any zero neighbors", #
+"dist_centroid" = "Distance to Image centroid", #
+"smooth5" = "Gaussian smooth (5mm$^3$)", #
+"smooth10" = "Gaussian smooth (10mm$^3$)", #
+"smooth20" = "Gaussian smooth (20mm$^3$)", #
+"zscore_template" = "Z-score-to-template image", #
+"flipped_value" = "Contralateral difference"#
+)#
+)
+coefs
+coefs$term
+plyr::rename(coefs$term, c("(Intercept)" = "Intercept"))
+coefs = broom::tidy(logistic_modlist$mod, quick = TRUE)#
+rvec = c("(Intercept)" = "Intercept", #
+"moment1" = "Neighborhood mean", #
+"moment2" = "Neighborhood sd", #
+"skew" = "Neighborhood skew", #
+"kurtosis" = "Neighborhood kurtosis", #
+"value" = "Image intensity (HU)",#
+"thresh" = "Threshold (>= 40 and <= 80)", #
+"zscore1" = "Z-score plane 1", #
+"zscore2" = "Z-score plane 2", #
+"zscore3" = "Z-score plane 3", #
+"win_z" = "Winsorized z-score (20\\% trim)", #
+"pct_thresh" = "Percentage thresholded neighbors", #
+"prob_img" = "Atropos probability image", #
+"pct_zero_neighbor" = "Percent of zero neighbors", #
+"any_zero_neighbor" = "Indicator of any zero neighbors", #
+"dist_centroid" = "Distance to Image centroid", #
+"smooth5" = "Gaussian smooth (5mm$^3$)", #
+"smooth10" = "Gaussian smooth (10mm$^3$)", #
+"smooth20" = "Gaussian smooth (20mm$^3$)", #
+"zscore_template" = "Z-score-to-template image", #
+"flipped_value" = "Contralateral difference"#
+)#
+revec = names(rvec)#
+names(revec) = rvec#
+#
+coefs$term = plyr::rename(coefs$term, revec)
+ceofs
+coefs
+coefs$term
+coefs = broom::tidy(logistic_modlist$mod, quick = TRUE)#
+coefs$term = plyr::revalue(coefs$term, c("(Intercept)" = "Intercept", #
+"moment1" = "Neighborhood mean", #
+"moment2" = "Neighborhood sd", #
+"skew" = "Neighborhood skew", #
+"kurtosis" = "Neighborhood kurtosis", #
+"value" = "Image intensity (HU)",#
+"thresh" = "Threshold (>= 40 and <= 80)", #
+"zscore1" = "Z-score plane 1", #
+"zscore2" = "Z-score plane 2", #
+"zscore3" = "Z-score plane 3", #
+"win_z" = "Winsorized z-score (20\\% trim)", #
+"pct_thresh" = "Percentage thresholded neighbors", #
+"prob_img" = "Atropos probability image", #
+"pct_zero_neighbor" = "Percent of zero neighbors", #
+"any_zero_neighbor" = "Indicator of any zero neighbors", #
+"dist_centroid" = "Distance to Image centroid", #
+"smooth5" = "Gaussian smooth (5mm$^3$)", #
+"smooth10" = "Gaussian smooth (10mm$^3$)", #
+"smooth20" = "Gaussian smooth (20mm$^3$)", #
+"zscore_template" = "Z-score-to-template image", #
+"flipped_value" = "Contralateral difference"#
+)#
+)
+coefs
+xtab = xtable(coefs)
+xtab
+print.xtable(xtab, type = "latex", include.rownames=FALSE)
+?xtable
