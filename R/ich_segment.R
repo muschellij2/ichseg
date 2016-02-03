@@ -57,7 +57,7 @@ ich_segment = function(img,
   ##############################################################
   # grabbing the evnironment to extract exported stuff
   if (verbose) {
-    message("# Making Prediction Images")
+    message("# Running ich_predict")
   }
   L = ich_predict(df = df,
                   nim = nim,
