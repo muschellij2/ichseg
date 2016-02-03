@@ -6,7 +6,7 @@
 \usage{
 ich_predict(df, nim, model = c("rf", "logistic"), verbose = TRUE,
   native = TRUE, native_img = NULL, transformlist = NULL,
-  interpolator = NULL, ...)
+  interpolator = NULL, native_thresh = 0.5, ...)
 }
 \arguments{
 \item{df}{\code{\link{data.frame}} of predictors.  If \code{multiplier}
@@ -30,6 +30,9 @@ is the dimensions of the native image}
 NOTE: these will be inverted.}
 
 \item{interpolator}{Interpolator for the transformation back to native space}
+
+\item{native_thresh}{Threshold for re-thresholding binary mask after
+interpolation}
 
 \item{...}{Additional options passsed to \code{\link{ich_preprocess}}}
 }

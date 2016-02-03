@@ -4,7 +4,8 @@
 #' @param img CT image, object of class \code{nifti} or
 #' character filename
 #' @param skull_strip Should the image be skull stripped? If not,
-#' a mask must be specified
+#' a mask must be specified.  If mask specified, will override this
+#' option
 #' @param mask binary brain mask, object of class \code{nifti} or
 #' character filename
 #' @param robust If skull stripping, should
@@ -38,7 +39,7 @@ ich_preprocess = function(img,
                           verbose = TRUE,
                           ...) {
 
-  if (skull_strip) {
+  if (skull_strip & is.null(mask)) {
     if (robust) {
       ss = CT_Skull_Strip_robust(img, retimg = TRUE, ...)
     } else {
@@ -47,9 +48,10 @@ ich_preprocess = function(img,
     mask = ss > 0
   } else {
     stopifnot(!is.null(mask))
-    mask = check_nifti(mask)
-    mask = mask > 0
   }
+  mask = check_nifti(mask)
+  mask = mask > 0
+
   img = check_nifti(img)
   ss = mask_img(img, mask)
   ss = window_img(ss, window = c(0, 100), replace = "zero")

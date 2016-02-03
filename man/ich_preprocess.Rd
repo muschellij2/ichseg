@@ -14,7 +14,8 @@ ich_preprocess(img, skull_strip = TRUE, robust = TRUE, mask = NULL,
 character filename}
 
 \item{skull_strip}{Should the image be skull stripped? If not,
-a mask must be specified}
+a mask must be specified.  If mask specified, will override this
+option}
 
 \item{robust}{If skull stripping, should
 \code{\link{CT_Skull_Strip_robust}}

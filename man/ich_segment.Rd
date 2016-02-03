@@ -8,13 +8,13 @@ ich_segment(img, mask = NULL, model = c("rf", "logistic"), verbose = TRUE,
   ...)
 }
 \arguments{
-\item{img}{CT image, object of class \code{nifti} or 
+\item{img}{CT image, object of class \code{nifti} or
 character filename}
 
-\item{mask}{binary brain mask, object of class \code{nifti} or 
+\item{mask}{binary brain mask, object of class \code{nifti} or
 character filename}
 
-\item{model}{model to use for prediction, 
+\item{model}{model to use for prediction,
 either the random forest (rf) or logistic}
 
 \item{verbose}{Print diagnostic output}

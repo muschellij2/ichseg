@@ -16,6 +16,8 @@
 #' @param transformlist Transforms list for the transformations back to native space.
 #' NOTE: these will be inverted.
 #' @param interpolator Interpolator for the transformation back to native space
+#' @param native_thresh Threshold for re-thresholding binary mask after
+#' interpolation
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output registered and native space
@@ -33,6 +35,7 @@ ich_predict = function(df,
                        native_img = NULL,
                        transformlist = NULL,
                        interpolator = NULL,
+                       native_thresh = 0.5,
                        ...) {
 
   if (!have_matlab()) {
@@ -127,6 +130,12 @@ ich_predict = function(df,
                             whichtoinvert = c(1)
       )
     })
+    native_res$smoothed_prediction_image = fslr::datatyper(
+        native_res$smoothed_prediction_image > native_thresh
+    )
+    native_res$prediction_image = fslr::datatyper(
+      native_res$prediction_image > native_thresh
+    )
   }
   res$cutoff = cutoff
   res$smoothed_cutoff = smoothed_cutoff
