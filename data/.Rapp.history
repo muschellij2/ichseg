@@ -397,3 +397,93 @@ xtab = xtable(coefs)
 xtab
 print.xtable(xtab, type = "latex", include.rownames=FALSE)
 ?xtable
+load("/Users/johnmuschelli/Dropbox/Packages/ichseg/data/logistic_modlist.rda")
+library(plyr)
+library(broom)
+load("logistic_modlist.rda")#
+npred = length(coef(logistic_modlist$mod)) - 1#
+# npred for intercept#
+stopifnot(npred == 20)#
+coefs = broom::tidy(logistic_modlist$mod, quick = TRUE)#
+coefs$term = plyr::revalue(coefs$term, c("(Intercept)" = "Intercept", #
+"moment1" = "Neighborhood mean", #
+"moment2" = "Neighborhood sd", #
+"skew" = "Neighborhood skew", #
+"kurtosis" = "Neighborhood kurtosis", #
+"value" = "Image intensity (HU)",#
+"thresh" = paste0("Threshold (>= ", lthresh, " and <= ", uthresh, ")"), #
+"zscore1" = "Within-plane Coronal", #
+"zscore2" = "Within-plane Sagittal", #
+"zscore3" = "Within-plane Axial", #
+"win_z" = "Winsorized z-score (20\\% trim)", #
+"pct_thresh" = "Percentage thresholded neighbors", #
+"prob_img" = "Atropos probability image", #
+"pct_zero_neighbor" = "Percent of zero neighbors", #
+"any_zero_neighbor" = "Indicator of any zero neighbors", #
+"dist_centroid" = "Distance to Image centroid", #
+"smooth5" = "Gaussian smooth (5mm^3)", #
+"smooth10" = "Gaussian smooth (10mm^3)", #
+"smooth20" = "Gaussian smooth (20mm^3)", #
+"zscore_template" = "Standardized-to-template Intensity", #
+"flipped_value" = "Contralateral difference"#
+)#
+)
+lthresh = 40; uthresh = 80
+load("logistic_modlist.rda")#
+npred = length(coef(logistic_modlist$mod)) - 1#
+# npred for intercept#
+stopifnot(npred == 20)#
+coefs = broom::tidy(logistic_modlist$mod, quick = TRUE)#
+coefs$term = plyr::revalue(coefs$term, c("(Intercept)" = "Intercept", #
+"moment1" = "Neighborhood mean", #
+"moment2" = "Neighborhood sd", #
+"skew" = "Neighborhood skew", #
+"kurtosis" = "Neighborhood kurtosis", #
+"value" = "Image intensity (HU)",#
+"thresh" = paste0("Threshold (>= ", lthresh, " and <= ", uthresh, ")"), #
+"zscore1" = "Within-plane Coronal", #
+"zscore2" = "Within-plane Sagittal", #
+"zscore3" = "Within-plane Axial", #
+"win_z" = "Winsorized z-score (20\\% trim)", #
+"pct_thresh" = "Percentage thresholded neighbors", #
+"prob_img" = "Atropos probability image", #
+"pct_zero_neighbor" = "Percent of zero neighbors", #
+"any_zero_neighbor" = "Indicator of any zero neighbors", #
+"dist_centroid" = "Distance to Image centroid", #
+"smooth5" = "Gaussian smooth (5mm^3)", #
+"smooth10" = "Gaussian smooth (10mm^3)", #
+"smooth20" = "Gaussian smooth (20mm^3)", #
+"zscore_template" = "Standardized-to-template Intensity", #
+"flipped_value" = "Contralateral difference"#
+)#
+)
+coefs
+colnames(coef) = c("Predictor", "Beta")
+colnames(coefs) = c("Predictor", "Beta")
+coefs
+load("/Users/johnmuschelli/Dropbox/Packages/ichseg/data/rf_modlist.rda")
+rf_modlist
+rf_modlist$mod
+library(randomForest)
+rf_modlist$mod
+varImpPlot(rf_modlist$mod)
+load("/Users/johnmuschelli/Dropbox/Packages/ichseg/data/logistic_modlist.rda")
+logistic_modlist$mod
+summary(logistic_modlist$mod)
+load("/Users/johnmuschelli/Dropbox/Packages/ichseg/data/rf_modlist.rda")
+system("open ./")
+q('no')
+load("/Users/johnmuschelli/Dropbox/Packages/ichseg/data/rf_modlist.rda")
+library(randomForest)
+varImpPlot(rf_modlist$mod)
+load("/Users/johnmuschelli/Dropbox/CTR/DHanley/CT_Registration/Segmentation/Segmentation_Paper/logistic_modlist.rda")
+logistic_modlist$mod
+summary(logistic_modlist$mod)
+load("/Users/johnmuschelli/Dropbox/CTR/DHanley/CT_Registration/Segmentation/Segmentation_Paper/Reseg_Aggregate_models_Rigid_logistic.Rda")
+ls()
+modlist$mod
+summary(modlist$mod)
+modlist$mod.time
+modlist$mod.pauc
+modlist$mod.acc
+names(modlist)
