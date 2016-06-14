@@ -27,6 +27,7 @@
 #' @import spm12r
 #' @seealso \code{\link{ich_candidate_voxels}}
 #' @export
+#' @import stats
 ich_predict = function(df,
                        nim,
                        model = c("rf", "logistic"),
