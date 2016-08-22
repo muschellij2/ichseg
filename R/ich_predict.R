@@ -22,9 +22,8 @@
 #'
 #' @return List of output registered and native space
 #' prediction/probability images
-#' @import randomForest
-#' @import oro.nifti
-#' @import spm12r
+#' @importFrom fslr remake_img
+#' @importFrom extrantsr ants_bwlabel
 #' @seealso \code{\link{ich_candidate_voxels}}
 #' @export
 #' @import stats
@@ -39,9 +38,9 @@ ich_predict = function(df,
                        native_thresh = 0.5,
                        ...) {
 
-  if (!have_matlab()) {
-    stop("MATLAB Path not defined!")
-  }
+  # if (!have_matlab()) {
+  #   stop("MATLAB Path not defined!")
+  # }
 
   cn = colnames(df)
   if (!("multiplier" %in% cn)) {
@@ -104,8 +103,10 @@ ich_predict = function(df,
   sm.pred = sm.pimg > smoothed_cutoff
   pred = pimg > cutoff
 
-  cc = spm_bwlabel(pred, k = 100)
-  scc = spm_bwlabel(sm.pred, k = 100)
+  # cc = spm_bwlabel(pred, k = 100)
+  # scc = spm_bwlabel(sm.pred, k = 100)
+  cc = ants_bwlabel(img = pred, k = 100, binary = TRUE)
+  scc = ants_bwlabel(img = sm.pred, k = 100, binary = TRUE)
 
   ##############################################################
   # Back to Native Space!

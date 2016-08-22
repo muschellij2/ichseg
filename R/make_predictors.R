@@ -30,7 +30,9 @@
 #' @param verbose Logical indicator if output messages should be
 #' printed
 #' @param ... options passed to \code{\link{get_neighbors}}
-#' @import fslr
+#' @importFrom fslr readnii checkimg fslerode zscore_img
+#' @importFrom oro.nifti zero_trans cal_img voxdim pixdim convert.datatype convert.bitpix
+#' @importFrom extrantsr zscore_template otropos reg_flip
 #' @export
 #' @return List of a data.frame of Predictors and set of
 #' indices to
@@ -328,19 +330,19 @@ make_predictors <- function(img, mask, roi = NULL,
     stopifnot(length(trim) == 1)
     stopifnot(trim > 0)
     stopifnot(trim <= 0.5)
-    qtrim <- quantile(x, 
-                      c(trim, 0.5, 1 - trim), 
+    qtrim <- quantile(x,
+                      c(trim, 0.5, 1 - trim),
                       na.rm = TRUE)
     xbot <- qtrim[1]
     xtop <- qtrim[3]
-    
+
     if (trim < 0.5) {
       x[x < xbot] <- xbot
       x[x > xtop] <- xtop
     } else {
       x[!is.na(x)] <- qtrim[2]
     }
-    
+
     mn = mean(x, na.rm=TRUE)
     s = sd(x, na.rm=TRUE)
     img = (img-mn)/s

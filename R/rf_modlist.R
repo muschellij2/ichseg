@@ -13,5 +13,4 @@
 #' \item{mod}{the model object of class \code{randomForest} }
 #' \item{mod.time}{the time it took to train the model }
 #' }
-#' @import randomForest
 "rf_modlist"

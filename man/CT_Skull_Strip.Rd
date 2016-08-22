@@ -21,8 +21,8 @@ nifti}
 \item{maskfile}{(character) Filename for mask (if \code{keepmask = TRUE}).
 If \code{NULL}, then will do \code{paste0(outfile, "_Mask")}.}
 
-\item{inskull_mesh}{(logical) Create inskull_mesh file from bet? 
-(Warning - will take longer) 
+\item{inskull_mesh}{(logical) Create inskull_mesh file from bet?
+(Warning - will take longer)
 This an exterior surface of the brain. (experimental)
 Also, if \code{outfile} is \code{NULL}, then this will be created in
 a temporary directory and not be retrieved.}
@@ -48,10 +48,10 @@ step?}
 
 \item{refill.thresh}{(numeric) Value to threshold post-smoothed mask}
 
-\item{sigma}{(integer) size of Gaussian kernel passed to 
+\item{sigma}{(integer) size of Gaussian kernel passed to
 \code{\link{fslsmooth}} if \code{presmooth} is \code{TRUE}}
 
-\item{lthresh}{(default: 0) Lower value to threshold CT 
+\item{lthresh}{(default: 0) Lower value to threshold CT
 \code{\link{fslthresh}}}
 
 \item{uthresh}{(default: 100) Upper value to threshold CT

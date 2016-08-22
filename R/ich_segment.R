@@ -11,7 +11,6 @@
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output prediction/probability images
-#' @import randomForest
 #' @export
 ich_segment = function(img,
                        mask = NULL,
@@ -19,9 +18,10 @@ ich_segment = function(img,
                        verbose = TRUE,
                        ...) {
 
-  if (!have_matlab()) {
-    stop("MATLAB Path not defined!")
-  }
+  # if (!have_matlab()) {
+  #   stop("MATLAB Path not defined!")
+  # }
+
   if (!have.fsl()) {
     stop("FSL Path Not Found!")
   }

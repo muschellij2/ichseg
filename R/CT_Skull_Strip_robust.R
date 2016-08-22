@@ -60,7 +60,9 @@
 #' fill holes using a box kernel with the number of voxels
 #' \code{nvoxels} in
 #' all 3 directions.
-#' @import extrantsr
+#' @importFrom extrantsr remove_neck
+#' @importFrom fslr check_outfile readnii writenii
+#' @importFrom oro.nifti readNIfTI drop_img_dim
 #' @export
 CT_Skull_Strip_robust <- function(
   img,

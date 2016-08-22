@@ -9,7 +9,7 @@ mean_image(x, nvoxels, shift = TRUE, verbose = TRUE)
 \arguments{
 \item{x}{3D array}
 
-\item{nvoxels}{window (in voxels) for the neighborhood 
+\item{nvoxels}{window (in voxels) for the neighborhood
 (1 results in a 3x3 cube)}
 
 \item{shift}{Should results be shifted back?}

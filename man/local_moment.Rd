@@ -22,7 +22,7 @@ local_moment(image, window = NULL, nvoxels = NULL, moment, mask = NULL,
 \item{only.mask}{Should objects outside the mask (i.e. zeros) be
 counted the moment?  Default is FALSE so edges are weighted to 0}
 
-\item{center}{vector of indicator of central moment. 
+\item{center}{vector of indicator of central moment.
 if TRUE mean image is subtracted.  Same length as moment}
 
 \item{invert}{Standardize the values by the power: 1/moment}
@@ -44,10 +44,10 @@ This function calculates Local Moments (mean, standard deviation, skew) for an a
 \examples{
 x = array(rnorm(1000), dim=c(10, 10, 10))
 mask = abs(x) < 1
-mean.x = local_moment(x, nvoxels=1, moment = 1, mask=mask, 
+mean.x = local_moment(x, nvoxels=1, moment = 1, mask=mask,
 center = FALSE,
 remask = FALSE)[[1]]
-var.x = local_moment(x, nvoxels=1, moment = 2, mask=mask, center = TRUE, 
+var.x = local_moment(x, nvoxels=1, moment = 2, mask=mask, center = TRUE,
 mean_image = mean.x, remask=FALSE)[[1]]
 
 ### check that x[2,2,2] mean is correct

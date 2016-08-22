@@ -22,7 +22,8 @@
 #' or \code{\link{CT_Skull_Strip}}
 #'
 #' @return List of output images and transformations
-#' @import matlabr
+#' @importFrom fslr check_nifti mask_img window_img
+#' @importFrom extrantsr registration ants_apply_transforms
 #' @export
 ich_preprocess = function(img,
                           skull_strip = TRUE,
