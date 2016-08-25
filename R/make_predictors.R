@@ -14,7 +14,8 @@
 #' @param save_imgs Logical to save all images that are created as
 #' predictors
 #' @param outdir Output directory of saved images, needs to be set
-#' @param stub Basename to write image names
+#' if \code{save_imgs = TRUE}
+#' @param stub Basename to write image names if \code{save_imgs = TRUE}
 #' @param overwrite If \code{save_imgs} is \code{TRUE},
 #' then should
 #' the files be overwritten?  If not, then files will be read

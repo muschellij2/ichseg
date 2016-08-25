@@ -24,9 +24,10 @@
 #' prediction/probability images
 #' @importFrom fslr remake_img
 #' @importFrom extrantsr ants_bwlabel
+#' @import randomForest
+#' @import stats
 #' @seealso \code{\link{ich_candidate_voxels}}
 #' @export
-#' @import stats
 ich_predict = function(df,
                        nim,
                        model = c("rf", "logistic"),

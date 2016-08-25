@@ -4,8 +4,8 @@
 \alias{ich_segment}
 \title{Predict ICH Segmentation}
 \usage{
-ich_segment(img, mask = NULL, model = c("rf", "logistic"), verbose = TRUE,
-  ...)
+ich_segment(img, mask = NULL, model = c("rf", "logistic"),
+  save_imgs = FALSE, outdir = NULL, stub = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{img}{CT image, object of class \code{nifti} or
@@ -16,6 +16,14 @@ character filename}
 
 \item{model}{model to use for prediction,
 either the random forest (rf) or logistic}
+
+\item{save_imgs}{Logical to save all images that are created as
+predictors}
+
+\item{outdir}{Output directory of saved images, needs to be set
+if \code{save_imgs = TRUE}}
+
+\item{stub}{Basename to write image names if \code{save_imgs = TRUE}}
 
 \item{verbose}{Print diagnostic output}
 

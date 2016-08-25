@@ -38,9 +38,10 @@ make_predictors(img, mask, roi = NULL, nvoxels = 1, moments = 1:4,
 \item{save_imgs}{Logical to save all images that are created as
 predictors}
 
-\item{outdir}{Output directory of saved images, needs to be set}
+\item{outdir}{Output directory of saved images, needs to be set
+if \code{save_imgs = TRUE}}
 
-\item{stub}{Basename to write image names}
+\item{stub}{Basename to write image names if \code{save_imgs = TRUE}}
 
 \item{overwrite}{If \code{save_imgs} is \code{TRUE},
 then should

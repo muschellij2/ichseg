@@ -7,6 +7,11 @@
 #' character filename
 #' @param model model to use for prediction,
 #' either the random forest (rf) or logistic
+#' @param save_imgs Logical to save all images that are created as
+#' predictors
+#' @param outdir Output directory of saved images, needs to be set
+#' if \code{save_imgs = TRUE}
+#' @param stub Basename to write image names if \code{save_imgs = TRUE}
 #' @param verbose Print diagnostic output
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
@@ -15,6 +20,9 @@
 ich_segment = function(img,
                        mask = NULL,
                        model = c("rf", "logistic"),
+                       save_imgs = FALSE,
+                       outdir = NULL,
+                       stub = NULL,
                        verbose = TRUE,
                        ...) {
 
@@ -44,7 +52,9 @@ ich_segment = function(img,
     message("# Making Predictors")
   }
   img.pred = make_predictors(timg, mask = tmask,
-                             roi = NULL, save_imgs = FALSE,
+                             roi = NULL, save_imgs = save_imgs,
+                             stub = stub,
+                             outdir = outdir,
                              verbose = verbose)
   df = img.pred$df
   nim = img.pred$nim
