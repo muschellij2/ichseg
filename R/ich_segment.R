@@ -51,6 +51,14 @@ ich_segment = function(img,
   if (verbose) {
     message("# Making Predictors")
   }
+
+  if (save_imgs){
+    if (is.character(img)){
+      if (is.null(stub)){
+        stub = paste0(nii.stub(img, bn = TRUE), "_reg_")
+      }
+    }
+  }
   img.pred = make_predictors(timg, mask = tmask,
                              roi = NULL, save_imgs = save_imgs,
                              stub = stub,
