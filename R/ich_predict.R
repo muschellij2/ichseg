@@ -22,10 +22,9 @@
 #'
 #' @return List of output registered and native space
 #' prediction/probability images
-#' @importFrom fslr remake_img
+#' @importFrom neurobase remake_img
 #' @importFrom extrantsr ants_bwlabel
 #' @import randomForest
-#' @import stats
 #' @seealso \code{\link{ich_candidate_voxels}}
 #' @export
 ich_predict = function(df,
@@ -133,10 +132,10 @@ ich_predict = function(df,
                             whichtoinvert = c(1)
       )
     })
-    native_res$smoothed_prediction_image = fslr::datatyper(
+    native_res$smoothed_prediction_image = neurobase::datatyper(
         native_res$smoothed_prediction_image > native_thresh
     )
-    native_res$prediction_image = fslr::datatyper(
+    native_res$prediction_image = neurobase::datatyper(
       native_res$prediction_image > native_thresh
     )
   }

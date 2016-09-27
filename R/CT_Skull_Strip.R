@@ -33,7 +33,9 @@
 #' @param verbose (logical) Should diagnostic output be printed?
 #' @param ... additional arguments passed to \code{\link{fslbet}}.
 #' @return character or logical depending on intern
-#' @importFrom fslr fslthresh fslmaths fslfill fslsmooth fslmask fslbet nii.stub
+#' @importFrom fslr fslthresh fslmaths fslfill fslsmooth fslmask fslbet
+#' @importFrom neurobase nii.stub
+#' @importFrom fslr get.imgext
 #' @export
 CT_Skull_Strip <- function(
   img,

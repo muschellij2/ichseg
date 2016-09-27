@@ -17,6 +17,7 @@
 #'
 #' @return List of output prediction/probability images
 #' @export
+#' @importFrom fslr have.fsl
 ich_segment = function(img,
                        mask = NULL,
                        model = c("rf", "logistic"),

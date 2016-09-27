@@ -22,7 +22,7 @@
 #' or \code{\link{CT_Skull_Strip}}
 #'
 #' @return List of output images and transformations
-#' @importFrom fslr check_nifti mask_img window_img
+#' @importFrom neurobase check_nifti mask_img window_img
 #' @importFrom extrantsr registration ants_apply_transforms
 #' @export
 ich_preprocess = function(img,

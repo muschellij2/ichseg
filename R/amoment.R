@@ -17,7 +17,7 @@
 #' @param remask set areas outside of mask to 0
 #' @param ... Arguments passed to \code{\link{get_neighbors}}
 #' @importFrom magic ashift
-#' @importFrom fslr niftiarr datatyper
+#' @importFrom neurobase niftiarr datatyper
 #' @export
 #' @return List of arrays same lenght as moment
 #' @examples

@@ -15,7 +15,7 @@
 #' @param verbose (logical) print out command before running
 #' @param ... additional arguments passed to \code{\link{readNIfTI}}.
 #' @return character or logical depending on intern
-#' @importFrom fslr zero_pad
+#' @importFrom neurobase zero_pad
 #' @note This function binarizes the image before running.
 #' @export
 dil_ero = function(file,

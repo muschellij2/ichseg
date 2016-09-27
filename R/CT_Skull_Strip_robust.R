@@ -41,7 +41,6 @@
 #' \code{\link{CT_Skull_Strip}} or
 #' \code{\link{remove_neck}}.
 #' @return Skull-stripped \code{nifti} object
-#' @import fslr
 #' @note This function first thresholds an image, runs a rigid
 #' registration
 #' (default in \code{\link{remove_neck}}) to drop any slices
@@ -61,7 +60,7 @@
 #' \code{nvoxels} in
 #' all 3 directions.
 #' @importFrom extrantsr remove_neck
-#' @importFrom fslr check_outfile readnii writenii
+#' @importFrom neurobase check_outfile readnii writenii cog
 #' @importFrom oro.nifti readNIfTI drop_img_dim
 #' @export
 CT_Skull_Strip_robust <- function(

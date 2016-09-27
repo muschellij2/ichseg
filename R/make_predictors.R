@@ -31,9 +31,11 @@
 #' @param verbose Logical indicator if output messages should be
 #' printed
 #' @param ... options passed to \code{\link{get_neighbors}}
-#' @importFrom fslr readnii checkimg fslerode zscore_img
+#' @importFrom neurobase readnii checkimg zscore_img finite_img
+#' @importFrom fslr fslerode
 #' @importFrom oro.nifti zero_trans cal_img voxdim pixdim convert.datatype convert.bitpix
 #' @importFrom extrantsr zscore_template otropos reg_flip
+#' @importFrom stats sd quantile predict complete.cases
 #' @export
 #' @return List of a data.frame of Predictors and set of
 #' indices to
