@@ -1,6 +1,6 @@
 #' @rdname face_mask
 #' @title Create Mask of the Face of CT
-#'
+#' @aliases ct_face_mask,mri_face_mask
 #' @description Creates a rough mask of the face of a brain image
 #' for CT scans
 #'

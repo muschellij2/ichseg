@@ -2,6 +2,7 @@
 % Please edit documentation in R/face_mask.R
 \name{ct_face_mask}
 \alias{ct_face_mask}
+\alias{ct_face_mask,mri_face_mask}
 \alias{mri_face_mask}
 \title{Create Mask of the Face of CT}
 \usage{
