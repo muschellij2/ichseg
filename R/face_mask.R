@@ -1,28 +1,44 @@
-#' @title Create Mask of the Face
+#' @rdname face_mask
+#' @title Create Mask of the Face of CT
 #'
 #' @description Creates a rough mask of the face of a brain image
+#' for CT scans
 #'
 #' @param file File for face masking - either filename or class nifti
 #' @param mask file or \code{nifti} to mask the \code{file}
 #' @param robust If \code{mask = NULL}, then \code{robust} is
 #' passed to \code{\link{CT_Skull_Stripper}}
 #' @param template.file Template to warp to original image space
-#' @param template.mask Mask of template to use as rough face mask.  If
-#' \code{template.file} is not specified, \code{template.mask_inds}
+#' @param template.face_mask Mask of template to use as rough face mask.  If
+#' \code{template.file} is not specified, \code{template.face_mask_inds}
 #' must be
-#' @param template.mask_inds List of length 3 for indices of
+#' @param template.face_mask_inds List of length 3 for indices of
 #' \code{template.file} to indicate the mask.
 #' @param typeofTransform Transformation for template to image, passed to
 #' \code{\link{ants_regwrite}}.
 #' @param swapdim Should the dimensions be swapped before registration,
 #' and then reset after
 #' @param verbose Print out diagnostic messages
-#' @param ... not used
+#' @param ... arguments passed to \code{\link{CT_Skull_Stripper}}
 #' @export
 #' @return Object of class nifti
 #' @importFrom neurobase check_mask_fail
 #' @importFrom extrantsr rpi_orient reverse_rpi_orient
-face_mask <- function(
+#' @examples \dontrun{
+#' file = "~/Desktop/Desktop/scratch/100-318_20070723_0957_CT_3_CT_Head-.nii.gz"
+#' mask = NULL
+#' robust = FALSE
+#' face = ct_face_mask(
+#'    file = file,
+#'    robust = FALSE,
+#'     template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
+#'                   package = "ichseg")
+#'    )
+#'  img = readnii(file)
+#'  rimg = randomize_mask(img, mask = face)
+#' }
+#'#'
+ct_face_mask <- function(
   file,
   mask = NULL,
   robust = TRUE,
@@ -30,8 +46,8 @@ face_mask <- function(
     system.file(
       "scct_unsmooth_SS_0.01.nii.gz",
       package = "ichseg"),
-  template.mask = NULL,
-  template.mask_inds = list(50:130, 170:217, 1:15),
+  template.face_mask = NULL,
+  template.face_mask_inds = list(50:130, 170:217, 1:15),
   typeofTransform = "Affine",
   swapdim = TRUE,
   verbose = TRUE,
@@ -43,46 +59,49 @@ face_mask <- function(
       message(paste0("# Skull Stripping \n"))
     }
     mask = tempfile(fileext = ".nii.gz")
-    ss = CT_Skull_Stripper(file,
-                           maskfile = mask,
-                           verbose = verbose,
-                           robust = robust)
+    ss = CT_Skull_Stripper(
+      img = file,
+      maskfile = mask,
+      verbose = verbose,
+      robust = robust,
+      template.file = template.file,
+      ...)
     rm(ss)
   }
   mask = check_nifti(mask)
   check_mask_fail(mask)
 
-  if (is.null(template.mask) &&
-      is.null(template.mask_inds)) {
-    stop("Need template.mask or template.mask_inds")
+  if (is.null(template.face_mask) &&
+      is.null(template.face_mask_inds)) {
+    stop("Need template.face_mask or template.face_mask_inds")
   }
 
   template.file = checkimg(template.file)
-  if (is.null(template.mask)) {
+  if (is.null(template.face_mask)) {
     nim = check_nifti(template.file)
 
     ###############################
     # using inds
     ###############################
-    template.mask = niftiarr(nim, 0)
-    inds = expand.grid(template.mask_inds)
+    template.face_mask = niftiarr(nim, 0)
+    inds = expand.grid(template.face_mask_inds)
     inds = as.matrix(inds)
-    template.mask[inds] = 1
-    # template.mask[50:130, 170:217, 1:15] = 1
-    template.mask = cal_img(template.mask)
+    template.face_mask[inds] = 1
+    # template.face_mask[50:130, 170:217, 1:15] = 1
+    template.face_mask = cal_img(template.face_mask)
   }
-  check_mask_fail(template.mask)
+  check_mask_fail(template.face_mask)
 
   file = check_nifti(file)
   # ofile = tempfile(fileext = '.nii.gz')
   img = mask_img(file, mask)
-
+  rm(list = c("file", "mask"))
   if (swapdim) {
     if (verbose) {
       message(paste0("# Swapping Dimensions \n"))
     }
-    L = rpi_orient(file)
-    file = L$img
+    L = rpi_orient(img)
+    img = L$img
     sorient = L$orientation
     ori = L$convention
   }
@@ -102,10 +121,11 @@ face_mask <- function(
   if (verbose) {
     message(paste0("# Applying Transforms to template mask \n"))
   }
+
   # Apply Transform to Mask image
   mask_trans = ants_apply_transforms(
     fixed = img,
-    moving = template.mask,
+    moving = template.face_mask,
     transformlist = rev_reg$fwdtransforms,
     interpolator = "nearestNeighbor")
 
@@ -123,7 +143,8 @@ face_mask <- function(
   xs = unique(ind[,"dim1"])
   inds = expand.grid(xs, ys, zs)
   inds = as.matrix(inds)
-  newimg = niftiarr(mask, 0)
+
+  newimg = niftiarr(img, 0)
   newimg[inds] = 1
   newimg = cal_img(newimg)
 
@@ -135,7 +156,52 @@ face_mask <- function(
     newimg = reverse_rpi_orient(
       file = newimg,
       convention = ori,
-      orientation = sorient, verbose = verbose)
+      orientation = sorient,
+      verbose = verbose)
   }
   return(newimg)
+}
+
+
+#' @rdname face_mask
+#' @export
+#' @importFrom fslr mni_fname
+#' @examples \dontrun{
+#' library(fslr)
+#' library(extrantsr)
+#' mri = "~/Desktop/Desktop/scratch/SUBJ0001-01-MPRAGE.nii.gz"
+#'
+#' template.file = mni_fname(brain = TRUE)
+#' tmask = mni_fname(brain = TRUE, mask = TRUE)
+#' noneck = double_remove_neck(mri,
+#'    template.file = template.file,
+#'    template.mask = tmask,
+#'    ret_mask = TRUE)
+#'
+#'  template.face_mask_inds = list(50:130, 170:217, 1:15)
+#' img = readnii(mri)
+#' img = mask_img(img, noneck)
+#' brain = fslbet_robust(img)
+#' mask = brain > 0
+#' img = brain
+#' template.face_mask = NULL
+#' verbose = TRUE
+#' face = mri_face_mask(
+#'    file = img,
+#'    mask = mask,
+#'    template.file = template.file
+#'    )
+#' }
+#'
+mri_face_mask <- function(
+  ...,
+  robust = FALSE,
+  template.file = mni_fname(brain = TRUE)
+){
+
+
+  ct_face_mask(
+    robust = robust,
+    template.file = template.file,
+    ...)
 }

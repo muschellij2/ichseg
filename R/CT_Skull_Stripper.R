@@ -9,12 +9,19 @@ CT_Skull_Stripper <- function(
   ...,
   robust = FALSE
 ){
-  
-  if (robust){
-    CT_Skull_Strip_robust(...)
+
+  L = list(...)
+  nL = names(L)
+  if (robust) {
+    n = names(formals(CT_Skull_Strip_robust))
+    L = L[intersect(nL, n)]
+    res = do.call("CT_Skull_Strip_robust", L)
   } else {
-    CT_Skull_Strip(...)
+    n = names(formals(CT_Skull_Strip))
+    L = L[intersect(nL, n)]
+    res = do.call("CT_Skull_Strip", L)
   }
+  return(res)
 }
 
 

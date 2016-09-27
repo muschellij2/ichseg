@@ -66,7 +66,8 @@ CT_Skull_Strip <- function(
     stopifnot(!is.null(outfile))
   }
   if (verbose){
-    message(paste0("# Thresholding Image to ", lthresh, "-", uthresh, "\n"))
+    message(paste0("# Thresholding Image to ",
+                   lthresh, "-", uthresh, "\n"))
   }
 
   outfile = nii.stub(outfile)
@@ -77,28 +78,36 @@ CT_Skull_Strip <- function(
   if (verbose){
     message(paste0("# Thresholding return: ", run, "\n"))
   }
-  if (verbose){
-    message(paste0("# Absolute value so fslmaths -bin keeps all mask",
-               " even if lthres < 0\n"))
-  }
-  absfile = tempfile()
-  run = fslmaths(outfile, outfile = absfile,
-                  retimg = FALSE,
-                  intern=FALSE, opts = "-abs")
 
-  if (verbose){
-    message(paste0("# Abs return: ", run, "\n"))
-  }
+  if (remask) {
+    if (verbose) {
+      message(paste0("# Absolute value so fslmaths -bin keeps all mask",
+                     " even if lthres < 0\n"))
+    }
+    absfile = tempfile()
+    run = fslmaths(outfile, outfile = absfile,
+                   retimg = FALSE,
+                   intern = FALSE,
+                   opts = "-abs")
 
-  if (verbose){
-    message(paste0("# Creating 0 - 100 mask to remask after filling\n"))
+
+    if (verbose) {
+      message(paste0("# Abs return: ", run, "\n"))
+    }
+
+
+    if (verbose) {
+      message(paste0(
+        "# Creating 0 - 100 mask to remask after filling\n"))
+    }
+    bonefile = tempfile()
+    #   fslbin(outfile, retimg = FALSE, outfile = bonefile, intern=FALSE)
+    fslfill(file = absfile,
+            bin = TRUE,
+            outfile = bonefile,
+            retimg = FALSE,
+            intern = FALSE)
   }
-  bonefile = tempfile()
-#   fslbin(outfile, retimg = FALSE, outfile = bonefile, intern=FALSE)
-  fslfill(file = absfile, bin=TRUE,
-                     outfile = bonefile,
-                     retimg=FALSE,
-                     intern=FALSE)
 
   ### Must prefill for the presmooth - not REALLY necessary, but if you're
   ### smoothing, you likely have noisy data.
@@ -132,20 +141,20 @@ CT_Skull_Strip <- function(
                     sigma = sigma,
                     retimg = FALSE,
                     intern = FALSE)
-    if (verbose){
+    if (verbose) {
       message(paste0("# Pre Smoothing Diagnostic: ", run, "\n"))
     }
 
     if (remask) {
-      if (verbose){
+      if (verbose) {
         message(paste0("# Remasking Smoothed Image\n"))
       }
       run = fslmask(outfile,
-                  mask = bonefile,
-                  outfile = outfile,
-                  retimg = FALSE,
-                  intern = FALSE)
-      if (verbose){
+                    mask = bonefile,
+                    outfile = outfile,
+                    retimg = FALSE,
+                    intern = FALSE)
+      if (verbose) {
         message(paste0("# Pre Smoothing Diagnostic: ", run, "\n"))
       }
 
@@ -156,7 +165,7 @@ CT_Skull_Strip <- function(
   #### Different options for bet
   if (inskull_mesh) {
     opts = paste0(opts, " -A")
-    if (betcmd != "bet"){
+    if (betcmd != "bet") {
       warning("Can't use bet2 with inskull mesh, using bet")
     }
     betcmd = "bet"
@@ -223,7 +232,7 @@ CT_Skull_Strip <- function(
   if (refill){
     smfile = tempfile()
     fslmaths(maskfile, retimg = FALSE, outfile = smfile,
-                           opts = "-kernel boxv 7 -fmean")
+             opts = "-kernel boxv 7 -fmean")
     ### smooth and if you add to 0, then > .5 (if 1 before > 1 now, then bin)
     addopt = sprintf(" -add %s -thr %f -bin", smfile, refill.thresh)
     fslmaths(maskfile, retimg = FALSE, outfile = maskfile,

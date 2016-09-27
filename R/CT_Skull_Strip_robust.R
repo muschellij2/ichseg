@@ -180,7 +180,7 @@ CT_Skull_Strip_robust <- function(
   #############################
   # Filling the mask
   #############################
-  if (verbose){
+  if (verbose) {
     message(paste0("# Filling Holes \n"))
   }
   if (nvoxels > 0){
