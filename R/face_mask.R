@@ -1,8 +1,7 @@
 #' @rdname face_mask
-#' @title Create Mask of the Face of CT
+#' @title Create Mask of the Face
 #' @aliases ct_face_mask,mri_face_mask
-#' @description Creates a rough mask of the face of a brain image
-#' for CT scans
+#' @description Creates a rough mask of the face from a head scan
 #'
 #' @param file File for face masking - either filename or class nifti
 #' @param mask file or \code{nifti} to mask the \code{file}
@@ -23,7 +22,7 @@
 #' @export
 #' @return Object of class nifti
 #' @importFrom neurobase check_mask_fail
-#' @importFrom extrantsr rpi_orient reverse_rpi_orient
+#' @importFrom fslr rpi_orient reverse_rpi_orient
 #' @examples \dontrun{
 #' file = "~/Desktop/Desktop/scratch/100-318_20070723_0957_CT_3_CT_Head-.nii.gz"
 #' mask = NULL
@@ -173,15 +172,13 @@ ct_face_mask <- function(
 #'
 #' template.file = mni_fname(brain = TRUE)
 #' tmask = mni_fname(brain = TRUE, mask = TRUE)
-#' noneck = double_remove_neck(mri,
-#'    template.file = template.file,
-#'    template.mask = tmask,
-#'    ret_mask = TRUE)
 #'
-#'  template.face_mask_inds = list(50:130, 170:217, 1:15)
-#' img = readnii(mri)
-#' img = mask_img(img, noneck)
-#' brain = fslbet_robust(img)
+#' template.face_mask_inds = list(50:130, 170:217, 1:15)
+#' brain = fslbet_robust(mri,
+#' remove.neck = TRUE,
+#' remover = "double_remove_neck",
+#' template.file = template.file,
+#' template.mask = tmask)
 #' mask = brain > 0
 #' img = brain
 #' template.face_mask = NULL
@@ -195,13 +192,30 @@ ct_face_mask <- function(
 #'
 mri_face_mask <- function(
   ...,
+  mask = NULL,
   robust = FALSE,
   template.file = mni_fname(brain = TRUE)
 ){
 
 
-  ct_face_mask(
-    robust = robust,
-    template.file = template.file,
-    ...)
+  L = list(...)
+  L$robust = robust
+  L$mask = mask
+  L$template.file = template.file
+
+  if (is.null(mask)) {
+    func = function(L, arg, opt) {
+      nL = names(L)
+      if (!arg %in% nL) {
+        L[arg] = opt
+      }
+      return(L)
+    }
+    L = func(L, "presmooth", FALSE)
+    L = func(L, "remask", FALSE)
+    L = func(L, "inskull_mesh", FALSE)
+    L = func(L, "opts", "-v")
+  }
+  res = do.call("ct_face_mask", args = L)
+  return(res)
 }

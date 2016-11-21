@@ -4,7 +4,7 @@
 \alias{ct_face_mask}
 \alias{ct_face_mask,mri_face_mask}
 \alias{mri_face_mask}
-\title{Create Mask of the Face of CT}
+\title{Create Mask of the Face}
 \usage{
 ct_face_mask(file, mask = NULL, robust = TRUE,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
@@ -12,7 +12,8 @@ ct_face_mask(file, mask = NULL, robust = TRUE,
   template.face_mask_inds = list(50:130, 170:217, 1:15),
   typeofTransform = "Affine", swapdim = TRUE, verbose = TRUE, ...)
 
-mri_face_mask(..., robust = FALSE, template.file = mni_fname(brain = TRUE))
+mri_face_mask(..., mask = NULL, robust = FALSE,
+  template.file = mni_fname(brain = TRUE))
 }
 \arguments{
 \item{file}{File for face masking - either filename or class nifti}
@@ -45,8 +46,7 @@ and then reset after}
 Object of class nifti
 }
 \description{
-Creates a rough mask of the face of a brain image
-for CT scans
+Creates a rough mask of the face from a head scan
 }
 \examples{
 \dontrun{
@@ -70,15 +70,13 @@ mri = "~/Desktop/Desktop/scratch/SUBJ0001-01-MPRAGE.nii.gz"
 
 template.file = mni_fname(brain = TRUE)
 tmask = mni_fname(brain = TRUE, mask = TRUE)
-noneck = double_remove_neck(mri,
-   template.file = template.file,
-   template.mask = tmask,
-   ret_mask = TRUE)
 
- template.face_mask_inds = list(50:130, 170:217, 1:15)
-img = readnii(mri)
-img = mask_img(img, noneck)
-brain = fslbet_robust(img)
+template.face_mask_inds = list(50:130, 170:217, 1:15)
+brain = fslbet_robust(mri,
+remove.neck = TRUE,
+remover = "double_remove_neck",
+template.file = template.file,
+template.mask = tmask)
 mask = brain > 0
 img = brain
 template.face_mask = NULL

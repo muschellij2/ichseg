@@ -407,7 +407,7 @@ make_predictors <- function(img, mask, roi = NULL,
     prob_img = readnii(fname, reorient = FALSE)
   } else {
     window.masked.img = window_img(masked.img, window = c(0, 100))
-    seg = otropos( window.masked.img, i = "KMeans[4]", v = 1)
+    seg = otropos( window.masked.img, i = "KMeans[4]", verbose = verbose)
     prob_img = seg$probabilityimages[[3]] + seg$probabilityimages[[4]]
     rm(list = c("seg")); gc(); gc();
     if (save_imgs){
