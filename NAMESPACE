@@ -3,6 +3,7 @@
 export(CT_Skull_Strip)
 export(CT_Skull_Strip_robust)
 export(CT_Skull_Stripper)
+export(ct_ear_mask)
 export(ct_face_mask)
 export(ct_template)
 export(ct_template_fname)

@@ -115,7 +115,8 @@ ct_face_mask <- function(
     skull_strip = FALSE,
     correct = FALSE,
     template.file = img,
-    typeofTransform = "Affine")
+    typeofTransform = typeofTransform,
+    verbose = verbose)
 
   if (verbose) {
     message(paste0("# Applying Transforms to template mask \n"))
