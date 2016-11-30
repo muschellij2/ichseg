@@ -4,9 +4,8 @@
 #' @description Creates a rough mask of the ear from a head scan
 #'
 #' @param file File for ear masking - either filename or class nifti
-#' @param mask file or \code{nifti} to mask the \code{file}
-#' @param robust If \code{mask = NULL}, then \code{robust} is
-#' passed to \code{\link{CT_Skull_Stripper}}
+#' @param type is it a CT or MRI?  Will determine if \code{\link{ct_face_mask}} or
+#' \code{\link{mri_face_mask}} is called
 #' @param template.file Template to warp to original image space
 #' @param template.ear_mask Mask of template to use as rough ear mask.  If
 #' \code{template.file} is not specified, \code{template.left_ear_inds} and
@@ -16,7 +15,8 @@
 #' \code{template.file} to indicate the left-ear mask.
 #' @param template.right_ear_inds List of length 3 for indices of
 #' \code{template.file} to indicate the right-ear mask.
-#' @param ... arguments passed to \code{\link{ct_face_mask}}
+#' @param ... arguments passed to \code{\link{ct_face_mask}} or
+#' \code{\link{mri_face_mask}}
 #' @export
 #' @return Object of class nifti
 #' @examples \dontrun{
@@ -32,9 +32,9 @@
 #'  img = readnii(file)
 #'  rimg = randomize_mask(img, mask = face)
 #' }
-#'#'
-ct_ear_mask = function(
+ear_mask = function(
   file,
+  type = c("ct", "mri"),
   template.file =
     system.file(
       "scct_unsmooth_SS_0.01.nii.gz",
@@ -48,7 +48,7 @@ ct_ear_mask = function(
   if (is.null(template.ear_mask) &&
       (is.null(template.left_ear_inds) ||
        is.null(template.right_ear_inds))
-      ){
+  ) {
     stop("Need template.ear_mask or template.left/right_ear_inds")
   }
 
@@ -73,13 +73,33 @@ ct_ear_mask = function(
   }
   check_mask_fail(template.ear_mask)
 
-  res = ct_face_mask(
-      file = file,
-      template.file = template.file,
-      template.face_mask = template.ear_mask,
-      template.face_mask_inds = NULL,
-      ...)
+  type = match.arg(type)
+  func = paste0(type, "_face_mask")
+  L = list(
+    file = file,
+    template.file = template.file,
+    template.face_mask = template.ear_mask,
+    template.face_mask_inds = NULL,
+    ... = ...)
+  res = do.call(func, args = L)
 
   return(res)
 
+}
+
+#' @rdname ear_mask
+#' @export
+ct_ear_mask = function(...) {
+  ear_mask(..., type = "ct")
+}
+
+#' @rdname ear_mask
+#' @export
+mri_ear_mask = function(
+  ...,
+  template.file = mni_fname(brain = TRUE)
+) {
+  ear_mask(...,
+           template.file = template.file,
+           type = "mri")
 }
