@@ -1,6 +1,6 @@
 #' @rdname ear_mask
 #' @title Create Mask of the Ears
-#' @aliases ct_face_mask,mri_ear_mask
+#' @aliases ct_ear_mask,mri_ear_mask
 #' @description Creates a rough mask of the ear from a head scan
 #'
 #' @param file File for ear masking - either filename or class nifti
@@ -38,24 +38,24 @@ ct_ear_mask = function(
   template.file =
     system.file(
       "scct_unsmooth_SS_0.01.nii.gz",
-      package = "ichseg"),  
+      package = "ichseg"),
   template.ear_mask = NULL,
   template.left_ear_inds = list(170:180, 60:110, 1:60),
   template.right_ear_inds = list(1:10, 60:110, 1:60),
   ...
 ){
-  
-  if (is.null(template.face_mask) &&
-      (is.null(template.left_ear_inds) || 
+
+  if (is.null(template.ear_mask) &&
+      (is.null(template.left_ear_inds) ||
        is.null(template.right_ear_inds))
       ){
     stop("Need template.ear_mask or template.left/right_ear_inds")
   }
-  
+
   template.file = checkimg(template.file)
   if (is.null(template.ear_mask)) {
     nim = check_nifti(template.file)
-    
+
     ###############################
     # using inds
     ###############################
@@ -64,22 +64,22 @@ ct_ear_mask = function(
     inds = expand.grid(template.right_ear_inds)
     inds = as.matrix(inds)
     template.ear_mask[inds] = 1
-    
+
     # left ear
     inds = expand.grid(template.left_ear_inds)
     inds = as.matrix(inds)
-    template.ear_mask[inds] = 1    
+    template.ear_mask[inds] = 1
     template.ear_mask = cal_img(template.ear_mask)
   }
   check_mask_fail(template.ear_mask)
-  
+
   res = ct_face_mask(
       file = file,
       template.file = template.file,
       template.face_mask = template.ear_mask,
       template.face_mask_inds = NULL,
       ...)
-  
+
   return(res)
-  
+
 }

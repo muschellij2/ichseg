@@ -2,7 +2,7 @@
 % Please edit documentation in R/ear_mask.R
 \name{ct_ear_mask}
 \alias{ct_ear_mask}
-\alias{ct_face_mask,mri_ear_mask}
+\alias{ct_ear_mask,mri_ear_mask}
 \title{Create Mask of the Ears}
 \usage{
 ct_ear_mask(file, template.file = system.file("scct_unsmooth_SS_0.01.nii.gz",
