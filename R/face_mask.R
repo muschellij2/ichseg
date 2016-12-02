@@ -13,6 +13,8 @@
 #' must be
 #' @param template.face_mask_inds List of length 3 for indices of
 #' \code{template.file} to indicate the mask.
+#' @param extend_mask after transformation, should the mask be extended to the
+#' front of the image to ensure all face has been removed?
 #' @param typeofTransform Transformation for template to image, passed to
 #' \code{\link{ants_regwrite}}.
 #' @param swapdim Should the dimensions be swapped before registration,
@@ -47,6 +49,7 @@ ct_face_mask <- function(
       package = "ichseg"),
   template.face_mask = NULL,
   template.face_mask_inds = list(50:130, 170:217, 1:15),
+  extend_mask = TRUE,
   typeofTransform = "Affine",
   swapdim = TRUE,
   verbose = TRUE,
@@ -135,18 +138,22 @@ ct_face_mask <- function(
   ######################################
   # Applying the mask to the image
   ######################################
-  ind = which(mask_trans > 0.5, arr.ind = TRUE)
-  minz = ceiling(mean(ind[,"dim3"]))
-  zs = seq(minz)
-  miny = min(ind[,"dim2"])
-  ys = seq(miny, dim(mask_trans)[2])
-  xs = unique(ind[,"dim1"])
-  inds = expand.grid(xs, ys, zs)
-  inds = as.matrix(inds)
+  if (extend_mask) {
+    ind = which(mask_trans > 0.5, arr.ind = TRUE)
+    minz = ceiling(mean(ind[,"dim3"]))
+    zs = seq(minz)
+    miny = min(ind[,"dim2"])
+    ys = seq(miny, dim(mask_trans)[2])
+    xs = unique(ind[,"dim1"])
+    inds = expand.grid(xs, ys, zs)
+    inds = as.matrix(inds)
 
-  newimg = niftiarr(img, 0)
-  newimg[inds] = 1
-  newimg = cal_img(newimg)
+    newimg = niftiarr(img, 0)
+    newimg[inds] = 1
+    newimg = cal_img(newimg)
+  } else {
+    newimg = mask_trans
+  }
 
 
   if (swapdim) {

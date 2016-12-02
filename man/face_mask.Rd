@@ -9,7 +9,7 @@
 ct_face_mask(file, mask = NULL, robust = TRUE,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
   "ichseg"), template.face_mask = NULL,
-  template.face_mask_inds = list(50:130, 170:217, 1:15),
+  template.face_mask_inds = list(50:130, 170:217, 1:15), extend_mask = TRUE,
   typeofTransform = "Affine", swapdim = TRUE, verbose = TRUE, ...)
 
 mri_face_mask(..., mask = NULL, robust = FALSE,
@@ -31,6 +31,9 @@ must be}
 
 \item{template.face_mask_inds}{List of length 3 for indices of
 \code{template.file} to indicate the mask.}
+
+\item{extend_mask}{after transformation, should the mask be extended to the
+front of the image to ensure all face has been removed?}
 
 \item{typeofTransform}{Transformation for template to image, passed to
 \code{\link{ants_regwrite}}.}

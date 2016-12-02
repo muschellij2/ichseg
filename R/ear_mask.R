@@ -15,6 +15,9 @@
 #' \code{template.file} to indicate the left-ear mask.
 #' @param template.right_ear_inds List of length 3 for indices of
 #' \code{template.file} to indicate the right-ear mask.
+#' @param extend_mask passed to \code{\link{ct_face_mask}} or
+#' \code{\link{mri_face_mask}}, but should be \code{FALSE} otherwise the
+#' mask will be extended forward
 #' @param ... arguments passed to \code{\link{ct_face_mask}} or
 #' \code{\link{mri_face_mask}}
 #' @export
@@ -23,14 +26,12 @@
 #' file = "~/Desktop/Desktop/scratch/100-318_20070723_0957_CT_3_CT_Head-.nii.gz"
 #' mask = NULL
 #' robust = FALSE
-#' face = ct_ear_mask(
+#' ears = ct_ear_mask(
 #'    file = file,
-#'    robust = FALSE,
-#'     template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
-#'                   package = "ichseg")
-#'    )
+#'    robust = FALSE
+#'  )
 #'  img = readnii(file)
-#'  rimg = randomize_mask(img, mask = face)
+#'  rimg = randomize_mask(img, mask = ears)
 #' }
 ear_mask = function(
   file,
@@ -42,6 +43,7 @@ ear_mask = function(
   template.ear_mask = NULL,
   template.left_ear_inds = list(170:180, 60:110, 1:60),
   template.right_ear_inds = list(1:10, 60:110, 1:60),
+  extend_mask = FALSE,
   ...
 ){
 
@@ -80,6 +82,7 @@ ear_mask = function(
     template.file = template.file,
     template.face_mask = template.ear_mask,
     template.face_mask_inds = NULL,
+    extend_mask = extend_mask,
     ... = ...)
   res = do.call(func, args = L)
 
