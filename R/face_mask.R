@@ -55,91 +55,34 @@ ct_face_mask <- function(
   verbose = TRUE,
   ...){
 
+  mask = .make_ss_mask(file = file,
+                       mask = mask,
+                       verbose = verbose,
+                       robust = robust,
+                       template.file = template.file, ...)
 
-  if (is.null(mask)) {
-    if (verbose) {
-      message(paste0("# Skull Stripping \n"))
-    }
-    mask = tempfile(fileext = ".nii.gz")
-    ss = CT_Skull_Stripper(
-      img = file,
-      maskfile = mask,
-      verbose = verbose,
-      robust = robust,
-      template.file = template.file,
-      ...)
-    rm(ss)
-  }
-  mask = check_nifti(mask)
-  check_mask_fail(mask)
+  template.face_mask = .make_template_mask(
+    template.file = template.file,
+    template.mask = template.face_mask,
+    template.inds = template.face_mask_inds)
 
-  if (is.null(template.face_mask) &&
-      is.null(template.face_mask_inds)) {
-    stop("Need template.face_mask or template.face_mask_inds")
-  }
+  L = .mask_reg(file = file,
+                mask = mask,
+                verbose = verbose,
+                swapdim = swapdim,
+                template.file = template.file,
+                typeofTransform = typeofTransform,
+                template.mask = template.face_mask)
 
-  template.file = checkimg(template.file)
-  if (is.null(template.face_mask)) {
-    nim = check_nifti(template.file)
+  mask_trans = L$mask_trans
+  img = L$img
 
-    ###############################
-    # using inds
-    ###############################
-    template.face_mask = niftiarr(nim, 0)
-    inds = expand.grid(template.face_mask_inds)
-    inds = as.matrix(inds)
-    template.face_mask[inds] = 1
-    # template.face_mask[50:130, 170:217, 1:15] = 1
-    template.face_mask = cal_img(template.face_mask)
-  }
-  check_mask_fail(template.face_mask)
 
-  file = check_nifti(file)
-  # ofile = tempfile(fileext = '.nii.gz')
-  img = mask_img(file, mask)
-  rm(list = c("file", "mask"))
-  if (swapdim) {
-    if (verbose) {
-      message(paste0("# Swapping Dimensions \n"))
-    }
-    L = rpi_orient(img)
-    img = L$img
-    sorient = L$orientation
-    ori = L$convention
-  }
-
-  if (verbose) {
-    message("# Template Registration to image\n")
-  }
-
-  # Registration
-  rev_reg = registration(
-    filename = template.file,
-    skull_strip = FALSE,
-    correct = FALSE,
-    template.file = img,
-    typeofTransform = typeofTransform,
-    verbose = verbose)
-
-  if (verbose) {
-    message(paste0("# Applying Transforms to template mask \n"))
-  }
-
-  # Apply Transform to Mask image
-  mask_trans = ants_apply_transforms(
-    fixed = img,
-    moving = template.face_mask,
-    transformlist = rev_reg$fwdtransforms,
-    interpolator = "nearestNeighbor")
-
-  if (verbose) {
-    message(paste0("# Applying Mask to Original Image \n"))
-  }
   ######################################
   # Applying the mask to the image
   ######################################
+  ind = which(mask_trans > 0.5, arr.ind = TRUE)
   if (extend_mask) {
-    ind = which(mask_trans > 0.5, arr.ind = TRUE)
     minz = ceiling(mean(ind[,"dim3"]))
     zs = seq(minz)
     miny = min(ind[,"dim2"])
@@ -160,6 +103,8 @@ ct_face_mask <- function(
     if (verbose) {
       message(paste0("# Swapping Dimensions Back\n"))
     }
+    sorient = L$sorient
+    ori = L$ori
     newimg = reverse_rpi_orient(
       file = newimg,
       convention = ori,
