@@ -57,43 +57,46 @@ ct_ear_mask = function(
   verbose = TRUE,
   ...){
 
-    mask = .make_ss_mask(file = file,
-                         mask = mask,
-                         verbose = verbose,
-                         robust = robust,
-                         template.file = template.file, ...)
+  mask = .make_ss_mask(file = file,
+                       mask = mask,
+                       verbose = verbose,
+                       robust = robust,
+                       template.file = template.file, ...)
 
-    template.left_ear_mask = .make_template_mask(
-      template.file = template.file,
-      template.mask = template.ear_mask,
-      template.inds = template.left_ear_inds)
-    template.right_ear_mask = .make_template_mask(
-      template.file = template.file,
-      template.mask = template.ear_mask,
-      template.inds = template.right_ear_inds)
+  template.left_ear_mask = .make_template_mask(
+    template.file = template.file,
+    template.mask = template.ear_mask,
+    template.inds = template.left_ear_inds)
+  template.right_ear_mask = .make_template_mask(
+    template.file = template.file,
+    template.mask = template.ear_mask,
+    template.inds = template.right_ear_inds)
 
-    template.ear_mask = template.left_ear_mask | template.right_ear_mask
+  template.ear_mask = template.left_ear_mask | template.right_ear_mask
 
-    L = .mask_reg(file = file,
-                  mask = mask,
-                  verbose = verbose,
-                  swapdim = swapdim,
-                  template.file = template.file,
-                  typeofTransform = typeofTransform,
-                  template.mask = template.ear_mask)
+  L = .mask_reg(file = file,
+                mask = mask,
+                verbose = verbose,
+                swapdim = swapdim,
+                template.file = template.file,
+                typeofTransform = typeofTransform,
+                template.mask = template.ear_mask)
 
-    mask_trans = L$mask_trans
-    img = L$img
+  mask_trans = L$mask_trans
+  img = L$img
 
 
-    ######################################
-    # Applying the mask to the image
-    ######################################
-    ind = which(mask_trans > 0.5, arr.ind = TRUE)
-    dimg = dim(img)
-    xdim = dimg[1]
-    midx = xdim/2
-    if (extend_left || extend_right) {
+  ######################################
+  # Applying the mask to the image
+  ######################################
+  mask_trans = mask_trans > 0.5
+  any_in_mask = any(mask_trans)
+  ind = which(mask_trans, arr.ind = TRUE)
+  dimg = dim(img)
+  xdim = dimg[1]
+  midx = xdim/2
+  if (extend_left || extend_right) {
+    if (any_in_mask) {
       df = data.frame(ind)
       df$left = c("left", "right")[ (df$dim1 > midx) + 1]
       ss = split(df, df$left)
@@ -103,7 +106,7 @@ ct_ear_mask = function(
       })
       inds = NULL
       ind = ss$left
-      if (!is.null(ind)) {
+      if (!is.null(ind) && nrow(ind) > 0) {
         xs = seq(1, max(ind$dim1)) # for left
         ys = unique(ind$dim2)
         zs = unique(ind$dim3)
@@ -113,7 +116,7 @@ ct_ear_mask = function(
       inds = rbind(inds, run_inds)
 
       ind = ss$right
-      if (!is.null(ind)) {
+      if (!is.null(ind) && nrow(ind) > 0) {
         xs = seq(min(ind$dim1), xdim) # for right
         ys = unique(ind$dim2)
         zs = unique(ind$dim3)
@@ -126,54 +129,58 @@ ct_ear_mask = function(
       newimg[inds] = 1
       newimg = cal_img(newimg)
     } else {
+      warning("No registered object in mask found - cannot extend!")
       newimg = mask_trans
     }
-
-
-    if (swapdim) {
-      if (verbose) {
-        message(paste0("# Swapping Dimensions Back\n"))
-      }
-      sorient = L$sorient
-      ori = L$ori
-      newimg = reverse_rpi_orient(
-        file = newimg,
-        convention = ori,
-        orientation = sorient,
-        verbose = verbose)
-    }
-    return(newimg)
+  } else {
+    newimg = mask_trans
   }
+
+
+  if (swapdim) {
+    if (verbose) {
+      message(paste0("# Swapping Dimensions Back\n"))
+    }
+    sorient = L$sorient
+    ori = L$ori
+    newimg = reverse_rpi_orient(
+      file = newimg,
+      convention = ori,
+      orientation = sorient,
+      verbose = verbose)
+  }
+  return(newimg)
+}
 
 
 
 #' @rdname ear_mask
 #' @export
 mri_ear_mask = function(
-    ...,
-    mask = NULL,
-    robust = FALSE,
-    template.file = mni_fname(brain = TRUE)
-  ){
+  ...,
+  mask = NULL,
+  robust = FALSE,
+  template.file = mni_fname(brain = TRUE)
+){
 
-    L = list(...)
-    L$robust = robust
-    L$mask = mask
-    L$template.file = template.file
+  L = list(...)
+  L$robust = robust
+  L$mask = mask
+  L$template.file = template.file
 
-    if (is.null(mask)) {
-      func = function(L, arg, opt) {
-        nL = names(L)
-        if (!arg %in% nL) {
-          L[arg] = opt
-        }
-        return(L)
+  if (is.null(mask)) {
+    func = function(L, arg, opt) {
+      nL = names(L)
+      if (!arg %in% nL) {
+        L[arg] = opt
       }
-      L = func(L, "presmooth", FALSE)
-      L = func(L, "remask", FALSE)
-      L = func(L, "inskull_mesh", FALSE)
-      L = func(L, "opts", "-v")
+      return(L)
     }
-    res = do.call("ct_ear_mask", args = L)
-    return(res)
+    L = func(L, "presmooth", FALSE)
+    L = func(L, "remask", FALSE)
+    L = func(L, "inskull_mesh", FALSE)
+    L = func(L, "opts", "-v")
   }
+  res = do.call("ct_ear_mask", args = L)
+  return(res)
+}
