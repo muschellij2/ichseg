@@ -47,4 +47,3 @@ predict the ICH voxels from the model chosen.
 \seealso{
 \code{\link{ich_candidate_voxels}}
 }
-

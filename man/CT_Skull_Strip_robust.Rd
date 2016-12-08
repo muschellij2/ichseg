@@ -96,4 +96,3 @@ fill holes using a box kernel with the number of voxels
 \code{nvoxels} in
 all 3 directions.
 }
-

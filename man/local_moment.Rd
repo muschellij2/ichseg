@@ -62,4 +62,3 @@ var.x[2,2,2]
 all.equal(v, var.x[2,2,2])
 
 }
-

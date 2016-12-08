@@ -33,7 +33,7 @@ ears.
 file = "~/Desktop/Desktop/scratch/100-318_20070723_0957_CT_3_CT_Head-.nii.gz"
 mask = NULL
 robust = FALSE
-face = ct_biometric_mask(
+mask = ct_biometric_mask(
    file = file,
    robust = FALSE
    )
@@ -42,4 +42,3 @@ face = ct_biometric_mask(
 }
 
 }
-

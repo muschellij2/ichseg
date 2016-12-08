@@ -22,4 +22,3 @@ Array of size of x
 \description{
 This function calculates the mean image using fft
 }
-

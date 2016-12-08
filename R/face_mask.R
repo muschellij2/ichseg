@@ -79,19 +79,26 @@ ct_face_mask <- function(
   ######################################
   # Applying the mask to the image
   ######################################
-  ind = which(mask_trans > 0.5, arr.ind = TRUE)
+  mask_trans = mask_trans > 0.5
+  any_in_mask = any(mask_trans)
+  ind = which(mask_trans, arr.ind = TRUE)
   if (extend_mask) {
-    minz = ceiling(mean(ind[,"dim3"]))
-    zs = seq(minz)
-    miny = min(ind[,"dim2"])
-    ys = seq(miny, dim(mask_trans)[2])
-    xs = unique(ind[,"dim1"])
-    inds = expand.grid(xs, ys, zs)
-    inds = as.matrix(inds)
+    if (any_in_mask) {
+      minz = ceiling(mean(ind[,"dim3"]))
+      zs = seq(minz)
+      miny = min(ind[,"dim2"])
+      ys = seq(miny, dim(mask_trans)[2])
+      xs = unique(ind[,"dim1"])
+      inds = expand.grid(xs, ys, zs)
+      inds = as.matrix(inds)
 
-    newimg = niftiarr(img, 0)
-    newimg[inds] = 1
-    newimg = cal_img(newimg)
+      newimg = niftiarr(img, 0)
+      newimg[inds] = 1
+      newimg = cal_img(newimg)
+    } else {
+      warning("No registered object in mask found - cannot extend!")
+      newimg = mask_trans
+    }
   } else {
     newimg = mask_trans
   }

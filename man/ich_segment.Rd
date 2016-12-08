@@ -35,4 +35,3 @@ List of output prediction/probability images
 \description{
 Will preprocess and predict the ICH voxels
 }
-

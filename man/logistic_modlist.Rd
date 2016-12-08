@@ -22,4 +22,3 @@ A list containing the logistic model for predicting ICH and other factors for
 prediction
 }
 \keyword{datasets}
-

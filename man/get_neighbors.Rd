@@ -35,4 +35,3 @@ This function calculates Local Moments (mean, standard deviation, skew) for an a
 x = array(rnorm(1000), dim=c(10, 10, 10))
 neigh = get_neighbors(x, nvoxels = 1)
 }
-

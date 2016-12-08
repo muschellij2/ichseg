@@ -15,4 +15,3 @@ Object of class \code{\link{nifti}}
 \description{
 Wrapper for returning a \code{nifti} object of the CT Template
 }
-

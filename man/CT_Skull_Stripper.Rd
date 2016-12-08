@@ -16,4 +16,3 @@ nifti}
 Simple Wrapper for \code{\link{CT_Skull_Strip}} and
 \code{\link{CT_Skull_Strip_robust}}, with simple flag for robustness
 }
-

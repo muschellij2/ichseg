@@ -22,4 +22,3 @@ A list containing the random forest model for predicting ICH and other factors f
 prediction
 }
 \keyword{datasets}
-

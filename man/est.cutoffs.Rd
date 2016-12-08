@@ -14,4 +14,3 @@ A dataset containing the 0.5% and 99.5% quantiles for the empirical
 distribution of training data for ICH segmentatino.
 }
 \keyword{datasets}
-

@@ -46,4 +46,3 @@ List of output images and transformations
 \description{
 Will do skull stripping and registration to the CT template
 }
-

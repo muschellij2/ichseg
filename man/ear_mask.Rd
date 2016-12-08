@@ -73,4 +73,3 @@ ears = ct_ear_mask(
  rimg = randomize_mask(img, mask = ears)
 }
 }
-

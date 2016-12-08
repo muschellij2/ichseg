@@ -17,4 +17,3 @@ Character filename
 \description{
 Wrapper for returning the filename of the CT Template
 }
-

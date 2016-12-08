@@ -21,4 +21,3 @@ for predicting ICH after smoothing and other factors for
 prediction.
 }
 \keyword{datasets}
-

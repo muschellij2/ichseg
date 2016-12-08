@@ -44,4 +44,3 @@ it again to erode it.
 \note{
 This function binarizes the image before running.
 }
-

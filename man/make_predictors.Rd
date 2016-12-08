@@ -80,4 +80,3 @@ mask
 Create a set of predictors for ICH segmentation
 for CT
 }
-

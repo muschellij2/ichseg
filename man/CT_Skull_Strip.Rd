@@ -68,4 +68,3 @@ character or logical depending on intern
 Skull Stripping (using FSL's BET) a CT file using \code{fslr}
 functions
 }
-

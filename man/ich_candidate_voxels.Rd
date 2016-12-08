@@ -16,4 +16,3 @@ Logical vector
 Takes estimated cutoffs from paper from training data
 and creates a logical candidate vector
 }
-
