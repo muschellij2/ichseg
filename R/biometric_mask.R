@@ -10,6 +10,18 @@
 #'
 #' @return Object of class nifti
 #' @export
+#' @examples \dontrun{
+#' file = "~/Desktop/Desktop/scratch/100-318_20070723_0957_CT_3_CT_Head-.nii.gz"
+#' mask = NULL
+#' robust = FALSE
+#' mask = ct_biometric_mask(
+#'    file = file,
+#'    robust = FALSE
+#'    )
+#'  img = readnii(file)
+#'  rimg = randomize_mask(img, mask = face)
+#' }
+#'
 biometric_mask = function(
   file,
   type = c("ct", "mri"),
@@ -36,6 +48,7 @@ ct_biometric_mask = function(
 
   args = list(...)
   args$type = "ct"
+  args$file = file
 
   mask = do.call("biometric_mask", args = args)
   return(mask)
@@ -49,6 +62,7 @@ mri_biometric_mask = function(
 
   args = list(...)
   args$type = "mri"
+  args$file = file
 
   mask = do.call("biometric_mask", args = args)
   return(mask)

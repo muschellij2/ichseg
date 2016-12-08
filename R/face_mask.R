@@ -31,14 +31,12 @@
 #' robust = FALSE
 #' face = ct_face_mask(
 #'    file = file,
-#'    robust = FALSE,
-#'     template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
-#'                   package = "ichseg")
+#'    robust = FALSE
 #'    )
 #'  img = readnii(file)
 #'  rimg = randomize_mask(img, mask = face)
 #' }
-#'#'
+#'
 ct_face_mask <- function(
   file,
   mask = NULL,

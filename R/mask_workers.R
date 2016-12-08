@@ -94,6 +94,7 @@
   }
   L = list(mask_trans = mask_trans,
            img = img)
+  L$fwdtransforms = rev_reg$fwdtransforms
   if (swapdim) {
     L$sorient = sorient
     L$ori = ori

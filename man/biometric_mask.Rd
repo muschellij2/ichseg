@@ -28,4 +28,18 @@ Object of class nifti
 Estimates biometric masks for anonymization, such as the face and
 ears.
 }
+\examples{
+\dontrun{
+file = "~/Desktop/Desktop/scratch/100-318_20070723_0957_CT_3_CT_Head-.nii.gz"
+mask = NULL
+robust = FALSE
+face = ct_biometric_mask(
+   file = file,
+   robust = FALSE
+   )
+ img = readnii(file)
+ rimg = randomize_mask(img, mask = face)
+}
+
+}
 
