@@ -85,12 +85,14 @@ ich_predict = function(df,
                                 df[ df$multiplier, ],
                                 type = "response"))
 
+  mult_img = niftiarr(nim, df$multiplier)
+
   # p = predict(mod, df[ df$multiplier, ], type = "response")
   pimg = remake_img(p,
                     nim,
-                    df$multiplier)
+                    mult_img)
 
-  mask = remake_img(df$mask, nim)
+  mask = niftiarr(nim, df$mask)
   pimg = mask_img(pimg, mask)
   sm.pimg  = mean_image(pimg,
                         nvoxels = 1)
