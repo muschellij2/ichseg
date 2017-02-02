@@ -12,13 +12,20 @@ CT_Skull_Stripper <- function(
 
   L = list(...)
   nL = names(L)
+  if (is.null(nL)) {
+    nL = rep("", length = length(L))
+  }
   if (robust) {
     n = names(formals(CT_Skull_Strip_robust))
-    L = L[intersect(nL, n)]
+    n = c("", n)
+    ind = which(nL %in% n)
+    L = L[ind]
     res = do.call("CT_Skull_Strip_robust", L)
   } else {
     n = names(formals(CT_Skull_Strip))
-    L = L[intersect(nL, n)]
+    n = c("", n)
+    ind = which(nL %in% n)
+    L = L[ind]
     res = do.call("CT_Skull_Strip", L)
   }
   return(res)
