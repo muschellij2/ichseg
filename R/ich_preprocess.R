@@ -72,7 +72,7 @@ ich_preprocess = function(img,
     interpolator = interpolator,
     remove.warp = FALSE,
     outprefix = outprefix,
-    verbose = verbose)
+    verbose = verbose > 1)
 
   omask = ants_apply_transforms(fixed = template.file,
                                 moving = mask,

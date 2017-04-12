@@ -202,7 +202,8 @@ make_predictors <- function(img, mask, roi = NULL,
     # erode the mask
     mask = fslerode(file = mask.fname,
                     kopts = "-kernel box 3x3x1",
-                    reorient = FALSE, retimg = TRUE)
+                    reorient = FALSE, retimg = TRUE,
+                    verbose = verbose > 1)
     #### may add this - think about it
     #     mask = fslfill(mask, bin=TRUE, retimg = TRUE)
     mask = mask > 0
@@ -407,7 +408,7 @@ make_predictors <- function(img, mask, roi = NULL,
     prob_img = readnii(fname, reorient = FALSE)
   } else {
     window.masked.img = window_img(masked.img, window = c(0, 100))
-    seg = otropos( window.masked.img, i = "KMeans[4]", verbose = verbose)
+    seg = otropos( window.masked.img, i = "KMeans[4]", verbose = verbose > 1)
     prob_img = seg$probabilityimages[[3]] + seg$probabilityimages[[4]]
     rm(list = c("seg")); gc(); gc();
     if (save_imgs){
@@ -504,7 +505,8 @@ make_predictors <- function(img, mask, roi = NULL,
     } else {
       smooth.img = fslsmooth(img.fname, sigma=sigma,
                              mask = mask, retimg = TRUE,
-                             outfile = fname)
+                             outfile = fname,
+                             verbose = verbose > 1)
     }
     return(c(smooth.img))
   }
@@ -532,7 +534,7 @@ make_predictors <- function(img, mask, roi = NULL,
                                         sd.img = sd.img,
                                         typeofTransform = zscore.typeofTransform,
                                         interpolator = zscore.interpolator,
-                                        verbose = verbose)
+                                        verbose = verbose > 1)
     if (save_imgs){
       write_img(zscore, addstub)
     }
@@ -554,7 +556,7 @@ make_predictors <- function(img, mask, roi = NULL,
       template.file = template.file,
       typeofTransform = flip.typeofTransform,
       interpolator = flip.interpolator,
-      verbose = verbose)
+      verbose = verbose > 1)
     flipper = flipper$t1
     ##########################
     # Take difference
