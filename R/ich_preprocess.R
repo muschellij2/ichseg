@@ -18,6 +18,7 @@
 #' @param interpolator Interpolation to be done after transformation
 #' @param outfile Output filename for transformed registered image
 #' @param verbose Print diagnostic output
+#' @param shiny Should shiny progress be called?
 #' @param ... Additional options passsed to \code{\link{CT_Skull_Strip_robust}}
 #' or \code{\link{CT_Skull_Strip}}
 #'
@@ -38,9 +39,13 @@ ich_preprocess = function(img,
                           interpolator = "Linear",
                           outfile = NULL,
                           verbose = TRUE,
+                          shiny = FALSE,
                           ...) {
 
   if (skull_strip & is.null(mask)) {
+    if (shiny) {
+        shiny::incProgress(message = "Skull Stripping Image")
+    }
     if (robust) {
       ss = CT_Skull_Strip_robust(img, retimg = TRUE, ...)
     } else {
@@ -59,6 +64,9 @@ ich_preprocess = function(img,
 
   if (is.null(outprefix)){
     outprefix = tempfile()
+  }
+  if (shiny) {
+    shiny::incProgress(message = "Rigid-Body Registration")
   }
   typeofTransform = match.arg(typeofTransform)
   res = registration(

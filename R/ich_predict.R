@@ -18,6 +18,7 @@
 #' @param interpolator Interpolator for the transformation back to native space
 #' @param native_thresh Threshold for re-thresholding binary mask after
 #' interpolation
+#' @param shiny Should shiny progress be called?
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output registered and native space
@@ -36,6 +37,7 @@ ich_predict = function(df,
                        transformlist = NULL,
                        interpolator = NULL,
                        native_thresh = 0.5,
+                       shiny = FALSE,
                        ...) {
 
   # if (!have_matlab()) {
@@ -58,8 +60,12 @@ ich_predict = function(df,
       df[, icn] = x
     }
   }
+  msg = "# Making Prediction Images"
   if (verbose) {
-    message("# Making Prediction Images")
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg)
   }
   env = as.environment("package:ichseg")
 
@@ -135,7 +141,7 @@ ich_predict = function(df,
       )
     })
     native_res$smoothed_prediction_image = neurobase::datatyper(
-        native_res$smoothed_prediction_image > native_thresh
+      native_res$smoothed_prediction_image > native_thresh
     )
     native_res$prediction_image = neurobase::datatyper(
       native_res$prediction_image > native_thresh

@@ -6,7 +6,7 @@
 \usage{
 ich_predict(df, nim, model = c("rf", "logistic"), verbose = TRUE,
   native = TRUE, native_img = NULL, transformlist = NULL,
-  interpolator = NULL, native_thresh = 0.5, ...)
+  interpolator = NULL, native_thresh = 0.5, shiny = FALSE, ...)
 }
 \arguments{
 \item{df}{\code{\link{data.frame}} of predictors.  If \code{multiplier}
@@ -33,6 +33,8 @@ NOTE: these will be inverted.}
 
 \item{native_thresh}{Threshold for re-thresholding binary mask after
 interpolation}
+
+\item{shiny}{Should shiny progress be called?}
 
 \item{...}{Additional options passsed to \code{\link{ich_preprocess}}}
 }

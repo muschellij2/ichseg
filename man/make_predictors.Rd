@@ -14,7 +14,7 @@ make_predictors(img, mask, roi = NULL, nvoxels = 1, moments = 1:4,
   zscore.typeofTransform = "SyN", zscore.interpolator = "Linear",
   flip.typeofTransform = "Affine",
   flip.interpolator = "LanczosWindowedSinc", low_thresh = 1e-13,
-  verbose = TRUE, ...)
+  verbose = TRUE, shiny = FALSE, ...)
 }
 \arguments{
 \item{img}{Filename of image intensities}
@@ -66,6 +66,8 @@ instead instead of code being re-run.}
 
 \item{verbose}{Logical indicator if output messages should be
 printed}
+
+\item{shiny}{Should shiny progress be called?}
 
 \item{...}{options passed to \code{\link{get_neighbors}}}
 }

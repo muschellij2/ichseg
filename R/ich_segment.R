@@ -13,6 +13,7 @@
 #' if \code{save_imgs = TRUE}
 #' @param stub Basename to write image names if \code{save_imgs = TRUE}
 #' @param verbose Print diagnostic output
+#' @param shiny Should shiny progress be called?
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output prediction/probability images
@@ -25,6 +26,7 @@ ich_segment = function(img,
                        outdir = NULL,
                        stub = NULL,
                        verbose = TRUE,
+                       shiny = FALSE,
                        ...) {
 
   # if (!have_matlab()) {
@@ -38,21 +40,30 @@ ich_segment = function(img,
   model = match.arg(model)
 
   if (verbose) {
-    message("# Processing The Data")
+    msg = "# Processing The Data"
+    message(msg)
+  }
+  if (shiny) {
+    shiny::setProgress(message = msg, value = 0)
   }
   # orig.img = img
   preprocess = ich_preprocess(
     img = img,
     mask = mask,
-    verbose = verbose, ...)
+    verbose = verbose,
+    shiny = shiny,
+    ...)
 
   timg = preprocess$transformed_image
   tmask = preprocess$transformed_mask > 0.5
 
   if (verbose) {
-    message("# Making Predictors")
+    msg = "# Making Predictors"
+    message(msg)
   }
-
+  if (shiny) {
+    shiny::setProgress(message = msg, value = 2/3)
+  }
   if (save_imgs){
     if (is.character(img)){
       if (is.null(stub)){
@@ -64,7 +75,8 @@ ich_segment = function(img,
                              roi = NULL, save_imgs = save_imgs,
                              stub = stub,
                              outdir = outdir,
-                             verbose = verbose)
+                             verbose = verbose,
+                             shiny = shiny)
   df = img.pred$df
   nim = img.pred$nim
   rm(list = "img.pred")
@@ -76,7 +88,11 @@ ich_segment = function(img,
   ##############################################################
   # grabbing the evnironment to extract exported stuff
   if (verbose) {
-    message("# Running ich_predict")
+    msg = "# Running ich_predict"
+    message(msg)
+  }
+  if (shiny) {
+    shiny::setProgress(message = msg, value = 3/3 - 0.3)
   }
   L = ich_predict(df = df,
                   nim = nim,
@@ -85,9 +101,12 @@ ich_segment = function(img,
                   native = TRUE,
                   verbose = verbose,
                   transformlist = preprocess$invtransforms,
-                  interpolator = preprocess$interpolator)
+                  interpolator = preprocess$interpolator,
+                  shiny = shiny)
   L$preprocess = preprocess
-
+  if (shiny) {
+    shiny::setProgress(value = 3/3)
+  }
   return(L)
 
 }

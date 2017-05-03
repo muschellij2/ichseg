@@ -30,6 +30,7 @@
 #' @param low_thresh Threshold for forcing values to zero
 #' @param verbose Logical indicator if output messages should be
 #' printed
+#' @param shiny Should shiny progress be called?
 #' @param ... options passed to \code{\link{get_neighbors}}
 #' @importFrom neurobase readnii checkimg zscore_img finite_img
 #' @importFrom fslr fslerode
@@ -42,6 +43,7 @@
 #' keep in mask and an empty nifti object for plotting.
 #' Also the number of voxels of the roi that were not in the
 #' mask
+
 make_predictors <- function(img, mask, roi = NULL,
                             nvoxels = 1, moments = 1:4,
                             center = c(FALSE, TRUE, TRUE, TRUE),
@@ -66,6 +68,7 @@ make_predictors <- function(img, mask, roi = NULL,
                             flip.interpolator = "LanczosWindowedSinc",
                             low_thresh = 1e-13,
                             verbose= TRUE,
+                            shiny = FALSE,
                             ...) {
   make_fname = function(addstub){
     fname = addstub
@@ -100,8 +103,12 @@ make_predictors <- function(img, mask, roi = NULL,
 
     ### if all data does not exist or rewrite - remake data
     if (!all(mom.exist) | overwrite) {
+      msg = "# Running Local_Moment"
       if (verbose){
-        message("# Running Local_Moment")
+        message(msg)
+      }
+      if (shiny) {
+        shiny::incProgress(message = msg, amount = 0.02)
       }
       moms = local_moment(
         img,
@@ -129,13 +136,17 @@ make_predictors <- function(img, mask, roi = NULL,
         return(mom.img)
       })
     }
+    msg = "# Creating Moment Matrix"
     if (verbose) {
-      message("# Creating Moment Matrix")
+      message(msg)
+    }
+    if (shiny) {
+      shiny::incProgress(message = msg, amount = 0.02)
     }
     mat = matrix(NA,
                  ncol = length(moms),
                  nrow = prod(dim(mask))
-                 )
+    )
     for (imom in seq_along(moms)) {
       mat[, imom] = c(moms[[imom]])
     }
@@ -173,8 +184,12 @@ make_predictors <- function(img, mask, roi = NULL,
     stub = nii.stub(img.fname, bn = TRUE)
   }
 
+  msg = "# Reading Images"
   if (verbose) {
-    message("\n# Reading Images\n")
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   # img = readnii(img.fname, reorient= FALSE)
   orig.img = img
@@ -191,8 +206,12 @@ make_predictors <- function(img, mask, roi = NULL,
   #     roi = niftiarr(img, array(0, dim = dim(nim)))
   #   }
 
+  msg = "# Eroding Mask"
   if (verbose) {
-    message("# Eroding Mask\n")
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = "usemask"
   fname = make_fname(addstub)
@@ -224,8 +243,12 @@ make_predictors <- function(img, mask, roi = NULL,
 
   keep.ind = which(mask > 0)
 
+  msg = "# Getting Moments"
   if (verbose) {
-    message("# Getting Moments\n")
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   ################################################
   # Making Moment Images
@@ -271,9 +294,13 @@ make_predictors <- function(img, mask, roi = NULL,
   ################################################
   # Making Percent threshold image
   ################################################
+  msg = paste0("# Getting thresholded from ",
+               lthresh, " to ", uthresh, "\n")
   if (verbose) {
-    message(paste0("# Getting thresholded from ",
-                   lthresh, " to ", uthresh, "\n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = paste0("thresh_", lthresh, "_", uthresh)
   fname = make_fname(addstub)
@@ -294,8 +321,12 @@ make_predictors <- function(img, mask, roi = NULL,
   ################################################
   # Making Z-score Images
   ################################################
+  msg = "# Getting Z-scored images"
   if (verbose) {
-    message(paste0("# Getting Z-scored images\n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   zimgs = lapply(1:3, function(i){
     addstub = paste0("zscore", i)
@@ -318,16 +349,16 @@ make_predictors <- function(img, mask, roi = NULL,
   }
   rm(list = c("zimgs")); gc(); gc();
 
-#   wmean2 = function(img, mask, trim = 0.2){
-#     x = img[ mask == 1]
-#     mn = psych::winsor.mean(x, trim = trim)
-#     s = psych::winsor.sd(x, trim = trim)
-#     z = (x-mn)/s
-#     img[mask == 1] = z
-#     img[mask == 0] = 0
-#     img = cal_img(img)
-#     return(img)
-#   }
+  #   wmean2 = function(img, mask, trim = 0.2){
+  #     x = img[ mask == 1]
+  #     mn = psych::winsor.mean(x, trim = trim)
+  #     s = psych::winsor.sd(x, trim = trim)
+  #     z = (x-mn)/s
+  #     img[mask == 1] = z
+  #     img[mask == 0] = 0
+  #     img = cal_img(img)
+  #     return(img)
+  #   }
 
   wmean = function(img, mask, trim = 0.2){
     x = img[ mask == 1 ]
@@ -355,8 +386,12 @@ make_predictors <- function(img, mask, roi = NULL,
     return(img)
   }
 
+  msg = "# Getting Winsorized Image"
   if (verbose) {
-    message("# Getting Winsorized Image\n")
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = paste0("win_z")
   fname = make_fname(addstub)
@@ -374,9 +409,13 @@ make_predictors <- function(img, mask, roi = NULL,
   ################################################
   # Making Percent threshold image
   ################################################
+  msg = paste0("# Getting Percent thresholded from ",
+               lthresh, " to ", uthresh)
   if (verbose) {
-    message(paste0("# Getting Percent thresholded from ",
-                   lthresh, " to ", uthresh, "\n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = paste0("pct_thresh_", lthresh, "_", uthresh)
   fname = make_fname(addstub)
@@ -399,8 +438,12 @@ make_predictors <- function(img, mask, roi = NULL,
   ################################################
   # Making Probability
   ################################################
+  msg = "# Getting Top Probability Segmentation from Atropos"
   if (verbose) {
-    message(paste0("# Getting Top Probability Segmentation from Atropos\n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = paste0("prob_img")
   fname = make_fname(addstub)
@@ -423,8 +466,12 @@ make_predictors <- function(img, mask, roi = NULL,
   ################################################
   # Making Percent that are 0
   ################################################
+  msg = "# Getting Percent 0"
   if (verbose) {
-    message(paste0("# Getting Percent 0\n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   ###### changed to masked.img
   thresh_0 = niftiarr(masked.img, masked.img == 0)
@@ -445,8 +492,12 @@ make_predictors <- function(img, mask, roi = NULL,
   df$pct_zero_neighbor = c(pct_zero_neighbor)
   rm(list = c("pct_zero_neighbor", "thresh_0")); gc(); gc();
 
+  msg = "# Getting Any 0 Neighbors"
   if (verbose) {
-    message(paste0("# Getting Any 0 Neighbors\n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = "any_zero_neighbor"
   df$any_zero_neighbor = (df$pct_zero_neighbor > 0) *1
@@ -454,8 +505,12 @@ make_predictors <- function(img, mask, roi = NULL,
   ################################################
   # Making Distance to centroid
   ################################################
+  msg = "# Getting Distance to centroid"
   if (verbose) {
-    message(paste0("# Getting Distance to centroid\n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = "dist_centroid"
   fname = make_fname(addstub)
@@ -488,8 +543,12 @@ make_predictors <- function(img, mask, roi = NULL,
   # Making 10mm and 20mm smoother
   ################################################
   make_smooth_img = function(sigma){
+    msg = paste0("# Getting Smooth ", sigma)
     if (verbose) {
-      message(paste0("# Getting Smooth ", sigma, "\n"))
+      message(msg)
+    }
+    if (shiny) {
+      shiny::incProgress(message = msg, amount = 0.02)
     }
     addstub = paste0("smooth", sigma)
     if (save_imgs){
@@ -519,9 +578,12 @@ make_predictors <- function(img, mask, roi = NULL,
 
 
 
-
+  msg = "# Z-score to template"
   if (verbose) {
-    message(paste0("# Z-score to template \n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = "zscore_template"
   fname = make_fname(addstub)
@@ -542,8 +604,12 @@ make_predictors <- function(img, mask, roi = NULL,
   df$zscore_template = c(zscore)
   rm(list = c("zscore")); gc(); gc();
 
+  msg = "# Flipped Difference"
   if (verbose) {
-    message(paste0("# Flipped Difference \n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
   addstub = "flipped_value"
   fname = make_fname(addstub)
@@ -570,8 +636,12 @@ make_predictors <- function(img, mask, roi = NULL,
   df$flipped_value = c(flipped_value)
   rm(list = c("flipped_value")); gc(); gc();
 
+  msg = "# Thresholding small values"
   if (verbose) {
-    message(paste0("# Thresholding small values \n"))
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
   }
 
 

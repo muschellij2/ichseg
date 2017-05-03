@@ -7,7 +7,8 @@
 ich_preprocess(img, skull_strip = TRUE, robust = TRUE, mask = NULL,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
   "ichseg"), outprefix = NULL, typeofTransform = c("Rigid", "Affine"),
-  interpolator = "Linear", outfile = NULL, verbose = TRUE, ...)
+  interpolator = "Linear", outfile = NULL, verbose = TRUE,
+  shiny = FALSE, ...)
 }
 \arguments{
 \item{img}{CT image, object of class \code{nifti} or
@@ -36,6 +37,8 @@ the output transformations}
 \item{outfile}{Output filename for transformed registered image}
 
 \item{verbose}{Print diagnostic output}
+
+\item{shiny}{Should shiny progress be called?}
 
 \item{...}{Additional options passsed to \code{\link{CT_Skull_Strip_robust}}
 or \code{\link{CT_Skull_Strip}}}
