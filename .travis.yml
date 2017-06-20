@@ -1,15 +1,23 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
 language: R
-sudo: false
+sudo: no
 cache: packages
-
-bioc_required: true
-use_bioc: true
-
+bioc_required: yes
+use_bioc: yes
 before_install:
   - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
   - cat antsr_travis.sh
   - source ./antsr_travis.sh
   - rm antsr_travis.sh
   - cat DESCRIPTION
+
+deploy:
+  provider: releases
+  skip_cleanup: yes
+  api_key:
+    secure: Wyb6Hj7awahxJN3jlwVyWQ41364xYPCAohvAOwmUn2wgudQLsWmNA3BEKUromwvpnVJL+aFKaoi/WeBdk7L+imVvJjjBmWJiQdAwr2JZI0GeBNRSppCm3rHMYlq3PJzcnDYv/GMW5d9oQOMNtzY7oYxdemV12Z/GmeWBb9GTRWEzNzZ2d46btQfp8vAuxl4f4kCLUxpqMZK6IN6svV4910TVRJl3RId121JbgdUKgNS4HJMl1ae5X6CY+tkxwP+xW+OwdpkknXcndDvTpymjVk5kb8cN2zcrrFKf/3eYCvone0F32ooOL5GX49kpz4mgDmh8X1jywoT94tL8YE5xVC86zEtdnbcAOBw0MT7iEUuUcuhGoABDEHldgxAOEVMWLxVD0I5FK9yZRic5z9om4DpMYQBCzrHF5gcuzyMpO8O+mdtY3NK5BI75Iz1pUgzjrg5CGtMF4VXOcj8KPyRjKMgpw0yCXbvyR/V9BHrbvZpexQut5ALOvf/i7EJtJdHJjwnazcu+wG9kiQoT/KR1xEHomgOLY9wFTIi3fDVkZniNpuga/EaQj/4aVIkULV5/stQZvjspjBYeYwDDmgiOQYReiCWpGMi5KaclkB6SNX1CFPfqWWDvsBBLBzkDTOgvFP5zDa2Fe3t7sAI1TbVGVKcP1PlMjCzbSwz2rs9t4uw=
+  file_glob: yes
+  file: ichseg*.t*gz
+  'on':
+    tags: yes
+    repo: muschellij2/ichseg
+
