@@ -6,3 +6,11 @@ cache: packages
 
 bioc_required: true
 use_bioc: true
+
+before_install:
+  - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
+  - chmod +x antsr_travis.sh
+  - source ./antsr_travis.sh
+  - rm antsr_travis.sh
+  - install_nodep_and_drop "extrantsr"
+  - cat DESCRIPTION

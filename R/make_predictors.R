@@ -33,7 +33,7 @@
 #' @param shiny Should shiny progress be called?
 #' @param ... options passed to \code{\link{get_neighbors}}
 #' @importFrom neurobase readnii checkimg zscore_img finite_img
-#' @importFrom fslr fslerode
+#' @importFrom fslr fslerode fsl_smooth
 #' @importFrom oro.nifti zero_trans cal_img voxdim pixdim convert.datatype convert.bitpix
 #' @importFrom extrantsr zscore_template otropos reg_flip
 #' @importFrom stats sd quantile predict complete.cases
@@ -43,7 +43,6 @@
 #' keep in mask and an empty nifti object for plotting.
 #' Also the number of voxels of the roi that were not in the
 #' mask
-
 make_predictors <- function(img, mask, roi = NULL,
                             nvoxels = 1, moments = 1:4,
                             center = c(FALSE, TRUE, TRUE, TRUE),
@@ -562,6 +561,12 @@ make_predictors <- function(img, mask, roi = NULL,
     if (file.exists(fname) & !overwrite) {
       smooth.img = readnii(fname, reorient = FALSE)
     } else {
+      smooth.mask = fslr::fsl_smooth(
+        file = mask,
+        sigma = sigma,
+        mask = NULL,
+        smooth_mask = FALSE,
+        verbose = verbose > 1)
       smooth.img = fslsmooth(img.fname, sigma=sigma,
                              mask = mask, retimg = TRUE,
                              outfile = fname,
