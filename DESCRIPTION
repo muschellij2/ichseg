@@ -17,13 +17,17 @@ Imports:
     stats,
     extrantsr (>= 3.0),
     oro.nifti,
-    neurobase,
+    neurobase (>= 1.20.5),
     fslr (>= 2.4),
     magic,
     randomForest,
     shiny
 LazyData: TRUE
 RoxygenNote: 6.0.1
-Remotes: stnava/ANTsRCore, muschellij2/extrantsr, muschellij2/fslr
+Remotes: 
+    stnava/ANTsRCore, 
+    muschellij2/neurobase, 
+    muschellij2/extrantsr, 
+    muschellij2/fslr
 
 
