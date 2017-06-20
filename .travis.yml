@@ -8,8 +8,8 @@ bioc_required: true
 use_bioc: true
 
 before_install:
-  - wget -O travis_helpers.sh http://bit.ly/travis_helpers
-  - source travis_helpers.sh
-  - rm travis_helpers.sh
-  - remote_binary_install ITKR ANTsRCore ANTsR
-  - install_remotes_no_dep
+  - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
+  - cat antsr_travis.sh
+  - source ./antsr_travis.sh
+  - rm antsr_travis.sh
+  - cat DESCRIPTION
