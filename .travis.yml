@@ -12,5 +12,4 @@ before_install:
   - chmod +x antsr_travis.sh
   - source ./antsr_travis.sh
   - rm antsr_travis.sh
-  - install_nodep_and_drop "extrantsr"
   - cat DESCRIPTION
