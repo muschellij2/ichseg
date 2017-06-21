@@ -17,7 +17,8 @@ before_install:
 - cat DESCRIPTION
 
 after_success:
-- install_build_with_tag()
+  - install_build_with_tag()
+
 
 deploy:
   provider: releases
