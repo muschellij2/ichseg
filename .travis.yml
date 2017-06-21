@@ -12,6 +12,8 @@ before_install:
   - rm antsr_travis.sh
   - cat DESCRIPTION
 
+after_success: 
+  - install_build_with_tag()
 
 deploy:
   provider: releases
