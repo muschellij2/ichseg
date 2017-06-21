@@ -3,6 +3,11 @@ sudo: false
 cache: packages
 bioc_required: true
 use_bioc: true
+
+os:
+  - linux
+  - osx
+  
 before_install:
 - export RGL_USE_NULL=TRUE
 - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
