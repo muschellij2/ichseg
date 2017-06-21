@@ -1,28 +1,26 @@
 language: R
-sudo: no
+sudo: false
 cache: packages
-bioc_required: yes
-use_bioc: yes
-
+bioc_required: true
+use_bioc: true
 before_install:
-  - export RGL_USE_NULL=TRUE  
-  - wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
-  - cat antsr_travis.sh
-  - source ./antsr_travis.sh
-  - rm antsr_travis.sh
-  - cat DESCRIPTION
+- export RGL_USE_NULL=TRUE
+- wget -O antsr_travis.sh http://bit.ly/antsr_travis_sh
+- cat antsr_travis.sh
+- source ./antsr_travis.sh
+- rm antsr_travis.sh
+- cat DESCRIPTION
 
-after_success: 
-  - install_build_with_tag()
+after_success:
+- install_build_with_tag()
 
 deploy:
   provider: releases
   skip_cleanup: yes
   api_key:
-    secure: Wyb6Hj7awahxJN3jlwVyWQ41364xYPCAohvAOwmUn2wgudQLsWmNA3BEKUromwvpnVJL+aFKaoi/WeBdk7L+imVvJjjBmWJiQdAwr2JZI0GeBNRSppCm3rHMYlq3PJzcnDYv/GMW5d9oQOMNtzY7oYxdemV12Z/GmeWBb9GTRWEzNzZ2d46btQfp8vAuxl4f4kCLUxpqMZK6IN6svV4910TVRJl3RId121JbgdUKgNS4HJMl1ae5X6CY+tkxwP+xW+OwdpkknXcndDvTpymjVk5kb8cN2zcrrFKf/3eYCvone0F32ooOL5GX49kpz4mgDmh8X1jywoT94tL8YE5xVC86zEtdnbcAOBw0MT7iEUuUcuhGoABDEHldgxAOEVMWLxVD0I5FK9yZRic5z9om4DpMYQBCzrHF5gcuzyMpO8O+mdtY3NK5BI75Iz1pUgzjrg5CGtMF4VXOcj8KPyRjKMgpw0yCXbvyR/V9BHrbvZpexQut5ALOvf/i7EJtJdHJjwnazcu+wG9kiQoT/KR1xEHomgOLY9wFTIi3fDVkZniNpuga/EaQj/4aVIkULV5/stQZvjspjBYeYwDDmgiOQYReiCWpGMi5KaclkB6SNX1CFPfqWWDvsBBLBzkDTOgvFP5zDa2Fe3t7sAI1TbVGVKcP1PlMjCzbSwz2rs9t4uw=
+    secure: laFG9AiY+nF3cH8TIwwDzApRqTUcRFQRTZKg5D4VKoGyFG1ylsWOJQVzIjSqwyZn2ArHtLk9/+jrjOpivFEafvkSVmxZz3AJbgtFuEnejyHJKQcO/DoNyJbJUi6gThsfvRDKnd568WfJqyGeD08iYXUJqzwwlS/v54NAHUyKkerwcNB1rVF/S0aOGvsVU2ud8Ly5CnLgwWPDVMRq7Vi9PdABrRCQTPaN8X6SMKYmbwwr40MTM4KmBl8lpfIpsE1LohCOxz+oiZHGjrhTSUR2Pq7i+8NlxrHftmP00igkkWZAH9O2urzxruVSMbz4y4B1lhqbo3JCK8mmovJon9RhYkBtFRq6J0TtWrgctMRBlySxKzw9WvY1HBftBQ4mCyRmHyEVoR92CyZk6y4Y6/Cd6TDR2eh7gwzTZvFG+4e0RPeWmHVuFy/K9doHic2GGG8jNdsM02lb0EwZ0Bh4m1ERK/nRfD0bMSyvBYtTgGF7A1wa1Ie5xUSZbFe7TyM0Bm8aUrpQpfW9P5+kg8l6Vsy4v1DmRUQKfI+6k0FOYcrzGAts14d1xY/Ax2Ol1RBLp/USxRV0AzKpKFdPyYc7+fGq0r+2aQdb8MJ/viSnzKes0xVgNk6OvBTf+zzuqLDd/F8L0xmbU4+8ORpwa7UEthzSkQZIBRak/MiS25M5rq+qfNU=
   file_glob: yes
   file: ichseg*.t*gz
   'on':
     tags: yes
     repo: muschellij2/ichseg
-
