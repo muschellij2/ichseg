@@ -1,0 +1,298 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Installation and Setup 
+
+R is used for most of the computations but there are external dependencies required for the packages needed to get this working.
+Most of my this software requires a Linux/*nix machine.
+
+If you're using a Docker/Singularity container, I suggest using Debian and Neurodebian (http://neuro.debian.net/).  
+
+## External Dependencies
+### R Package Setup
+
+```{r, engine = "bash"}
+sudo apt-get install r-base r-base-dev
+```
+
+In `R`:
+```{r}
+install.packages("devtools")
+```
+
+### FSL
+FSL (https://fsl.fmrib.ox.ac.uk/fsl/fslwiki) must be installed for the fslr package (see https://github.com/muschellij2/fslr for additional Neurodebian setup).
+
+After setting up the `apt-key`s sufficiently, the below may install FSL to work with `fslr` (not guaranteed).
+
+```{r, engine = "bash"}
+sudo apt-get install fsl-complete
+
+FSLDIR=/usr/local/fsl
+FSLSHARE=/usr/share/data
+
+mkdir -p ${FSLDIR}/bin && cp /usr/lib/fsl/5.0/* ${FSLDIR}/bin/
+mkdir -p ${FSLDIR}/data/standard && mkdir -p ${FSLDIR}/data/atlases 
+
+
+#######################################
+# Setting things up like other installers
+#######################################
+cp -R ${FSLSHARE}/fsl-mni152-templates/* ${FSLDIR}/data/standard/
+
+# setting up atlases
+cp -R ${FSLSHARE}/harvard-oxford-atlases/* ${FSLDIR}/data/atlases/ 
+cp -R ${FSLSHARE}/juelich-histological-atlas/* ${FSLDIR}/data/atlases/ 
+cp -R ${FSLSHARE}/bangor-cerebellar-atlas/* ${FSLDIR}/data/atlases/ 
+cp -R ${FSLSHARE}/jhu-dti-whitematter-atlas/* ${FSLDIR}/data/atlases/ 
+cp -R ${FSLSHARE}/forstmann-subthalamic-nucleus-atlas/* ${FSLDIR}/data/atlases/ 
+cp -R ${FSLSHARE}/fsl-resting-connectivity-parcellation-atlases/* ${FSLDIR}/data/atlases/ 
+cp -R ${FSLSHARE}/mni-structural-atlas/* ${FSLDIR}/data/atlases/ 
+cp -R ${FSLSHARE}/oxford-thalamic-connectivity-atlas/* ${FSLDIR}/data/atlases/ 
+cp -R ${FSLSHARE}/talairach-daemon-atlas/* ${FSLDIR}/data/atlases/ 
+
+echo "export LD_LIBRARY_PATH=/usr/lib/fsl/5.0:$LD_LIBRARY_PATH" >> ~/.profile
+echo "export LD_LIBRARY_PATH=/usr/lib/fsl/5.0:$LD_LIBRARY_PATH" >> ~/.bash_profile
+```
+
+### ANTsR and ITK-based software
+
+The `ichseg` package relies upon `extrantsr`, which relies on `ANTsR`, `ANTsRCore`, and `ITKR`, which are largely powerful packages that rely upon the [ITK](https://itk.org) software.  
+
+These rely on `git` and `cmake`, so they must be installed:
+
+```{r, engine = "bash"}
+sudo apt-get git-core
+sudo apt-get cmake
+```
+
+
+In `R`:
+
+```{r}
+devtools::install_github("muschellij2/ITKR")
+devtools::install_github("muschellij2/ANTsRCore")
+devtools::install_github("muschellij2/ANTsR")
+```
+
+
+An easier way to install these packages is likely to use the binaries
+#### OS X Binaries
+
+The links for the OSX binaries are at:
+```
+https://github.com/muschellij2/ITKR/releases/download/v0.4.12.4/ITKR_0.4.12.4.tgz
+https://github.com/muschellij2/ANTsRCore/releases/download/v0.4.2.1/ANTsRCore_0.4.2.1.tgz
+https://github.com/muschellij2/ANTsR/releases/download/v0.6.2/ANTsR_0.6.2.tgz
+```
+
+#### Linux Binaries
+
+The links for the Linux binaries are at:
+```
+https://github.com/muschellij2/ITKR/releases/download/v0.4.12.4/ITKR_0.4.12.4_R_x86_64-pc-linux-gnu.tar.gz
+https://github.com/muschellij2/ANTsRCore/releases/download/v0.4.2.1/ANTsRCore_0.4.2.1_R_x86_64-pc-linux-gnu.tar.gz
+https://github.com/muschellij2/ANTsR/releases/download/v0.6.2/ANTsR_0.6.2_R_x86_64-pc-linux-gnu.tar.gz
+```
+
+
+### Installing ichseg
+
+The main R package that does the ICH segmentation in CT is `ichseg`:
+https://github.com/muschellij2/ichseg.  After the 3 packages above are installed, you are ready to install the main pacakge `ichseg`
+```{r}
+devtools::install_github("muschellij2/extrantsr", upgrade_dependencies = FALSE)
+devtools::install_github("muschellij2/ichseg", upgrade_dependencies = FALSE)
+```
+
+
+# Workflow 
+
+Here we will have some data (DICOM format), that is unsorted and there are multiple pieces of data in there (such MRI scans, localizer scans, CTA, etc.).
+
+## Sorting DICOM data (not solved)
+
+Have a folder of DICOM data.  There can be multiple images in there, they will be sorted in the following steps.
+
+We use the `tractor.base::sortDicomDirectories` function.  We need at least a specific version for sorting.  
+
+```{r}
+if (!("tractor.base" %in% installed.packages())) {
+  install.packages("tractor.base")
+}
+tractor_version = packageVersion("tractor.base")
+if (compareVersion(as.character(tractor_version), "3.1.3") < 0) {
+  devtools::install_github(
+    "tractor/tractor", 
+    subdir = "tractor.base")
+}
+```
+
+Now that you have the package installed, you should run the following steps for DICOM sorting (where you replace `"/path/to/dicom/files"` with the relevant directory):
+
+```{r}
+dicom_directory = "/path/to/dicom/files"
+before_run = list.dirs(dir, recursive = FALSE)
+
+# find all zip files - uncompress them, then delete zip files
+all_zip = list.files(
+  path = dir,
+  pattern = "[.]zip$",
+  recursive = TRUE, full.names = TRUE)
+if (length(all_zip) > 0) {
+  file.remove(all_zip)
+}
+
+all_zip = list.files(
+  path = dir,
+  pattern = "[.]rar$",
+  recursive = TRUE, full.names = TRUE)
+if (length(all_zip) > 0) {
+  file.remove(all_zip)
+}
+
+# sort the data
+res = tractor.base::sortDicomDirectories(
+  directories = dicom_directory, 
+  deleteOriginals = TRUE,
+  ignoreTransferSyntax = TRUE
+  )
+
+# remove old directories
+after_run = list.dirs(dicom_directory, recursive = FALSE)
+new_dirs = setdiff(after_run, before_run)
+old_dirs = intersect(after_run, before_run)
+
+unlink(old_dirs, recursive = TRUE)
+```
+
+All files with the ending `.zip` will be deleted (sometimes they are duplicated).  If you want to keep these, I recommend using the `utils::unzip` command in R previous to running this.  The data will be copies, sorted, and the old data will be deleted.  
+
+The structure of the directory specified in `dicom_directory` will be sorted based on Series (by default), based on Series unique ID (UID) based on DICOM tag 0x0020,0x000e by default.
+
+### Subsetting: Not completed 
+
+Now that the dat has been sorted, the relevant data can be subset.   The data for the PItCHPERFECT model requires the data be non-contrast CT data.  This means removing anything of the imaging modality MR (MRIs), CTAs (CT angiograms), and a slew of derived images (such as screen saves, dose reports, localizers, and 3D reconstructions).  
+
+These can be subset using the DICOM header information:
+
+* `Modality`: (0008,0060) tag
+* `ImageType`: (0008,0008) tag  
+* `Frame Type`: (0008,9007) tag
+* `ConvolutionKernel`: (0018,1210) tag (Required if Frame Type (0008,9007) Value 1 of this frame is ORIGINAL. May be present otherwise.)
+* `Convolution Kernel Group`: (0018,9316) tag
+* `X-ray Tube Current`:  (0018,1151) tag X-ray Tube Current in mA.	
+* `Exposure Time`: (0018,1150) tag Time of x-ray exposure in msec	
+
+With this information, we will start removing unnecessary series.  We will use the `dcmtk` package for this:
+
+```{r}
+if (!("dcmtk" %in% installed.packages())) {
+  devtools::install_github("muschellij2/dcmtk")
+} else {
+  dcmtk_ver = packageVersion("dcmtk")
+  if (dcmtk_ver < "0.5.5") {
+    devtools::install_github("muschellij2/dcmtk")
+  }  
+}
+library(dcmtk)
+```
+
+We are reading in all the header information from each DICOM using the `dcmtk::read_dicom_header` function:
+```{r}
+n_dirs = length(new_dirs)
+all_data = vector(mode = "list", length = n_dirs)
+for (i in seq(n_dirs)) {
+  basedir = new_dirs[i]
+  hdr = dcmtk::read_dicom_header(file = paste0(basedir, "/*"))
+  hdr$dir = basedir
+  all_data[[i]] = hdr
+}
+```
+
+NB: this data contains all the header information, not just those fields specified above, including protected health information (PHI).
+
+```{r}
+library(dplyr)
+all_hdr = dplyr::bind_rows(all_data)
+keep_tags = c("(0008,0008)", "(0008,0060)", "(0018,1210)",
+              "(0018,1160)", "(0018,1151)", "(0018,0081)",
+              "(0018,1150)", "(0018,0080)", "(0008,9007)",
+              "(0018,9316)")
+sub_hdr = all_hdr %>% 
+  filter(tag %in% keep_tags) %>% 
+  select(file, name, value)
+```
+
+## Converting DICOM to NIfTI data
+
+Once we have a directory of DICOM files, we can convert them using to NIfTI using the DICOM to NIfTI converter [dcm2nii](https://www.nitrc.org/projects/dcm2nii/).  We use this through the `dcm2niir` package
+
+The current workflow is to convert a directory (`directory_of_DICOMS`):
+
+```{r, eval = FALSE}
+library(dcm2niir)
+
+out = dcm2nii(basedir = directory_of_DICOMS)
+res_file = check_dcm2nii(out)
+```
+
+## Ensuring HU scale
+
+We then read in the file, make sure it's within the standard range of HU and then write it out.
+
+
+```{r, eval = FALSE}
+library(neurobase)
+####################################  
+# window the image
+####################################
+window = c(-1024, 3071)
+img = readnii(res_file)
+img = window_img(img, window = window)
+img = cal_img(img)
+scl_slope(img) = 1
+scl_inter(img) = 0
+aux_file(img) = ""
+descrip(img) = ""
+writenii(img, filename = res_file)
+````
+
+## ICH Segmentation
+
+This file can be passed into `ichseg::ich_segment`.  
+
+```{r, eval = FALSE}
+results = ichseg::ich_segment(res_file)
+```
+
+
+### Resampling to 1x1x1
+
+In order to keep the dimensions of voxels the same, we can rigidly register to a template (which is done in `ich_segment`).
+
+You can also resample the image to a 1x1x1$mm$ image:
+
+```{r}
+library(ANTsRCore)
+img = antsImageRead(res_file)
+res_img = resampleImage(img, resampleParams = c(1,1,1),
+  useVoxels = FALSE)
+```
+
+The images should be on the same grid but not registered and not necessarily oriented the same way
+
+
+

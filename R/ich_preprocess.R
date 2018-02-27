@@ -21,6 +21,8 @@
 #' @param shiny Should shiny progress be called?
 #' @param ... Additional options passsed to \code{\link{CT_Skull_Strip_robust}}
 #' or \code{\link{CT_Skull_Strip}}
+#' @param roi Filename of ROI, which will be transformed
+#'
 #'
 #' @return List of output images and transformations
 #' @importFrom neurobase check_nifti mask_img window_img
@@ -40,6 +42,7 @@ ich_preprocess = function(img,
                           outfile = NULL,
                           verbose = TRUE,
                           shiny = FALSE,
+                          roi = NULL,
                           ...) {
 
   if (skull_strip & is.null(mask)) {
@@ -84,10 +87,23 @@ ich_preprocess = function(img,
 
   omask = ants_apply_transforms(fixed = template.file,
                                 moving = mask,
-                                typeofTransform = typeofTransform,
+                                # typeofTransform = typeofTransform,
                                 interpolator = interpolator,
                                 transformlist = res$fwdtransforms)
+  if (!is.null(roi)) {
+    roi_interpolator = "genericLabel"
+    oroi = ants_apply_transforms(fixed = template.file,
+                                 moving = roi,
+                                 # typeofTransform = typeofTransform,
+                                 interpolator = roi_interpolator,
+                                 transformlist = res$fwdtransforms)
+    res$roi_interpolator = roi_interpolator
+  } else {
+    oroi = NULL
+  }
+
   res$mask = mask
+  res$transformed_roi = oroi
   res$ss_image = ss
   res$transformed_image = res$outfile
   res$transformed_mask = omask

@@ -6,7 +6,7 @@
 \usage{
 ich_segment(img, mask = NULL, model = c("rf", "logistic"),
   save_imgs = FALSE, outdir = NULL, stub = NULL, verbose = TRUE,
-  shiny = FALSE, ...)
+  shiny = FALSE, roi = NULL, ...)
 }
 \arguments{
 \item{img}{CT image, object of class \code{nifti} or
@@ -29,6 +29,8 @@ if \code{save_imgs = TRUE}}
 \item{verbose}{Print diagnostic output}
 
 \item{shiny}{Should shiny progress be called?}
+
+\item{roi}{Filename of ROI, which will be transformed}
 
 \item{...}{Additional options passsed to \code{\link{ich_preprocess}}}
 }

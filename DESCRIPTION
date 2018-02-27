@@ -2,11 +2,10 @@ Package: ichseg
 Type: Package
 Title: Intracerebral Hemorrhage Segmentation of X-Ray Computed Tomography (CT)
     Images
-Version: 0.9.7
+Version: 0.10.0
 Date: 2017-06-19
 Authors@R: c(person(given = "John", family = "Muschelli", email = "muschellij2@gmail.com",
   role = c("aut", "cre")))
-Maintainer: John Muschelli <muschellij2@gmail.com>
 Description: Performs preprocessing on computed tomography (CT) scans, including
     skull stripping. Computes predictors of intracerebral hemorrhage (ICH) and uses
     these to predict a binary hemorrhage mask from the data.
@@ -22,12 +21,19 @@ Imports:
     magic,
     randomForest,
     shiny
+Suggests:
+    dcmtk,
+    tractor.base,
+    dplyr,
+    knitr
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000
 Remotes: 
-    stnava/ANTsRCore, 
+    ANTsX/ANTsRCore, 
     muschellij2/neurobase, 
     muschellij2/extrantsr, 
-    muschellij2/fslr
-
+    muschellij2/fslr,
+    muschellij2/dcmtk
+VignetteBuilder: knitr
+Encoding: UTF-8
 

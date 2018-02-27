@@ -14,6 +14,7 @@
 #' @param stub Basename to write image names if \code{save_imgs = TRUE}
 #' @param verbose Print diagnostic output
 #' @param shiny Should shiny progress be called?
+#' @param roi Filename of ROI, which will be transformed
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output prediction/probability images
@@ -27,6 +28,7 @@ ich_segment = function(img,
                        stub = NULL,
                        verbose = TRUE,
                        shiny = FALSE,
+                       roi = NULL,
                        ...) {
 
   # if (!have_matlab()) {
@@ -52,9 +54,11 @@ ich_segment = function(img,
     mask = mask,
     verbose = verbose,
     shiny = shiny,
+    roi = roi,
     ...)
 
   timg = preprocess$transformed_image
+  troi = preprocess$transformed_roi
   tmask = preprocess$transformed_mask > 0.5
 
   if (verbose) {
@@ -64,19 +68,21 @@ ich_segment = function(img,
   if (shiny) {
     shiny::setProgress(message = msg, value = 2/3)
   }
-  if (save_imgs){
-    if (is.character(img)){
-      if (is.null(stub)){
+  if (save_imgs) {
+    if (is.character(img)) {
+      if (is.null(stub)) {
         stub = paste0(nii.stub(img, bn = TRUE), "_reg_")
       }
     }
   }
-  img.pred = make_predictors(timg, mask = tmask,
-                             roi = NULL, save_imgs = save_imgs,
-                             stub = stub,
-                             outdir = outdir,
-                             verbose = verbose,
-                             shiny = shiny)
+  img.pred = make_predictors(
+    timg, mask = tmask,
+    roi = troi,
+    save_imgs = save_imgs,
+    stub = stub,
+    outdir = outdir,
+    verbose = verbose,
+    shiny = shiny)
   df = img.pred$df
   nim = img.pred$nim
   rm(list = "img.pred")
