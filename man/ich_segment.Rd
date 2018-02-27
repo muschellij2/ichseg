@@ -4,19 +4,24 @@
 \alias{ich_segment}
 \title{Predict ICH Segmentation}
 \usage{
-ich_segment(img, mask = NULL, model = c("rf", "logistic"),
-  save_imgs = FALSE, outdir = NULL, stub = NULL, verbose = TRUE,
-  shiny = FALSE, roi = NULL, ...)
+ich_segment(img, ..., verbose = TRUE, shiny = FALSE, model = c("rf",
+  "logistic"))
 }
 \arguments{
 \item{img}{CT image, object of class \code{nifti} or
 character filename}
 
-\item{mask}{binary brain mask, object of class \code{nifti} or
-character filename}
+\item{...}{Additional options passsed to \code{\link{ich_preprocess}}}
+
+\item{verbose}{Print diagnostic output}
+
+\item{shiny}{Should shiny progress be called?}
 
 \item{model}{model to use for prediction,
 either the random forest (rf) or logistic}
+
+\item{mask}{binary brain mask, object of class \code{nifti} or
+character filename}
 
 \item{save_imgs}{Logical to save all images that are created as
 predictors}
@@ -26,13 +31,7 @@ if \code{save_imgs = TRUE}}
 
 \item{stub}{Basename to write image names if \code{save_imgs = TRUE}}
 
-\item{verbose}{Print diagnostic output}
-
-\item{shiny}{Should shiny progress be called?}
-
 \item{roi}{Filename of ROI, which will be transformed}
-
-\item{...}{Additional options passsed to \code{\link{ich_preprocess}}}
 }
 \value{
 List of output prediction/probability images

@@ -21,72 +21,24 @@
 #' @export
 #' @importFrom fslr have.fsl
 ich_segment = function(img,
-                       mask = NULL,
-                       model = c("rf", "logistic"),
-                       save_imgs = FALSE,
-                       outdir = NULL,
-                       stub = NULL,
+                       ...,
                        verbose = TRUE,
                        shiny = FALSE,
-                       roi = NULL,
-                       ...) {
-
-  # if (!have_matlab()) {
-  #   stop("MATLAB Path not defined!")
-  # }
-
-  if (!have.fsl()) {
-    stop("FSL Path Not Found!")
-  }
+                       model = c("rf", "logistic")) {
 
   model = match.arg(model)
 
-  if (verbose) {
-    msg = "# Processing The Data"
-    message(msg)
-  }
-  if (shiny) {
-    shiny::setProgress(message = msg, value = 0)
-  }
-  # orig.img = img
-  preprocess = ich_preprocess(
+  L = ich_process_predictors(
     img = img,
-    mask = mask,
+    ...,
     verbose = verbose,
-    shiny = shiny,
-    roi = roi,
-    ...)
+    roi = NULL)
+  df = L$img.pred$df
+  nim = L$img.pred$nim
+  L$img.pred = NULL
+  preprocess = L$preprocess
+  rm(list = "L");   gc()
 
-  timg = preprocess$transformed_image
-  troi = preprocess$transformed_roi
-  tmask = preprocess$transformed_mask > 0.5
-
-  if (verbose) {
-    msg = "# Making Predictors"
-    message(msg)
-  }
-  if (shiny) {
-    shiny::setProgress(message = msg, value = 2/3)
-  }
-  if (save_imgs) {
-    if (is.character(img)) {
-      if (is.null(stub)) {
-        stub = paste0(nii.stub(img, bn = TRUE), "_reg_")
-      }
-    }
-  }
-  img.pred = make_predictors(
-    timg, mask = tmask,
-    roi = troi,
-    save_imgs = save_imgs,
-    stub = stub,
-    outdir = outdir,
-    verbose = verbose,
-    shiny = shiny)
-  df = img.pred$df
-  nim = img.pred$nim
-  rm(list = "img.pred")
-  gc()
 
   # data(MOD)
   ##############################################################
@@ -115,4 +67,78 @@ ich_segment = function(img,
   }
   return(L)
 
+}
+
+
+#' @rdname
+#' @export
+ich_process_predictors = function(img,
+                                  mask = NULL,
+                                  save_imgs = FALSE,
+                                  outdir = NULL,
+                                  stub = NULL,
+                                  verbose = TRUE,
+                                  shiny = FALSE,
+                                  roi = NULL,
+                                  ...) {
+
+  if (!have.fsl()) {
+    stop("FSL Path Not Found!")
+  }
+
+  if (verbose) {
+    msg = "# Processing The Data"
+    message(msg)
+  }
+  if (shiny) {
+    shiny::setProgress(message = msg, value = 0)
+  }
+  # orig.img = img
+  preprocess = ich_preprocess(
+    img = img,
+    mask = mask,
+    verbose = verbose,
+    shiny = shiny,
+    roi = roi,
+    ...)
+
+  timg = preprocess$transformed_image
+  troi = preprocess$transformed_roi
+  tmask = preprocess$transformed_mask > 0.5
+
+  L = list(
+    preprocess = preprocess
+  )
+  rm(list = "preprocess"); gc()
+
+  if (verbose) {
+    msg = "# Making Predictors"
+    message(msg)
+  }
+  if (shiny) {
+    shiny::setProgress(message = msg, value = 1/3)
+  }
+  if (save_imgs) {
+    if (is.character(img)) {
+      if (is.null(stub)) {
+        stub = paste0(nii.stub(img, bn = TRUE), "_reg_")
+      }
+    }
+  }
+  img.pred = make_predictors(
+    timg, mask = tmask,
+    roi = troi,
+    save_imgs = save_imgs,
+    stub = stub,
+    outdir = outdir,
+    verbose = verbose,
+    shiny = shiny)
+  L$img.pred = img.pred
+  rm(list = "img.pred")
+  gc()
+
+  if (shiny) {
+    shiny::setProgress(value = 2/3)
+  }
+  return(L)
 }
