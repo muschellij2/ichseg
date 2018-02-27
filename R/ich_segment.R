@@ -72,15 +72,16 @@ ich_segment = function(img,
 
 #' @rdname
 #' @export
-ich_process_predictors = function(img,
-                                  mask = NULL,
-                                  save_imgs = FALSE,
-                                  outdir = NULL,
-                                  stub = NULL,
-                                  verbose = TRUE,
-                                  shiny = FALSE,
-                                  roi = NULL,
-                                  ...) {
+ich_process_predictors = function(
+  img,
+  mask = NULL,
+  save_imgs = FALSE,
+  outdir = NULL,
+  stub = NULL,
+  verbose = TRUE,
+  shiny = FALSE,
+  roi = NULL,
+  ...) {
 
   if (!have.fsl()) {
     stop("FSL Path Not Found!")
