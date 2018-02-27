@@ -27,7 +27,6 @@ Suggests:
     dplyr,
     knitr
 LazyData: TRUE
-RoxygenNote: 6.0.1.9000
 Remotes: 
     ANTsX/ANTsRCore, 
     muschellij2/neurobase, 
@@ -36,4 +35,4 @@ Remotes:
     muschellij2/dcmtk
 VignetteBuilder: knitr
 Encoding: UTF-8
-
+RoxygenNote: 6.0.1
