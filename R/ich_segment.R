@@ -70,7 +70,7 @@ ich_segment = function(img,
 }
 
 
-#' @rdname
+#' @rdname ich_segment
 #' @export
 ich_process_predictors = function(
   img,

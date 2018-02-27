@@ -273,6 +273,7 @@ make_predictors <- function(img, mask, roi = NULL,
     if (save_imgs) {
       write_img(skew, addstub)
     }
+    rm(list = c("skew")); gc(); gc();
   }
 
   ###########
@@ -287,8 +288,8 @@ make_predictors <- function(img, mask, roi = NULL,
     if (save_imgs) {
       write_img(kurtosis, addstub)
     }
+    rm(list = c("kurtosis")); gc(); gc();
   }
-  rm(list = c("kurtosis", "skew")); gc(); gc();
 
   ################################################
   # Making Percent threshold image

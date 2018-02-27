@@ -2,10 +2,14 @@
 % Please edit documentation in R/ich_segment.R
 \name{ich_segment}
 \alias{ich_segment}
+\alias{ich_process_predictors}
 \title{Predict ICH Segmentation}
 \usage{
 ich_segment(img, ..., verbose = TRUE, shiny = FALSE, model = c("rf",
   "logistic"))
+
+ich_process_predictors(img, mask = NULL, save_imgs = FALSE, outdir = NULL,
+  stub = NULL, verbose = TRUE, shiny = FALSE, roi = NULL, ...)
 }
 \arguments{
 \item{img}{CT image, object of class \code{nifti} or
