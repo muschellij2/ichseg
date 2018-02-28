@@ -94,6 +94,13 @@ ich_process_predictors = function(
   if (shiny) {
     shiny::setProgress(message = msg, value = 0)
   }
+  if (save_imgs) {
+    if (is.character(img)) {
+      if (is.null(stub)) {
+        stub = paste0(nii.stub(img, bn = TRUE), "_reg_")
+      }
+    }
+  }
   # orig.img = img
   preprocess = ich_preprocess(
     img = img,
@@ -107,6 +114,20 @@ ich_process_predictors = function(
   troi = preprocess$transformed_roi
   tmask = preprocess$transformed_mask > 0.5
 
+  if (save_imgs) {
+    if (!is.null(outdir)) {
+      if (!is.null(stub)) {
+        fname = file.path(outdir, paste0(stub, "_", "image"))
+        writenii(timg, fname)
+        fname = file.path(outdir, paste0(stub, "_", "roi"))
+        writenii(troi, fname)
+        fname = file.path(outdir, paste0(stub, "_", "mask"))
+        writenii(tmask, fname)
+      }
+    }
+  }
+
+
   L = list(
     preprocess = preprocess
   )
@@ -119,13 +140,7 @@ ich_process_predictors = function(
   if (shiny) {
     shiny::setProgress(message = msg, value = 1/3)
   }
-  if (save_imgs) {
-    if (is.character(img)) {
-      if (is.null(stub)) {
-        stub = paste0(nii.stub(img, bn = TRUE), "_reg_")
-      }
-    }
-  }
+
   img.pred = make_predictors(
     timg, mask = tmask,
     roi = troi,
