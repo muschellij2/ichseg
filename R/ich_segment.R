@@ -119,8 +119,10 @@ ich_process_predictors = function(
       if (!is.null(stub)) {
         fname = file.path(outdir, paste0(stub, "_", "image"))
         writenii(timg, fname)
-        fname = file.path(outdir, paste0(stub, "_", "roi"))
-        writenii(troi, fname)
+        if (!is.null(troi)) {
+          fname = file.path(outdir, paste0(stub, "_", "roi"))
+          writenii(troi, fname)
+        }
         fname = file.path(outdir, paste0(stub, "_", "mask"))
         writenii(tmask, fname)
       }
