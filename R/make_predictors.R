@@ -230,7 +230,12 @@ make_predictors <- function(img, mask, roi = NULL,
       write_img(mask, addstub)
     }
   }
-
+  if (sum(mask) == 0) {
+    msg = paste0(
+      "Eroded mask is empty! Somethign went wrong with eroding ",
+      "or Skull stripping")
+    stop(msg)
+  }
   orig.masked.img = mask_img(orig.img, orig.mask)
   masked.img = mask_img(orig.img, mask)
   if (!is.null(roi)){
