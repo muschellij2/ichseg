@@ -3,6 +3,7 @@
 export(CT_Skull_Strip)
 export(CT_Skull_Strip_robust)
 export(CT_Skull_Stripper)
+export(CT_Skull_Stripper_mask)
 export(biometric_mask)
 export(ct_biometric_mask)
 export(ct_ear_mask)

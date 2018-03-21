@@ -2,15 +2,21 @@
 % Please edit documentation in R/CT_Skull_Stripper.R
 \name{CT_Skull_Stripper}
 \alias{CT_Skull_Stripper}
+\alias{CT_Skull_Stripper_mask}
 \title{CT Skull Stripping Wrapper}
 \usage{
 CT_Skull_Stripper(..., robust = FALSE)
+
+CT_Skull_Stripper_mask(..., maskfile = NULL, robust = FALSE)
 }
 \arguments{
-\item{...}{(character) File to be skull stripped or object of class
-nifti}
+\item{...}{(character) File to be skull stripped or object of class}
 
 \item{robust}{(logical) output filename}
+
+\item{maskfile}{(character) Filename for mask (if \code{keepmask = TRUE}).
+If \code{NULL}, then a temporary file will be generated.
+nifti}
 }
 \description{
 Simple Wrapper for \code{\link{CT_Skull_Strip}} and

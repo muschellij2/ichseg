@@ -58,23 +58,23 @@ CT_Skull_Strip <- function(
   verbose=TRUE,
   ...
 ){
-  if (retimg){
+  if (retimg) {
     if (is.null(outfile)) {
       outfile = tempfile()
     }
   } else {
     stopifnot(!is.null(outfile))
   }
-  if (verbose){
+  if (verbose) {
     message(paste0("# Thresholding Image to ",
                    lthresh, "-", uthresh, "\n"))
   }
 
   outfile = nii.stub(outfile)
-  run = fslthresh(img, thresh=lthresh, uthresh = uthresh,
+  run = fslthresh(img, thresh = lthresh, uthresh = uthresh,
                   outfile = outfile,
                   retimg = FALSE,
-                  intern=FALSE)
+                  intern = FALSE)
   if (verbose){
     message(paste0("# Thresholding return: ", run, "\n"))
   }
@@ -250,7 +250,8 @@ CT_Skull_Strip <- function(
                 mask=maskfile,
                 outfile=outfile,
                 retimg = retimg,
-                intern= intern)
+                intern= intern,
+                reorient = reorient)
 
   if (!keepmask){
     if (verbose){
@@ -262,5 +263,3 @@ CT_Skull_Strip <- function(
   }
   return(res)
 }
-
-
