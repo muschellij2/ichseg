@@ -22,17 +22,19 @@
 #' @param ... Additional options passsed to \code{\link{CT_Skull_Strip_robust}}
 #' or \code{\link{CT_Skull_Strip}}
 #' @param roi Filename of ROI, which will be transformed
+#' @param n4_correct Should N4 bias-field correction be done after
+#' skull-stripping
 #'
 #'
 #' @return List of output images and transformations
 #' @importFrom neurobase check_nifti mask_img window_img
-#' @importFrom extrantsr registration ants_apply_transforms
+#' @importFrom extrantsr registration ants_apply_transforms bias_correct
 #' @export
 ich_preprocess = function(img,
                           skull_strip = TRUE,
                           robust = TRUE,
                           mask = NULL,
-
+                          n4_correct = FALSE,
                           template.file = system.file(
                             "scct_unsmooth_SS_0.01.nii.gz",
                             package = "ichseg"),
@@ -47,7 +49,7 @@ ich_preprocess = function(img,
 
   if (skull_strip & is.null(mask)) {
     if (shiny) {
-        shiny::incProgress(message = "Skull Stripping Image")
+      shiny::incProgress(message = "Skull Stripping Image")
     }
     if (robust) {
       ss = CT_Skull_Strip_robust(img, retimg = TRUE, ...)
@@ -65,7 +67,21 @@ ich_preprocess = function(img,
   ss = mask_img(img, mask)
   ss = window_img(ss, window = c(0, 100), replace = "zero")
 
-  if (is.null(outprefix)){
+
+  if (n4_correct) {
+    if (verbose) {
+      msg = "# Running N4 Correction"
+      message(msg)
+    }
+    n4_img = extrantsr::bias_correct(
+      ss, correction = "N4",
+      mask = mask,
+      verbose = verbose > 1)
+    ss = n4_img
+  }
+
+
+  if (is.null(outprefix)) {
     outprefix = tempfile()
   }
   if (shiny) {

@@ -5,6 +5,7 @@
 \title{Preprocess data for ICH Segmentation}
 \usage{
 ich_preprocess(img, skull_strip = TRUE, robust = TRUE, mask = NULL,
+  n4_correct = FALSE,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
   "ichseg"), outprefix = NULL, typeofTransform = c("Rigid", "Affine"),
   interpolator = "Linear", outfile = NULL, verbose = TRUE,
@@ -24,6 +25,9 @@ be used vs. \code{\link{CT_Skull_Strip}}}
 
 \item{mask}{binary brain mask, object of class \code{nifti} or
 character filename}
+
+\item{n4_correct}{Should N4 bias-field correction be done after
+skull-stripping}
 
 \item{template.file}{Template to register to (Skull stripped template)}
 
