@@ -15,6 +15,7 @@
 #' @param verbose Print diagnostic output
 #' @param shiny Should shiny progress be called?
 #' @param roi Filename of ROI, which will be transformed
+#' @param erode_mask Should the brain mask be eroded?
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output prediction/probability images
@@ -81,6 +82,7 @@ ich_process_predictors = function(
   verbose = TRUE,
   shiny = FALSE,
   roi = NULL,
+  erode_mask = TRUE,
   ...) {
 
   if (!have.fsl()) {
@@ -150,7 +152,8 @@ ich_process_predictors = function(
     stub = stub,
     outdir = outdir,
     verbose = verbose,
-    shiny = shiny)
+    shiny = shiny,
+    erode_mask = erode_mask)
   L$img.pred = img.pred
   rm(list = "img.pred")
   gc()

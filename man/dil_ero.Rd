@@ -6,7 +6,8 @@
 \usage{
 dil_ero(file, outfile = NULL, nvoxels = 3, zeropad = TRUE,
   remove.ends = FALSE, tol = .Machine$double.eps^0.5, refill = TRUE,
-  retimg = FALSE, reorient = FALSE, intern = TRUE, verbose = TRUE, ...)
+  retimg = FALSE, reorient = FALSE, intern = TRUE, verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{file}{(character) filename of image to be filled}

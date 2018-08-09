@@ -9,7 +9,8 @@ CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
   lthresh = 0, uthresh = 100, nvoxels = 5, remove.neck = TRUE,
   smooth.factor = 2, verbose = TRUE, opts = NULL,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
-  "ichseg"), template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
+  "ichseg"),
+  template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
   package = "ichseg"), ...)
 }
 \arguments{

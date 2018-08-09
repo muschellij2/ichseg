@@ -8,8 +8,9 @@
 ich_segment(img, ..., verbose = TRUE, shiny = FALSE, model = c("rf",
   "logistic"))
 
-ich_process_predictors(img, mask = NULL, save_imgs = FALSE, outdir = NULL,
-  stub = NULL, verbose = TRUE, shiny = FALSE, roi = NULL, ...)
+ich_process_predictors(img, mask = NULL, save_imgs = FALSE,
+  outdir = NULL, stub = NULL, verbose = TRUE, shiny = FALSE,
+  roi = NULL, erode_mask = TRUE, ...)
 }
 \arguments{
 \item{img}{CT image, object of class \code{nifti} or
@@ -36,6 +37,8 @@ if \code{save_imgs = TRUE}}
 \item{stub}{Basename to write image names if \code{save_imgs = TRUE}}
 
 \item{roi}{Filename of ROI, which will be transformed}
+
+\item{erode_mask}{Should the brain mask be eroded?}
 }
 \value{
 List of output prediction/probability images

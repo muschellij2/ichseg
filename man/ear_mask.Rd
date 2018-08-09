@@ -10,9 +10,9 @@ ct_ear_mask(file, mask = NULL, robust = TRUE,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
   "ichseg"), template.ear_mask = NULL,
   template.left_ear_inds = list(170:180, 60:110, 1:60),
-  template.right_ear_inds = list(1:10, 60:110, 1:60), extend_left = TRUE,
-  extend_right = TRUE, typeofTransform = "Affine", swapdim = TRUE,
-  verbose = TRUE, ...)
+  template.right_ear_inds = list(1:10, 60:110, 1:60),
+  extend_left = TRUE, extend_right = TRUE,
+  typeofTransform = "Affine", swapdim = TRUE, verbose = TRUE, ...)
 
 mri_ear_mask(..., mask = NULL, robust = FALSE,
   template.file = mni_fname(brain = TRUE))

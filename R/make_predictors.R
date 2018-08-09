@@ -31,6 +31,7 @@
 #' @param verbose Logical indicator if output messages should be
 #' printed
 #' @param shiny Should shiny progress be called?
+#' @param erode_mask Should the brain mask be eroded?
 #' @param ... options passed to \code{\link{get_neighbors}}
 #' @importFrom neurobase readnii checkimg zscore_img finite_img
 #' @importFrom fslr fslerode fsl_smooth
@@ -68,6 +69,7 @@ make_predictors <- function(img, mask, roi = NULL,
                             low_thresh = 1e-13,
                             verbose= TRUE,
                             shiny = FALSE,
+                            erode_mask = TRUE,
                             ...) {
   make_fname = function(addstub){
     fname = addstub
@@ -206,22 +208,28 @@ make_predictors <- function(img, mask, roi = NULL,
   #   }
 
   msg = "# Eroding Mask"
+  addstub = "usemask"
+  fname = make_fname(addstub)
+
   if (verbose) {
     message(msg)
   }
   if (shiny) {
     shiny::incProgress(message = msg, amount = 0.02)
   }
-  addstub = "usemask"
-  fname = make_fname(addstub)
+
   if (file.exists(fname) & !overwrite){
-    mask = readnii(fname, reorient=FALSE)
+    mask = readnii(fname, reorient = FALSE)
   } else {
-    # erode the mask
-    mask = fslerode(file = mask.fname,
-                    kopts = "-kernel box 3x3x1",
-                    reorient = FALSE, retimg = TRUE,
-                    verbose = verbose > 1)
+    if (erode_mask) {
+      # erode the mask
+      mask = fslerode(file = mask.fname,
+                      kopts = "-kernel box 3x3x1",
+                      reorient = FALSE, retimg = TRUE,
+                      verbose = verbose > 1)
+    } else {
+      mask = readnii(mask.fname)
+    }
     #### may add this - think about it
     #     mask = fslfill(mask, bin=TRUE, retimg = TRUE)
     mask = mask > 0
@@ -230,6 +238,7 @@ make_predictors <- function(img, mask, roi = NULL,
       write_img(mask, addstub)
     }
   }
+
   if (sum(mask) == 0) {
     msg = paste0(
       "Eroded mask is empty! Somethign went wrong with eroding ",

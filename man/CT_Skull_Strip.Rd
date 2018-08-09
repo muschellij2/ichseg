@@ -5,10 +5,11 @@
 \title{CT Skull Stripping within R}
 \usage{
 CT_Skull_Strip(img, outfile = NULL, keepmask = TRUE, maskfile = NULL,
-  inskull_mesh = FALSE, retimg = TRUE, reorient = FALSE, intern = TRUE,
-  betcmd = "bet2", opts = "-f 0.01 -v", presmooth = TRUE, remask = TRUE,
-  refill = FALSE, refill.thresh = 0.75, sigma = 1, lthresh = 0,
-  uthresh = 100, verbose = TRUE, ...)
+  inskull_mesh = FALSE, retimg = TRUE, reorient = FALSE,
+  intern = TRUE, betcmd = "bet2", opts = "-f 0.01 -v",
+  presmooth = TRUE, remask = TRUE, refill = FALSE,
+  refill.thresh = 0.75, sigma = 1, lthresh = 0, uthresh = 100,
+  verbose = TRUE, ...)
 }
 \arguments{
 \item{img}{(character) File to be skull stripped or object of class

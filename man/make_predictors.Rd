@@ -6,15 +6,15 @@
 \usage{
 make_predictors(img, mask, roi = NULL, nvoxels = 1, moments = 1:4,
   center = c(FALSE, TRUE, TRUE, TRUE), lthresh = 40, uthresh = 80,
-  sigmas = c(5, 10, 20), save_imgs = TRUE, outdir = NULL, stub = NULL,
-  overwrite = FALSE,
+  sigmas = c(5, 10, 20), save_imgs = TRUE, outdir = NULL,
+  stub = NULL, overwrite = FALSE,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
-  "ichseg"), mean.img = system.file("Mean_Image.nii.gz", package = "ichseg"),
-  sd.img = system.file("SD_Image.nii.gz", package = "ichseg"),
+  "ichseg"), mean.img = system.file("Mean_Image.nii.gz", package =
+  "ichseg"), sd.img = system.file("SD_Image.nii.gz", package = "ichseg"),
   zscore.typeofTransform = "SyN", zscore.interpolator = "Linear",
   flip.typeofTransform = "Affine",
   flip.interpolator = "LanczosWindowedSinc", low_thresh = 1e-13,
-  verbose = TRUE, shiny = FALSE, ...)
+  verbose = TRUE, shiny = FALSE, erode_mask = TRUE, ...)
 }
 \arguments{
 \item{img}{Filename of image intensities}
@@ -68,6 +68,8 @@ instead instead of code being re-run.}
 printed}
 
 \item{shiny}{Should shiny progress be called?}
+
+\item{erode_mask}{Should the brain mask be eroded?}
 
 \item{...}{options passed to \code{\link{get_neighbors}}}
 }
