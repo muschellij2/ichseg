@@ -154,6 +154,11 @@ ich_process_predictors = function(
       troi = NULL
     }
     tmask = readnii(trans_mask_fname)
+    preprocess = list(
+      transformed_roi = troi,
+      transformed_image = timg,
+      transformed_mask = tmask
+    )
   }
 
 
