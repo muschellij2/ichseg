@@ -103,32 +103,57 @@ ich_process_predictors = function(
       }
     }
   }
-  # orig.img = img
-  preprocess = ich_preprocess(
-    img = img,
-    mask = mask,
-    verbose = verbose,
-    shiny = shiny,
-    roi = roi,
-    ...)
 
-  timg = preprocess$transformed_image
-  troi = preprocess$transformed_roi
-  tmask = preprocess$transformed_mask > 0.5
+  if (save_imgs){
+    stopifnot(!is.null(outdir))
+    stopifnot(!is.null(stub))
+  }
+  if (is.null(outdir)){
+    outdir = tempdir()
+  }
 
+  trans_fname = trans_mask_fname = trans_roi_fname = ""
   if (save_imgs) {
-    if (!is.null(outdir)) {
-      if (!is.null(stub)) {
-        fname = file.path(outdir, paste0(stub, "_", "image"))
-        writenii(timg, fname)
-        if (!is.null(troi)) {
-          fname = file.path(outdir, paste0(stub, "_", "roi"))
-          writenii(troi, fname)
-        }
-        fname = file.path(outdir, paste0(stub, "_", "mask"))
-        writenii(tmask, fname)
-      }
+    trans_fname = file.path(outdir, paste0(stub, "_", "image.nii.gz"))
+    if (!is.null(roi)) {
+      trans_roi_fname = file.path(outdir, paste0(stub, "_", "roi.nii.gz"))
+    } else {
+      trans_roi_fname = NULL
     }
+    trans_mask_fname = file.path(outdir, paste0(stub, "_", "mask.nii.gz"))
+  }
+
+  fnames = c(trans_fname, trans_roi_fname, trans_mask_fname)
+
+  if (!all(file.exists(fnames))) {
+    # orig.img = img
+    preprocess = ich_preprocess(
+      img = img,
+      mask = mask,
+      verbose = verbose,
+      shiny = shiny,
+      roi = roi,
+      ...)
+
+    timg = preprocess$transformed_image
+    troi = preprocess$transformed_roi
+    tmask = preprocess$transformed_mask > 0.5
+
+    if (save_imgs) {
+      writenii(timg, trans_fname)
+      if (!is.null(troi)) {
+        writenii(troi, trans_roi_fname)
+      }
+      writenii(tmask, trans_mask_fname)
+    }
+  } else {
+    timg = readnii(trans_fname)
+    if (file.exists(trans_roi_fname)) {
+      troi = readnii(trans_roi_fname)
+    } else {
+      troi = NULL
+    }
+    tmask = readnii(trans_mask_fname)
   }
 
 
