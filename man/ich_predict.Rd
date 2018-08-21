@@ -6,7 +6,8 @@
 \usage{
 ich_predict(df, nim, model = c("rf", "logistic"), verbose = TRUE,
   native = TRUE, native_img = NULL, transformlist = NULL,
-  interpolator = NULL, native_thresh = 0.5, shiny = FALSE, ...)
+  interpolator = NULL, native_thresh = 0.5, shiny = FALSE,
+  model_list = NULL, smoothed_cutoffs = NULL, ...)
 }
 \arguments{
 \item{df}{\code{\link{data.frame}} of predictors.  If \code{multiplier}
@@ -35,6 +36,12 @@ NOTE: these will be inverted.}
 interpolation}
 
 \item{shiny}{Should shiny progress be called?}
+
+\item{model_list}{list of model objects, used mainly for retraining
+but only expert use.}
+
+\item{smoothed_cutoffs}{A list with an element
+\code{mod.dice.coef}, only expert use.}
 
 \item{...}{Additional options passsed to \code{\link{ich_preprocess}}}
 }

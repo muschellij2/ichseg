@@ -19,6 +19,10 @@
 #' @param native_thresh Threshold for re-thresholding binary mask after
 #' interpolation
 #' @param shiny Should shiny progress be called?
+#' @param model_list list of model objects, used mainly for retraining
+#' but only expert use.
+#' @param smoothed_cutoffs A list with an element
+#' \code{mod.dice.coef}, only expert use.
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output registered and native space
@@ -38,6 +42,8 @@ ich_predict = function(df,
                        interpolator = NULL,
                        native_thresh = 0.5,
                        shiny = FALSE,
+                       model_list = NULL,
+                       smoothed_cutoffs = NULL,
                        ...) {
 
   # if (!have_matlab()) {
@@ -70,16 +76,25 @@ ich_predict = function(df,
   env = as.environment("package:ichseg")
 
   # Getting modlist for model and cutoff
-  modlist.name = paste0(model, "_modlist")
-  modlist = env[[modlist.name]]
+  if (is.null(model_list)) {
+    modlist.name = paste0(model, "_modlist")
+    modlist = env[[modlist.name]]
+  } else {
+    modlist = model_list
+  }
   mod = modlist$mod
   cutoff = modlist$mod.dice.coef[1, "cutoff"]
 
   rm(list = c("modlist"))
 
   # Getting smoothed cutoff
-  smoothed_name = paste0("smoothed_", model, "_cutoffs")
-  scutoffs = env[[smoothed_name]]
+  if (is.null(smoothed_cutoffs)) {
+    smoothed_name = paste0("smoothed_", model, "_cutoffs")
+    scutoffs = env[[smoothed_name]]
+  } else {
+    scutoffs = smoothed_cutoffs
+  }
+
   smoothed_cutoff = scutoffs$mod.dice.coef[1, "cutoff"]
   rm(list = c("scutoffs", "smoothed_name"))
 
