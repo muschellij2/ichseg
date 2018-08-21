@@ -4,10 +4,13 @@
 \alias{ich_candidate_voxels}
 \title{Create ICH Segmentation Candidate Voxesl}
 \usage{
-ich_candidate_voxels(df)
+ich_candidate_voxels(df, cutoffs = ichseg::est.cutoffs)
 }
 \arguments{
 \item{df}{\code{data.frame} of image from \code{\link{make_predictors}}}
+
+\item{cutoffs}{a set of cutoffs/quantiles, with the names of
+columns of \code{df}}
 }
 \value{
 Logical vector

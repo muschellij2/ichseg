@@ -2,10 +2,12 @@
 #' @description Takes estimated cutoffs from paper from training data
 #' and creates a logical candidate vector
 #' @param df \code{data.frame} of image from \code{\link{make_predictors}}
+#' @param cutoffs a set of cutoffs/quantiles, with the names of
+#' columns of \code{df}
 #'
 #' @return Logical vector
 #' @export
-ich_candidate_voxels = function(df){
+ich_candidate_voxels = function(df, cutoffs = ichseg::est.cutoffs){
 
 #   fname = file.path(outdir,
 #                     paste0("Reseg_Aggregate_data_cutoffs",
@@ -23,7 +25,7 @@ ich_candidate_voxels = function(df){
   keepnames = c("zscore3", "zscore2",
                 "pct_thresh", "zscore_template")
   for (icut in keepnames) {
-    qcuts = ichseg::est.cutoffs[, icut]
+    qcuts = cutoffs[, icut]
     colname = paste0(icut, ".cutoff")
     df[, colname] =
       df[, icut] >= qcuts[1] &
