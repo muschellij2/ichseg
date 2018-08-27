@@ -214,7 +214,7 @@ CT_Skull_Strip <- function(
   }
   if (is.null(maskfile)){
     maskfile = nii.stub(outfile)
-    maskfile = paste0(outfile, "_Mask")
+    maskfile = paste0(maskfile, "_Mask")
   }
   stopifnot(inherits(maskfile, "character"))
   # outmask = paste(outfile, "inskull_mask", sep="_")
