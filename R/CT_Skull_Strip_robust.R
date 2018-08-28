@@ -105,7 +105,7 @@ CT_Skull_Strip_robust <- function(
   ### Working on maskfile
   if (is.null(maskfile)){
     maskfile = nii.stub(outfile)
-    maskfile = paste0(outfile, "_Mask")
+    maskfile = paste0(maskfile, "_Mask")
   }
   maskfile = nii.stub(maskfile)
   stopifnot(inherits(maskfile, "character"))
@@ -114,9 +114,11 @@ CT_Skull_Strip_robust <- function(
   # Threshold Image
   #############################
   img = check_nifti(img, reorient = reorient)
-  thresh = niftiarr(img, img * (img > lthresh & img < uthresh))
+  thresh_img = niftiarr(img, img * (img > lthresh & img < uthresh))
 
-  thresh = drop_img_dim(thresh)
+  thresh_img = drop_img_dim(thresh_img)
+  thresh = checkimg(thresh_img)
+  rm(thresh_img)
   ## need to do rep.value = 0 because template is like that.
 
   #############################
@@ -138,7 +140,9 @@ CT_Skull_Strip_robust <- function(
   }
   noneck = mask_img(img, neck_mask)
   noneck = drop_img_dim(noneck)
+  noneck = checkimg(noneck)
 
+  rm(neck_mask)
   #############################
   # Skull Stripping no-neck image
   #############################
@@ -159,7 +163,7 @@ CT_Skull_Strip_robust <- function(
   # Setting new center of gravity and rerunning with smoothness factor
   #############################
   cog = cog(ssmask,
-            ceil=TRUE)
+            ceil = TRUE)
   if (verbose){
     message(paste0("# Skull Stripping with new cog\n"))
   }
@@ -173,7 +177,7 @@ CT_Skull_Strip_robust <- function(
                       keepmask = TRUE,
                       reorient = reorient,
                       ...)
-
+  rm(ss)
   ssmask = readNIfTI(maskfile,
                      reorient = reorient)
 
