@@ -279,14 +279,18 @@ mean_image = function(x, nvoxels, shift = TRUE, verbose = TRUE){
     cat("Creating Kernel fft\n")
   }
   H = fft(z);
+  rm(z)
   if (verbose){
     cat("Creating Image fft\n")
   }
   X = fft(x);
+  rm(x)
   if (verbose){
     cat("Convolution\n")
   }
-  y = fft(H*X, inverse =TRUE)
+  X = H * X
+  rm(H)
+  y = fft(X, inverse = TRUE)
   y = y / length(y)
   y = Re(y)
 
@@ -297,7 +301,9 @@ mean_image = function(x, nvoxels, shift = TRUE, verbose = TRUE){
   if (verbose){
     cat("Shifting\n")
   }
-  if (shift) y = ashift(y, v = -(ceiling(dim(h)/2)-1))
+  if (shift) {
+    y = ashift(y, v = -(ceiling(dim(h)/2)-1))
+  }
 
   #   y=circshift(y,c(-ceiling(RH/2), -ceiling(CH/2), -ceiling(SH/2)))
   # compensation for group delay
