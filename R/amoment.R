@@ -288,9 +288,10 @@ mean_image = function(x, nvoxels, shift = TRUE, verbose = TRUE){
   if (verbose){
     cat("Convolution\n")
   }
-  X = H * X
+  y = H * X
   rm(H)
-  y = fft(X, inverse = TRUE)
+  rm(X)
+  y = fft(y, inverse = TRUE)
   y = y / length(y)
   y = Re(y)
 
