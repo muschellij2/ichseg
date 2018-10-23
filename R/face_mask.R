@@ -177,6 +177,8 @@ mri_face_mask <- function(
       }
       uthr = fslr::fslmax(file)
       L$uthr = uthr
+      L = func(L, "uthr", uthr)
+
     }
 
     L = func(L, "presmooth", FALSE)
