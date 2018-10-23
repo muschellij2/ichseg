@@ -169,6 +169,16 @@ mri_face_mask <- function(
       }
       return(L)
     }
+    uthr = L$uthr
+    if (is.null(uthr)) {
+      file = L$file
+      if (is.null(file)) {
+        file = L[[1]]
+      }
+      uthr = fslr::fslmax(file)
+      L$uthr = uthr
+    }
+
     L = func(L, "presmooth", FALSE)
     L = func(L, "remask", FALSE)
     L = func(L, "inskull_mesh", FALSE)
