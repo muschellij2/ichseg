@@ -19,7 +19,8 @@
 #' \code{\link{ants_regwrite}}.
 #' @param swapdim Should the dimensions be swapped before registration,
 #' and then reset after
-#' @param skull_strip Should the data require skull stripping?
+#' @param skull_strip Should the data require skull stripping if
+#' no mask is provided?
 #' @param verbose Print out diagnostic messages
 #' @param ... arguments passed to \code{\link{CT_Skull_Stripper}}
 #' @export
@@ -169,7 +170,7 @@ mri_face_mask <- function(
   L$mask = mask
   L$template.file = template.file
 
-  if (is.null(mask)) {
+  if (is.null(mask) & skull_strip) {
     func = function(L, arg, opt) {
       nL = names(L)
       if (!arg %in% nL) {
