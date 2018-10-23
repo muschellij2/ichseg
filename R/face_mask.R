@@ -165,6 +165,7 @@ mri_face_mask <- function(
 
   L = list(...)
   L$robust = robust
+  L$skull_strip = skull_strip
   L$mask = mask
   L$template.file = template.file
 
