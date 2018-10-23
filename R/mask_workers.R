@@ -55,6 +55,8 @@
   # ofile = tempfile(fileext = '.nii.gz')
   if (!is.null(mask)) {
     img = mask_img(file, mask)
+  } else {
+    img = file
   }
   rm(list = c("file", "mask"))
   if (swapdim) {
