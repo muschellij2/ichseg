@@ -53,7 +53,9 @@
                      template.mask) {
   file = check_nifti(file)
   # ofile = tempfile(fileext = '.nii.gz')
-  img = mask_img(file, mask)
+  if (!is.null(mask)) {
+    img = mask_img(file, mask)
+  }
   rm(list = c("file", "mask"))
   if (swapdim) {
     if (verbose) {

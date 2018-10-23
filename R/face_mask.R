@@ -19,6 +19,7 @@
 #' \code{\link{ants_regwrite}}.
 #' @param swapdim Should the dimensions be swapped before registration,
 #' and then reset after
+#' @param skull_strip Should the data require skull stripping?
 #' @param verbose Print out diagnostic messages
 #' @param ... arguments passed to \code{\link{CT_Skull_Stripper}}
 #' @export
@@ -39,11 +40,14 @@
 #'
 ct_face_mask <- function(
   file,
+  skull_strip = TRUE,
   mask = NULL,
   robust = TRUE,
   template.file =
     system.file(
-      "scct_unsmooth_SS_0.01.nii.gz",
+      ifelse(skull_strip,
+             "scct_unsmooth_SS_0.01.nii.gz",
+             "scct_unsmooth.nii.gz"),
       package = "ichseg"),
   template.face_mask = NULL,
   template.face_mask_inds = list(50:130, 170:217, 1:15),
@@ -53,11 +57,13 @@ ct_face_mask <- function(
   verbose = TRUE,
   ...){
 
-  mask = .make_ss_mask(file = file,
-                       mask = mask,
-                       verbose = verbose,
-                       robust = robust,
-                       template.file = template.file, ...)
+  if (skull_strip) {
+    mask = .make_ss_mask(file = file,
+                         mask = mask,
+                         verbose = verbose,
+                         robust = robust,
+                         template.file = template.file, ...)
+  }
 
   template.face_mask = .make_template_mask(
     template.file = template.file,
