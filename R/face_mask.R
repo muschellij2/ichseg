@@ -156,9 +156,10 @@ ct_face_mask <- function(
 #'
 mri_face_mask <- function(
   ...,
+  skull_strip = TRUE,
   mask = NULL,
   robust = FALSE,
-  template.file = mni_fname(brain = TRUE)
+  template.file = mni_fname(brain = skull_strip)
 ){
 
 

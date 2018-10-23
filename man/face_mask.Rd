@@ -14,8 +14,8 @@ ct_face_mask(file, skull_strip = TRUE, mask = NULL, robust = TRUE,
   extend_mask = TRUE, typeofTransform = "Affine", swapdim = TRUE,
   verbose = TRUE, ...)
 
-mri_face_mask(..., mask = NULL, robust = FALSE,
-  template.file = mni_fname(brain = TRUE))
+mri_face_mask(..., skull_strip = TRUE, mask = NULL, robust = FALSE,
+  template.file = mni_fname(brain = skull_strip))
 }
 \arguments{
 \item{file}{File for face masking - either filename or class nifti}
