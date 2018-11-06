@@ -4,7 +4,7 @@
 \alias{ct_dcm2nii}
 \title{CT DICOM to NIfTI conversion}
 \usage{
-ct_dcm2nii(basedir, merge_files = TRUE, ...)
+ct_dcm2nii(basedir = ".", merge_files = TRUE, ...)
 }
 \arguments{
 \item{basedir}{(character) directory to get files}

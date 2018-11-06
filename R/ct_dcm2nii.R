@@ -11,7 +11,7 @@
 #'
 #' @importFrom dcm2niir dcm2nii check_dcm2nii
 #' @importFrom neurobase rescale_img check_nifti
-ct_dcm2nii = function(basedir, merge_files = TRUE, ...) {
+ct_dcm2nii = function(basedir = ".", merge_files = TRUE, ...) {
   out = dcm2nii(basedir, merge_files = TRUE, ...)
   res = check_dcm2nii(out)
   img = lapply(res, function(x){
