@@ -20,7 +20,8 @@ mri_face_mask(..., skull_strip = TRUE, mask = NULL, robust = FALSE,
 \arguments{
 \item{file}{File for face masking - either filename or class nifti}
 
-\item{skull_strip}{Should the data require skull stripping?}
+\item{skull_strip}{Should the data require skull stripping if
+no mask is provided?}
 
 \item{mask}{file or \code{nifti} to mask the \code{file}}
 

@@ -6,7 +6,7 @@
 \alias{mri_ear_mask}
 \title{Create Mask of the Ears}
 \usage{
-ct_ear_mask(file, mask = NULL, robust = TRUE,
+ct_ear_mask(file, skull_strip = TRUE, mask = NULL, robust = TRUE,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
   "ichseg"), template.ear_mask = NULL,
   template.left_ear_inds = list(170:180, 60:110, 1:60),
@@ -14,11 +14,14 @@ ct_ear_mask(file, mask = NULL, robust = TRUE,
   extend_left = TRUE, extend_right = TRUE,
   typeofTransform = "Affine", swapdim = TRUE, verbose = TRUE, ...)
 
-mri_ear_mask(..., mask = NULL, robust = FALSE,
-  template.file = mni_fname(brain = TRUE))
+mri_ear_mask(..., skull_strip = TRUE, mask = NULL, robust = FALSE,
+  template.file = mni_fname(brain = skull_strip))
 }
 \arguments{
 \item{file}{File for face masking - either filename or class nifti}
+
+\item{skull_strip}{Should the data require skull stripping if
+no mask is provided?}
 
 \item{mask}{file or \code{nifti} to mask the \code{file}}
 
