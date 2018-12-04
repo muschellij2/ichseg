@@ -175,7 +175,6 @@ CT_Skull_Strip_robust <- function(
                                    "-w ", smooth.factor,
                                    paste(c("-c", cog),
                                          collapse=" ")),
-                      verbose = verbose,
                       maskfile = maskfile,
                       keepmask = TRUE,
                       reorient = reorient,
