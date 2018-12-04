@@ -74,7 +74,8 @@ CT_Skull_Strip <- function(
   run = fslthresh(img, thresh = lthresh, uthresh = uthresh,
                   outfile = outfile,
                   retimg = FALSE,
-                  intern = FALSE)
+                  intern = FALSE,
+                  verbose = verbose)
   if (verbose){
     message(paste0("# Thresholding return: ", run, "\n"))
   }
@@ -88,7 +89,8 @@ CT_Skull_Strip <- function(
     run = fslmaths(outfile, outfile = absfile,
                    retimg = FALSE,
                    intern = FALSE,
-                   opts = "-abs")
+                   opts = "-abs",
+                   verbose = verbose)
 
 
     if (verbose) {
@@ -106,7 +108,8 @@ CT_Skull_Strip <- function(
             bin = TRUE,
             outfile = bonefile,
             retimg = FALSE,
-            intern = FALSE)
+            intern = FALSE,
+            verbose = verbose)
   }
 
   ### Must prefill for the presmooth - not REALLY necessary, but if you're
@@ -131,16 +134,17 @@ CT_Skull_Strip <- function(
   #   }
 
 
-  if (isTRUE(presmooth)){
+  if (isTRUE(presmooth)) {
 
-    if (verbose){
+    if (verbose) {
       message(paste0("# Presmoothing image\n"))
     }
     run = fslsmooth(outfile,
                     outfile = outfile,
                     sigma = sigma,
                     retimg = FALSE,
-                    intern = FALSE)
+                    intern = FALSE,
+                    verbose = verbose)
     if (verbose) {
       message(paste0("# Pre Smoothing Diagnostic: ", run, "\n"))
     }
@@ -153,7 +157,8 @@ CT_Skull_Strip <- function(
                     mask = bonefile,
                     outfile = outfile,
                     retimg = FALSE,
-                    intern = FALSE)
+                    intern = FALSE,
+                    verbose = verbose)
       if (verbose) {
         message(paste0("# Pre Smoothing Diagnostic: ", run, "\n"))
       }
@@ -171,15 +176,16 @@ CT_Skull_Strip <- function(
     betcmd = "bet"
   }
   betintern = TRUE
-  if (verbose){
+  if (verbose) {
     message(paste0("# Running ", betcmd, "\n"))
     betintern = FALSE
   }
   runbet = fslbet(infile = outfile,
-                  outfile=outfile,
-                  retimg = FALSE, intern=betintern,
+                  outfile = outfile,
+                  retimg = FALSE, intern = betintern,
                   betcmd = betcmd,
-                  opts = opts, ...)
+                  opts = opts,
+                  verbose = verbose, ...)
 
   if (verbose){
     message(paste0("# ", betcmd, " output: ", runbet, "\n"))
@@ -197,13 +203,13 @@ CT_Skull_Strip <- function(
                   "outskull_mask", "outskull_mesh",
                   "skull_mask")
     end.names = paste0(end.names, ext)
-    end.names= c(end.names,
+    end.names = c(end.names,
                  "inskull_mesh.off",
                  "outskin_mesh.off",
                  "outskull_mesh.off",
                  "mesh.vtk")
-    end.names = paste(outfile, end.names, sep="_")
-    rr = file.remove(end.names)
+    end.names = paste(outfile, end.names, sep = "_")
+    file.remove(end.names)
   }
 
   #####################
@@ -212,7 +218,7 @@ CT_Skull_Strip <- function(
   if (verbose){
     message("# Using fslfill to fill in any holes in mask \n")
   }
-  if (is.null(maskfile)){
+  if (is.null(maskfile)) {
     maskfile = nii.stub(outfile)
     maskfile = paste0(maskfile, "_Mask")
   }
@@ -223,20 +229,24 @@ CT_Skull_Strip <- function(
   absfile = tempfile()
   run = fslmaths(outfile, outfile = absfile,
                  retimg = FALSE,
-                 intern=FALSE, opts = "-abs")
+                 intern = FALSE,
+                 verbose = verbose, opts = "-abs")
 
-  runmask = fslfill(file = absfile, bin=TRUE,
-                    outfile=maskfile,
-                    retimg=FALSE,
-                    intern=FALSE)
+  runmask = fslfill(file = absfile, bin = TRUE,
+                    outfile = maskfile,
+                    retimg = FALSE,
+                    intern = FALSE,
+                    verbose = verbose)
   if (refill){
     smfile = tempfile()
     fslmaths(maskfile, retimg = FALSE, outfile = smfile,
-             opts = "-kernel boxv 7 -fmean")
+             opts = "-kernel boxv 7 -fmean",
+             verbose = verbose)
     ### smooth and if you add to 0, then > .5 (if 1 before > 1 now, then bin)
     addopt = sprintf(" -add %s -thr %f -bin", smfile, refill.thresh)
     fslmaths(maskfile, retimg = FALSE, outfile = maskfile,
-             opts = addopt)
+             opts = addopt,
+             verbose = verbose)
   }
 
   if (verbose){
@@ -246,12 +256,15 @@ CT_Skull_Strip <- function(
   if (verbose){
     message("# Using the filled mask to mask original image\n")
   }
-  res = fslmask(file=img,
-                mask=maskfile,
-                outfile=outfile,
-                retimg = retimg,
-                intern= intern,
-                reorient = reorient)
+  res = fslmask(
+    file = img,
+    mask = maskfile,
+    outfile = outfile,
+    retimg = retimg,
+    intern = intern,
+    reorient = reorient,
+    verbose = verbose
+  )
 
   if (!keepmask){
     if (verbose){
