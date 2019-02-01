@@ -7,7 +7,7 @@
 CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
   maskfile = NULL, retimg = TRUE, reorient = FALSE, int = "0.01",
   lthresh = 0, uthresh = 100, nvoxels = 5, remove.neck = TRUE,
-  smooth.factor = 2, verbose = TRUE, opts = NULL,
+  smooth.factor = 2, recog = TRUE, verbose = TRUE, opts = NULL,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
   "ichseg"),
   template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
@@ -52,6 +52,9 @@ thresholded image to remove neck slices.}
 \item{smooth.factor}{Smoothing factor for \code{\link{fslbet}}.
 See \code{-w}
 option in \code{fslbet.help()}.}
+
+\item{recog}{Re-estimate the center of gravity (COG) and
+skull strip.}
 
 \item{verbose}{(logical) Should diagnostic output be printed?}
 

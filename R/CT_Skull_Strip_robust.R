@@ -40,6 +40,8 @@
 #' @param ... additional arguments passed to
 #' \code{\link{CT_Skull_Strip}} or
 #' \code{\link{remove_neck}}.
+#' @param recog Re-estimate the center of gravity (COG) and
+#' skull strip.
 #' @return Skull-stripped \code{nifti} object
 #' @note This function first thresholds an image, runs a rigid
 #' registration
@@ -76,6 +78,7 @@ CT_Skull_Strip_robust <- function(
   nvoxels = 5,
   remove.neck = TRUE,
   smooth.factor = 2,
+  recog = TRUE,
   verbose = TRUE,
   opts = NULL,
   template.file =
@@ -98,7 +101,7 @@ CT_Skull_Strip_robust <- function(
 
   if (verbose){
     message(paste0("# Thresholding Image to ",
-               lthresh, "-", uthresh, "\n"))
+                   lthresh, "-", uthresh, "\n"))
   }
 
 
@@ -160,29 +163,30 @@ CT_Skull_Strip_robust <- function(
 
   ssmask = readNIfTI(maskfile,
                      reorient = reorient)
-
-  #############################
-  # Setting new center of gravity and rerunning with smoothness factor
-  #############################
-  cog = cog(ssmask,
-            ceil = TRUE)
-  if (verbose){
-    message(paste0("# Skull Stripping with new cog\n"))
+  if (recog) {
+    #############################
+    # Setting new center of gravity and rerunning with smoothness factor
+    #############################
+    cog = cog(ssmask,
+              ceil = TRUE)
+    if (verbose){
+      message(paste0("# Skull Stripping with new cog\n"))
+    }
+    ss = CT_Skull_Strip(noneck, outfile = outfile, retimg = TRUE,
+                        opts = paste("-f ", int,
+                                     ifelse(verbose, "-v", ""),
+                                     "-w ", smooth.factor,
+                                     paste(c("-c", cog),
+                                           collapse=" ")),
+                        maskfile = maskfile,
+                        keepmask = TRUE,
+                        reorient = reorient,
+                        verbose = verbose,
+                        ...)
+    rm(ss)
+    ssmask = readNIfTI(maskfile,
+                       reorient = reorient)
   }
-  ss = CT_Skull_Strip(noneck, outfile = outfile, retimg = TRUE,
-                      opts = paste("-f ", int,
-                                   ifelse(verbose, "-v", ""),
-                                   "-w ", smooth.factor,
-                                   paste(c("-c", cog),
-                                         collapse=" ")),
-                      maskfile = maskfile,
-                      keepmask = TRUE,
-                      reorient = reorient,
-                      verbose = verbose,
-                      ...)
-  rm(ss)
-  ssmask = readNIfTI(maskfile,
-                     reorient = reorient)
 
   #############################
   # Filling the mask
@@ -192,16 +196,16 @@ CT_Skull_Strip_robust <- function(
   }
   if (nvoxels > 0){
     ssmask = dil_ero(ssmask,
-                    retimg = TRUE,
-                    nvoxels = nvoxels,
-                    verbose = verbose)
+                     retimg = TRUE,
+                     nvoxels = nvoxels,
+                     verbose = verbose)
   }
 
   ss = mask_img(img, ssmask)
   ss = drop_img_dim(ss)
 
   writenii(ss,
-             filename = outfile)
+           filename = outfile)
 
   #############################
   # Removing mask if keepmask = FALSE
