@@ -16,7 +16,8 @@ ct_dcm2nii = function(basedir = ".", merge_files = TRUE, ...) {
   res = check_dcm2nii(out)
   img = lapply(res, function(x){
     img = check_nifti(res)
-    img = rescale_img(img)
+    img = rescale_img(img, min.val = -1024,
+                      max.val = 3071)
   })
   if (length(res) == 1) {
     img = img[[1]]
