@@ -46,6 +46,7 @@ ich_train_data = function(
 #' @param ... additional arguments passed to \code{\link{randomForest}}
 #'
 #' @return A \code{randomForest} object
+#' @importFrom stats as.formula
 #' @export
 ich_train_model = function(
   df,
