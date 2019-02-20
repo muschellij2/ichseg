@@ -2,6 +2,7 @@
 % Please edit documentation in R/CT_Skull_Strip_robust.R
 \name{CT_Skull_Strip_robust}
 \alias{CT_Skull_Strip_robust}
+\alias{CT_Skull_Strip_register}
 \title{Robust CT Skull Stripping}
 \usage{
 CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
@@ -12,6 +13,11 @@ CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
   "ichseg"),
   template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
   package = "ichseg"), ...)
+
+CT_Skull_Strip_register(img, outfile = NULL, keepmask = TRUE,
+  maskfile = NULL, retimg = TRUE, reorient = FALSE, int = "0.01",
+  lthresh = 0, uthresh = 100, nvoxels = 5, remove.neck = TRUE,
+  verbose = TRUE, opts = NULL, ...)
 }
 \arguments{
 \item{img}{(character) File to be skull stripped or object of class
@@ -99,4 +105,9 @@ created, the image is dilated and eroded using
 fill holes using a box kernel with the number of voxels
 \code{nvoxels} in
 all 3 directions.
+
+\code{CT_Skull_Strip_register} removes the neck, registers the
+image to the template, using a rigid-body transformation,
+runs the skull stripper to get a mask, then transforms the mask
+back to native space.
 }

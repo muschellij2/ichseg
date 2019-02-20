@@ -191,10 +191,10 @@ CT_Skull_Strip_robust <- function(
   #############################
   # Filling the mask
   #############################
-  if (verbose) {
-    message(paste0("# Filling Holes \n"))
-  }
   if (nvoxels > 0){
+    if (verbose) {
+      message(paste0("# Filling Holes \n"))
+    }
     ssmask = dil_ero(ssmask,
                      retimg = TRUE,
                      nvoxels = nvoxels,
@@ -206,6 +206,173 @@ CT_Skull_Strip_robust <- function(
 
   writenii(ss,
            filename = outfile)
+
+  #############################
+  # Removing mask if keepmask = FALSE
+  #############################
+  if (!keepmask) {
+    if (verbose) {
+      message("# Removing Mask File\n")
+    }
+    maskfile = nii.stub(maskfile)
+    ext = get.imgext()
+    maskfile = paste0(maskfile, ext)
+    file.remove(maskfile)
+  }
+
+  return(ss)
+}
+
+
+
+
+#' @rdname CT_Skull_Strip_robust
+#' @note \code{CT_Skull_Strip_register} removes the neck, registers the
+#' image to the template, using a rigid-body transformation,
+#' runs the skull stripper to get a mask, then transforms the mask
+#' back to native space.
+#' @export
+CT_Skull_Strip_register <- function(
+  img,
+  outfile = NULL,
+  keepmask = TRUE,
+  maskfile = NULL,
+  retimg = TRUE,
+  reorient = FALSE,
+  int = "0.01",
+  lthresh = 0,
+  uthresh = 100,
+  nvoxels = 5,
+  remove.neck = TRUE,
+  verbose = TRUE,
+  opts = NULL,
+  ...
+){
+
+  ###########################################
+  # Checking outfile input/output
+  ###########################################
+  outfile = check_outfile(outfile = outfile,
+                          retimg = retimg,
+                          fileext = "")
+  outfile = path.expand(outfile)
+
+  ### Working on maskfile
+  if (is.null(maskfile)) {
+    maskfile = nii.stub(outfile)
+    maskfile = paste0(maskfile, "_Mask")
+  }
+  maskfile = nii.stub(maskfile)
+  stopifnot(inherits(maskfile, "character"))
+
+  #############################
+  # Threshold Image
+  #############################
+  if (verbose) {
+    message(paste0("# Thresholding Image to ",
+                   lthresh, "-", uthresh, "\n"))
+  }
+  img = check_nifti(img, reorient = reorient)
+  thresh_img = niftiarr(img, img * (img > lthresh & img < uthresh))
+
+  thresh_img = drop_img_dim(thresh_img)
+  thresh = checkimg(thresh_img)
+  rm(thresh_img)
+  ## need to do rep.value = 0 because template is like that.
+
+  #############################
+  # Removing Neck
+  #############################
+  template.file =
+    system.file("scct_unsmooth_SS_0.01.nii.gz",
+                package = "ichseg")
+  template.mask =
+    system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
+                package = "ichseg")
+  if (remove.neck) {
+    if (verbose) {
+      message(paste0("# Removing Neck\n"))
+    }
+    neck_mask = remove_neck(thresh,
+                            rep.value = 0,
+                            template.file = template.file,
+                            template.mask = template.mask,
+                            ret_mask = TRUE,
+                            swapdim = TRUE,
+                            verbose = verbose,
+                            ...)
+  } else {
+    neck_mask = niftiarr(img, array(1, dim = dim(img)))
+  }
+  noneck = mask_img(img, neck_mask)
+  noneck = drop_img_dim(noneck)
+  noneck = checkimg(noneck)
+
+  rm(neck_mask)
+
+  if (verbose) {
+    message("# Registering to Template")
+  }
+  template_with_skull =
+    system.file("scct_unsmooth.nii.gz",
+                package = "ichseg")
+  reg = registration(
+    noneck,
+    template.file = template_with_skull,
+    typeofTransform = "Rigid",
+    interpolator = "NearestNeighbor",
+    correct = FALSE,
+    verbose = verbose)
+  original_noneck = noneck
+  noneck = reg$outfile
+
+  #############################
+  # Skull Stripping no-neck image
+  #############################
+  if (verbose) {
+    message(paste0("# Skull Stripping in Template Space"))
+  }
+  template_ss = CT_Skull_Strip(
+    noneck, outfile = outfile, retimg = TRUE,
+    maskfile = maskfile,
+    lthresh = lthresh, uthresh = uthresh,
+    opts = paste("-f ", int,
+                 ifelse(verbose, " -v", "")),
+    verbose = verbose,
+    keepmask = TRUE, reorient = reorient, ...)
+  template_ssmask = readNIfTI(maskfile,
+                              reorient = reorient)
+
+  if (verbose) {
+    message("# Inverting Transformation")
+  }
+  ssmask = ants_apply_transforms(
+    fixed = original_noneck,
+    moving = template_ssmask,
+    transformlist = reg$fwdtransforms,
+    whichtoinvert = 1,
+    interpolator = "NearestNeighbor")
+  ssmask = neurobase::copyNIfTIHeader(img = img, arr = ssmask)
+  writenii(ssmask, maskfile)
+  rm(template_ssmask)
+
+  #############################
+  # Filling the mask
+  #############################
+  if (nvoxels > 0) {
+    if (verbose) {
+      message(paste0("# Filling Holes \n"))
+    }
+    ssmask = dil_ero(ssmask,
+                     retimg = TRUE,
+                     nvoxels = nvoxels,
+                     verbose = verbose)
+  }
+
+  ss = mask_img(img, ssmask)
+  ss = drop_img_dim(ss)
+
+  writenii(ss, filename = outfile)
 
   #############################
   # Removing mask if keepmask = FALSE

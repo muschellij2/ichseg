@@ -4,16 +4,26 @@
 \alias{ct_template_fname}
 \title{Get CT Template Filename}
 \usage{
-ct_template_fname(type = c("brain", "mask", "image"))
+ct_template_fname(type = c("brain", "mask", "image", "cormack",
+  "stripped_cormack", "stripped_hu", "stripped_hu8"))
 }
 \arguments{
 \item{type}{Type of image.  \code{image} is the original image,
 \code{brain} is the skull stripped image,
-\code{mask} is brain mask.}
+\code{mask} is brain mask. Values with \code{cormack} or \code{stripped}
+are in 2 millimeter resolution, and smoothed.}
 }
 \value{
 Character filename
 }
 \description{
 Wrapper for returning the filename of the CT Template
+}
+\examples{
+types = c("brain", "mask", "image",
+"cormack",
+"stripped_cormack",
+"stripped_hu",
+"stripped_hu8")
+sapply(types, ct_template_fname)
 }
