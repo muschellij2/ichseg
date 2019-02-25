@@ -4,13 +4,15 @@
 \alias{ct_dcm2nii}
 \title{CT DICOM to NIfTI conversion}
 \usage{
-ct_dcm2nii(basedir = ".", merge_files = TRUE, ...)
+ct_dcm2nii(basedir = ".", merge_files = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 \item{basedir}{(character) directory to get files}
 
 \item{merge_files}{Should files be merged, passed do \code{\link{dcm2nii}}
 options}
+
+\item{verbose}{print diagnostic messages}
 
 \item{...}{Additional parameters passed to \code{\link{dcm2nii}}}
 }
