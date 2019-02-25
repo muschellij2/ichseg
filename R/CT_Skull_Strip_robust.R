@@ -239,13 +239,10 @@ CT_Skull_Strip_register <- function(
   maskfile = NULL,
   retimg = TRUE,
   reorient = FALSE,
-  int = "0.01",
   lthresh = 0,
   uthresh = 100,
-  nvoxels = 5,
   remove.neck = TRUE,
   verbose = TRUE,
-  opts = NULL,
   ...
 ){
 
@@ -336,12 +333,10 @@ CT_Skull_Strip_register <- function(
     noneck, outfile = outfile, retimg = TRUE,
     maskfile = maskfile,
     lthresh = lthresh, uthresh = uthresh,
-    opts = paste("-f ", int,
-                 ifelse(verbose, " -v", "")),
     verbose = verbose,
     keepmask = TRUE, reorient = reorient, ...)
-  template_ssmask = readNIfTI(maskfile,
-                              reorient = reorient)
+  template_ssmask = readnii(maskfile,
+                            reorient = reorient)
 
   if (verbose) {
     message("# Inverting Transformation")
@@ -355,19 +350,6 @@ CT_Skull_Strip_register <- function(
   ssmask = neurobase::copyNIfTIHeader(img = img, arr = ssmask)
   writenii(ssmask, maskfile)
   rm(template_ssmask)
-
-  #############################
-  # Filling the mask
-  #############################
-  if (nvoxels > 0) {
-    if (verbose) {
-      message(paste0("# Filling Holes \n"))
-    }
-    ssmask = dil_ero(ssmask,
-                     retimg = TRUE,
-                     nvoxels = nvoxels,
-                     verbose = verbose)
-  }
 
   ss = mask_img(img, ssmask)
   ss = drop_img_dim(ss)

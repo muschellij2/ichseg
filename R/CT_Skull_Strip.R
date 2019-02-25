@@ -100,7 +100,7 @@ CT_Skull_Strip <- function(
 
     if (verbose) {
       message(paste0(
-        "# Creating 0 - 100 mask to remask after filling\n"))
+        "# Creating binary mask to remask after filling\n"))
     }
     bonefile = tempfile()
     #   fslbin(outfile, retimg = FALSE, outfile = bonefile, intern=FALSE)
