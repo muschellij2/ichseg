@@ -32,6 +32,9 @@
 #' \code{\link{fslthresh}}
 #' @param verbose (logical) Should diagnostic output be printed?
 #' @param ... additional arguments passed to \code{\link{fslbet}}.
+#' @param smooth_before_threshold Should the image be smoothed before
+#' thresholding?  This can be useful for bone-window scans.
+#'
 #' @return character or logical depending on intern
 #' @importFrom fslr fslthresh fslmaths fslfill fslsmooth fslmask fslbet
 #' @importFrom neurobase nii.stub
@@ -55,6 +58,7 @@ CT_Skull_Strip <- function(
   sigma = 1,
   lthresh = 0,
   uthresh = 100,
+  smooth_before_threshold = FALSE,
   verbose=TRUE,
   ...
 ){
@@ -65,18 +69,34 @@ CT_Skull_Strip <- function(
   } else {
     stopifnot(!is.null(outfile))
   }
+  orig_img = img
+
+
+  if (smooth_before_threshold) {
+    if (verbose) {
+      message(paste0("# Smoothing before Thresholding"))
+    }
+    pm_file = tempfile()
+    img = fslsmooth(img,
+                    outfile = pm_file,
+                    sigma = sigma,
+                    retimg = FALSE,
+                    verbose = verbose)
+  }
+
   if (verbose) {
     message(paste0("# Thresholding Image to ",
                    lthresh, "-", uthresh, "\n"))
   }
 
+  tfile = tempfile()
   outfile = nii.stub(outfile)
   run = fslthresh(img, thresh = lthresh, uthresh = uthresh,
-                  outfile = outfile,
+                  outfile = tfile,
                   retimg = FALSE,
                   intern = FALSE,
                   verbose = verbose)
-  if (verbose){
+  if (verbose) {
     message(paste0("# Thresholding return: ", run, "\n"))
   }
 
@@ -86,7 +106,7 @@ CT_Skull_Strip <- function(
                      " even if lthres < 0\n"))
     }
     absfile = tempfile()
-    run = fslmaths(outfile, outfile = absfile,
+    run = fslmaths(tfile, outfile = absfile,
                    retimg = FALSE,
                    intern = FALSE,
                    opts = "-abs",
@@ -139,8 +159,8 @@ CT_Skull_Strip <- function(
     if (verbose) {
       message(paste0("# Presmoothing image\n"))
     }
-    run = fslsmooth(outfile,
-                    outfile = outfile,
+    run = fslsmooth(tfile,
+                    outfile = tfile,
                     sigma = sigma,
                     retimg = FALSE,
                     intern = FALSE,
@@ -153,9 +173,9 @@ CT_Skull_Strip <- function(
       if (verbose) {
         message(paste0("# Remasking Smoothed Image\n"))
       }
-      run = fslmask(outfile,
+      run = fslmask(tfile,
                     mask = bonefile,
-                    outfile = outfile,
+                    outfile = tfile,
                     retimg = FALSE,
                     intern = FALSE,
                     verbose = verbose)
@@ -180,14 +200,14 @@ CT_Skull_Strip <- function(
     message(paste0("# Running ", betcmd, "\n"))
     betintern = FALSE
   }
-  runbet = fslbet(infile = outfile,
-                  outfile = outfile,
+  runbet = fslbet(infile = tfile,
+                  outfile = tfile,
                   retimg = FALSE, intern = betintern,
                   betcmd = betcmd,
                   opts = opts,
                   verbose = verbose, ...)
 
-  if (verbose){
+  if (verbose) {
     message(paste0("# ", betcmd, " output: ", runbet, "\n"))
   }
   ###############
@@ -195,8 +215,8 @@ CT_Skull_Strip <- function(
   ##############
   ext = get.imgext()
 
-  if (isTRUE(inskull_mesh)){
-    if (verbose){
+  if (isTRUE(inskull_mesh)) {
+    if (verbose) {
       message("# Deleting extraneous files\n")
     }
     end.names = c("inskull_mask", "outskin_mask", "outskin_mesh",
@@ -204,18 +224,18 @@ CT_Skull_Strip <- function(
                   "skull_mask")
     end.names = paste0(end.names, ext)
     end.names = c(end.names,
-                 "inskull_mesh.off",
-                 "outskin_mesh.off",
-                 "outskull_mesh.off",
-                 "mesh.vtk")
-    end.names = paste(outfile, end.names, sep = "_")
+                  "inskull_mesh.off",
+                  "outskin_mesh.off",
+                  "outskull_mesh.off",
+                  "mesh.vtk")
+    end.names = paste(tfile, end.names, sep = "_")
     file.remove(end.names)
   }
 
   #####################
   # Filling in holes of the mask (like choroid plexis and CSF)
   #####################
-  if (verbose){
+  if (verbose) {
     message("# Using fslfill to fill in any holes in mask \n")
   }
   if (is.null(maskfile)) {
@@ -227,7 +247,7 @@ CT_Skull_Strip <- function(
   # outmask = paste0(outmask, ext)
   # file.rename(outmask, paste0(maskfile, ext))
   absfile = tempfile()
-  run = fslmaths(outfile, outfile = absfile,
+  run = fslmaths(tfile, outfile = absfile,
                  retimg = FALSE,
                  intern = FALSE,
                  verbose = verbose, opts = "-abs")
@@ -237,7 +257,7 @@ CT_Skull_Strip <- function(
                     retimg = FALSE,
                     intern = FALSE,
                     verbose = verbose)
-  if (refill){
+  if (refill) {
     smfile = tempfile()
     fslmaths(maskfile, retimg = FALSE, outfile = smfile,
              opts = "-kernel boxv 7 -fmean",
@@ -249,15 +269,15 @@ CT_Skull_Strip <- function(
              verbose = verbose)
   }
 
-  if (verbose){
+  if (verbose) {
     message(paste0("# fslfill output: ", runmask, "\n"))
   }
 
-  if (verbose){
+  if (verbose) {
     message("# Using the filled mask to mask original image\n")
   }
   res = fslmask(
-    file = img,
+    file = orig_img,
     mask = maskfile,
     outfile = outfile,
     retimg = retimg,
@@ -266,8 +286,8 @@ CT_Skull_Strip <- function(
     verbose = verbose
   )
 
-  if (!keepmask){
-    if (verbose){
+  if (!keepmask) {
+    if (verbose) {
       message("# Removing Mask File\n")
     }
     maskfile = nii.stub(maskfile)

@@ -15,9 +15,8 @@ CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
   package = "ichseg"), ...)
 
 CT_Skull_Strip_register(img, outfile = NULL, keepmask = TRUE,
-  maskfile = NULL, retimg = TRUE, reorient = FALSE, int = "0.01",
-  lthresh = 0, uthresh = 100, nvoxels = 5, remove.neck = TRUE,
-  verbose = TRUE, opts = NULL, ...)
+  maskfile = NULL, retimg = TRUE, reorient = FALSE, lthresh = 0,
+  uthresh = 100, remove.neck = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 \item{img}{(character) File to be skull stripped or object of class

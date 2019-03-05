@@ -9,7 +9,7 @@ CT_Skull_Strip(img, outfile = NULL, keepmask = TRUE, maskfile = NULL,
   intern = TRUE, betcmd = "bet2", opts = "-f 0.01 -v",
   presmooth = TRUE, remask = TRUE, refill = FALSE,
   refill.thresh = 0.75, sigma = 1, lthresh = 0, uthresh = 100,
-  verbose = TRUE, ...)
+  smooth_before_threshold = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 \item{img}{(character) File to be skull stripped or object of class
@@ -57,6 +57,9 @@ step?}
 
 \item{uthresh}{(default: 100) Upper value to threshold CT
 \code{\link{fslthresh}}}
+
+\item{smooth_before_threshold}{Should the image be smoothed before
+thresholding?  This can be useful for bone-window scans.}
 
 \item{verbose}{(logical) Should diagnostic output be printed?}
 

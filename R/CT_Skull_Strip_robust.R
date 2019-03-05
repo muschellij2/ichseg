@@ -97,13 +97,7 @@ CT_Skull_Strip_robust <- function(
                           retimg = retimg,
                           fileext = "")
   outfile = path.expand(outfile)
-
-
-  if (verbose){
-    message(paste0("# Thresholding Image to ",
-                   lthresh, "-", uthresh, "\n"))
-  }
-
+  tfile = tempfile()
 
   ### Working on maskfile
   if (is.null(maskfile)){
@@ -153,7 +147,7 @@ CT_Skull_Strip_robust <- function(
   if (verbose) {
     message(paste0("# Skull Stripping for COG\n"))
   }
-  ss = CT_Skull_Strip(noneck, outfile = outfile, retimg = TRUE,
+  ss = CT_Skull_Strip(noneck, outfile = tfile, retimg = TRUE,
                       maskfile = maskfile,
                       lthresh = lthresh, uthresh = uthresh,
                       opts = paste("-f ", int,
@@ -172,7 +166,7 @@ CT_Skull_Strip_robust <- function(
     if (verbose){
       message(paste0("# Skull Stripping with new cog\n"))
     }
-    ss = CT_Skull_Strip(noneck, outfile = outfile, retimg = TRUE,
+    ss = CT_Skull_Strip(noneck, outfile = tfile, retimg = TRUE,
                         opts = paste("-f ", int,
                                      ifelse(verbose, "-v", ""),
                                      "-w ", smooth.factor,
@@ -219,7 +213,12 @@ CT_Skull_Strip_robust <- function(
     maskfile = paste0(maskfile, ext)
     file.remove(maskfile)
   }
-
+  if (!retimg) {
+    outfile = nii.stub(outfile)
+    ext = get.imgext()
+    outfile = paste0(outfile, ext)
+    ss = outfile
+  }
   return(ss)
 }
 
@@ -253,6 +252,7 @@ CT_Skull_Strip_register <- function(
                           retimg = retimg,
                           fileext = "")
   outfile = path.expand(outfile)
+  tfile = tempfile()
 
   ### Working on maskfile
   if (is.null(maskfile)) {
@@ -330,7 +330,7 @@ CT_Skull_Strip_register <- function(
     message(paste0("# Skull Stripping in Template Space"))
   }
   template_ss = CT_Skull_Strip(
-    noneck, outfile = outfile, retimg = TRUE,
+    noneck, outfile = tfile, retimg = TRUE,
     maskfile = maskfile,
     lthresh = lthresh, uthresh = uthresh,
     verbose = verbose,
@@ -368,6 +368,11 @@ CT_Skull_Strip_register <- function(
     maskfile = paste0(maskfile, ext)
     file.remove(maskfile)
   }
-
+  if (!retimg) {
+    outfile = nii.stub(outfile)
+    ext = get.imgext()
+    outfile = paste0(outfile, ext)
+    ss = outfile
+  }
   return(ss)
 }
