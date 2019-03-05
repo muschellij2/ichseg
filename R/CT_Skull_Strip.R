@@ -77,11 +77,12 @@ CT_Skull_Strip <- function(
       message(paste0("# Smoothing before Thresholding"))
     }
     pm_file = tempfile()
-    img = fslsmooth(img,
+    result = fslsmooth(img,
                     outfile = pm_file,
                     sigma = sigma,
                     retimg = FALSE,
                     verbose = verbose)
+    img = pm_file
   }
 
   if (verbose) {
