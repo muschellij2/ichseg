@@ -35,8 +35,7 @@ ich_train_data = function(
       img = img,
       roi = roi,
       ...,
-      verbose = verbose,
-      roi = NULL)
+      verbose = verbose)
     df = L$img.pred$df
     df$filename = img
     if (run_candidate) {
@@ -45,8 +44,8 @@ ich_train_data = function(
     df
   }, imgs, rois, SIMPLIFY = FALSE)
 
-results = do.call("rbind", results)
-return(results)
+  results = do.call("rbind", results)
+  return(results)
 }
 
 
