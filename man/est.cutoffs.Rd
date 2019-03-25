@@ -3,11 +3,14 @@
 \docType{data}
 \name{est.cutoffs}
 \alias{est.cutoffs}
+\alias{big_est.cutoffs}
 \title{Estimated Cutoffs for ICH}
 \format{A matrix with 2 rows and 18 variables, each are descriptors, which
 are relevant to those made by \code{\link{make_predictors}}}
 \usage{
 est.cutoffs
+
+big_est.cutoffs
 }
 \description{
 A dataset containing the 0.5% and 99.5% quantiles for the empirical

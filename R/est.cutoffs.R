@@ -6,3 +6,6 @@
 #' @format A matrix with 2 rows and 18 variables, each are descriptors, which
 #' are relevant to those made by \code{\link{make_predictors}}
 "est.cutoffs"
+
+#' @rdname est.cutoffs
+"big_est.cutoffs"

@@ -5,7 +5,7 @@
 \title{Create ICH Train Data}
 \usage{
 ich_train_data(imgs, run_candidate = TRUE,
-  cutoffs = ichseg::est.cutoffs, ..., verbose = TRUE)
+  cutoffs = ichseg::est.cutoffs, rois = NULL, ..., verbose = TRUE)
 }
 \arguments{
 \item{imgs}{CT image, object of class \code{nifti} (list) or
@@ -15,6 +15,9 @@ character filename}
 to get candidate voxels}
 
 \item{cutoffs}{cutoffs to pass to \code{\link{ich_candidate_voxels}}}
+
+\item{rois}{ROI image, object of class \code{nifti} (list) or
+character filename}
 
 \item{...}{Additional options passsed to \code{\link{ich_preprocess}}}
 

@@ -3,6 +3,7 @@
 \docType{data}
 \name{smoothed_rf_cutoffs}
 \alias{smoothed_rf_cutoffs}
+\alias{smoothed_big_rf_cutoffs}
 \title{Estimated Random Forest List of Cutoffs for Smoothed Data for ICH}
 \format{A list with 7 elements, which are:
 \describe{
@@ -14,9 +15,11 @@
 }}
 \usage{
 smoothed_rf_cutoffs
+
+smoothed_big_rf_cutoffs
 }
 \description{
-A list containing the random forest model cutoffs  
+A list containing the random forest model cutoffs
 for predicting ICH after smoothing and other factors for
 prediction.
 }

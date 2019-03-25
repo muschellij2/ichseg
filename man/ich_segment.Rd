@@ -6,7 +6,7 @@
 \title{Predict ICH Segmentation}
 \usage{
 ich_segment(img, ..., verbose = TRUE, shiny = FALSE, model = c("rf",
-  "logistic"))
+  "logistic", "big_rf"))
 
 ich_process_predictors(img, mask = NULL, save_imgs = FALSE,
   outdir = NULL, stub = NULL, verbose = TRUE, shiny = FALSE,

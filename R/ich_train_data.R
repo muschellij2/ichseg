@@ -6,6 +6,9 @@
 #' @param cutoffs cutoffs to pass to \code{\link{ich_candidate_voxels}}
 #' @param run_candidate Run \code{\link{ich_candidate_voxels}}
 #' to get candidate voxels
+#' @param rois ROI image, object of class \code{nifti} (list) or
+#' character filename
+#'
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @note This is a simple wrapper for \code{\link{ich_process_predictors}}
@@ -15,13 +18,22 @@ ich_train_data = function(
   imgs,
   run_candidate = TRUE,
   cutoffs = ichseg::est.cutoffs,
+  rois = NULL,
   ...,
   verbose = TRUE) {
 
   imgs = checkimg(imgs)
-  results = lapply(imgs, function(img) {
+  if (!is.null(rois)) {
+    rois = checkimg(rois)
+  } else {
+    rois = lapply(seq_along(imgs), function(x) NULL)
+  }
+  stopifnot(length(imgs) == length(rois))
+
+  results = mapply(function(img, roi) {
     L = ich_process_predictors(
       img = img,
+      roi = roi,
       ...,
       verbose = verbose,
       roi = NULL)
@@ -31,9 +43,10 @@ ich_train_data = function(
       df$candidate = ich_candidate_voxels(df, cutoffs = cutoffs)
     }
     df
-  })
-  results = do.call("rbind", results)
-  return(results)
+  }, imgs, rois, SIMPLIFY = FALSE)
+
+results = do.call("rbind", results)
+return(results)
 }
 
 

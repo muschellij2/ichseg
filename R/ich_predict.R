@@ -34,7 +34,7 @@
 #' @export
 ich_predict = function(df,
                        nim,
-                       model = c("rf", "logistic"),
+                       model = c("rf", "logistic", "big_rf"),
                        verbose = TRUE,
                        native = TRUE,
                        native_img = NULL,

@@ -1,6 +1,6 @@
 #' @title Estimated Random Forest List of Cutoffs for Smoothed Data for ICH
 #'
-#' @description A list containing the random forest model cutoffs  
+#' @description A list containing the random forest model cutoffs
 #' for predicting ICH after smoothing and other factors for
 #' prediction.
 #'
@@ -13,3 +13,6 @@
 #' \item{mod.acc}{the accuracy and cutoff estimated with the training data}
 #' }
 "smoothed_rf_cutoffs"
+
+#' @rdname smoothed_rf_cutoffs
+"smoothed_big_rf_cutoffs"

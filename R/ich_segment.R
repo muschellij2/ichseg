@@ -25,7 +25,7 @@ ich_segment = function(img,
                        ...,
                        verbose = TRUE,
                        shiny = FALSE,
-                       model = c("rf", "logistic")) {
+                       model = c("rf", "logistic", "big_rf")) {
 
   model = match.arg(model)
 

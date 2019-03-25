@@ -3,6 +3,7 @@
 \docType{data}
 \name{rf_modlist}
 \alias{rf_modlist}
+\alias{big_rf_modlist}
 \title{Estimated Random Forest Model List for ICH}
 \format{A list with 7 elements, which are:
 \describe{
@@ -16,6 +17,8 @@
 }}
 \usage{
 rf_modlist
+
+big_rf_modlist
 }
 \description{
 A list containing the random forest model for predicting ICH and other factors for

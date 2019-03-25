@@ -14,3 +14,6 @@
 #' \item{mod.time}{the time it took to train the model }
 #' }
 "rf_modlist"
+
+#' @rdname rf_modlist
+"big_rf_modlist"
