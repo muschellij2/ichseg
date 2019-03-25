@@ -66,7 +66,7 @@ ich_predict = function(df,
       df[, icn] = x
     }
   }
-  msg = "# Making Prediction Images"
+  msg = "# Making Prediction"
   if (verbose) {
     message(msg)
   }
@@ -108,7 +108,10 @@ ich_predict = function(df,
              logistic = predict(mod,
                                 df[ df$multiplier, ],
                                 type = "response"))
-
+  msg = "# Making Prediction Image"
+  if (verbose) {
+    message(msg)
+  }
   mult_img = niftiarr(nim, df$multiplier)
 
   # p = predict(mod, df[ df$multiplier, ], type = "response")
@@ -118,8 +121,13 @@ ich_predict = function(df,
 
   mask = niftiarr(nim, df$mask)
   pimg = mask_img(pimg, mask)
+  msg = "# Smoothing Image"
+  if (verbose) {
+    message(msg)
+  }
   sm.pimg  = mean_image(pimg,
-                        nvoxels = 1)
+                        nvoxels = 1,
+                        verbose = verbose)
   sm.pimg[abs(sm.pimg) <
             .Machine$double.eps ^ 0.5 ] = 0
   sm.pimg = niftiarr(nim, sm.pimg)
@@ -129,6 +137,10 @@ ich_predict = function(df,
   sm.pred = sm.pimg > smoothed_cutoff
   pred = pimg > cutoff
 
+  msg = "# Connected Components"
+  if (verbose) {
+    message(msg)
+  }
   # cc = spm_bwlabel(pred, k = 100)
   # scc = spm_bwlabel(sm.pred, k = 100)
   cc = ants_bwlabel(img = pred, k = 100, binary = TRUE)
@@ -148,6 +160,10 @@ ich_predict = function(df,
   ##############################################################
   native_res = NULL
   if (native) {
+    msg = "# Projecting back to Native Space"
+    if (verbose) {
+      message(msg)
+    }
     stopifnot(!is.null(interpolator))
     stopifnot(!is.null(transformlist))
     native_res = lapply(res, function(x){
