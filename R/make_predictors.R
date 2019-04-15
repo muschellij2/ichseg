@@ -36,7 +36,7 @@
 #' @importFrom neurobase readnii checkimg zscore_img finite_img
 #' @importFrom fslr fslerode fsl_smooth
 #' @importFrom oro.nifti zero_trans cal_img voxdim pixdim convert.datatype convert.bitpix
-#' @importFrom extrantsr zscore_template otropos reg_flip
+#' @importFrom extrantsr zscore_template otropos reg_flip perona_malik
 #' @importFrom stats sd quantile predict complete.cases
 #' @export
 #' @return List of a data.frame of Predictors and set of
@@ -552,6 +552,33 @@ make_predictors <- function(img, mask, roi = NULL,
   }
   df$dist_centroid = c(dist.img)
   rm(list = c("dist.img")); gc(); gc();
+
+
+  ################################################
+  # Making Distance to centroid
+  ################################################
+  msg = "# Perona Malik Smoother"
+  if (verbose) {
+    message(msg)
+  }
+  if (shiny) {
+    shiny::incProgress(message = msg, amount = 0.02)
+  }
+  addstub = "perona_malik"
+  fname = make_fname(addstub)
+  if (file.exists(fname) & !overwrite) {
+    dist.img = readnii(fname, reorient = FALSE)
+  } else {
+    pm_img = extrantsr::perona_malik(
+      masked.img, n_iter = 10,
+      conductance = 5)
+    if (save_imgs) {
+      write_img(pm_img, addstub)
+    }
+    rm(list = c("seg")); gc(); gc();
+  }
+  df$perona_malik = c(pm_img)
+  rm(list = c("pm_img")); gc(); gc();
 
   ################################################
   # Making 10mm and 20mm smoother
