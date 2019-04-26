@@ -3,6 +3,7 @@
 \name{CT_Skull_Strip_robust}
 \alias{CT_Skull_Strip_robust}
 \alias{CT_Skull_Strip_register}
+\alias{CT_Skull_Strip_smooth}
 \title{Robust CT Skull Stripping}
 \usage{
 CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
@@ -17,6 +18,10 @@ CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
 CT_Skull_Strip_register(img, outfile = NULL, keepmask = TRUE,
   maskfile = NULL, retimg = TRUE, reorient = FALSE, lthresh = 0,
   uthresh = 100, remove.neck = TRUE, verbose = TRUE, ...)
+
+CT_Skull_Strip_smooth(img, ..., smooth_before_threshold = TRUE,
+  smooth.factor = 1, remove.neck = TRUE, recog = FALSE,
+  nvoxels = 0)
 }
 \arguments{
 \item{img}{(character) File to be skull stripped or object of class
@@ -76,6 +81,9 @@ to \code{\link{remove_neck}}}
 \item{...}{additional arguments passed to
 \code{\link{CT_Skull_Strip}} or
 \code{\link{remove_neck}}.}
+
+\item{smooth_before_threshold}{Should the image be smoothed before
+thresholding?  This can be useful for bone-window scans.}
 }
 \value{
 Skull-stripped \code{nifti} object

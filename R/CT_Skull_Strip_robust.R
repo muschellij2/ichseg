@@ -376,3 +376,23 @@ CT_Skull_Strip_register <- function(
   }
   return(ss)
 }
+
+#' @rdname CT_Skull_Strip_robust
+#' @export
+#' @param smooth_before_threshold Should the image be smoothed before
+#' thresholding?  This can be useful for bone-window scans.
+CT_Skull_Strip_smooth = function(img, ...,
+                                 smooth_before_threshold = TRUE,
+                                 smooth.factor = 1,
+                                 remove.neck = TRUE,
+                                 recog = FALSE,
+                                 nvoxels = 0) {
+  CT_Skull_Strip_robust(
+    img = img,
+    smooth_before_threshold = smooth_before_threshold,
+    smooth.factor = smooth.factor,
+    remove.neck = remove.neck,
+    recog = recog,
+    nvoxels = nvoxels,
+    ...)
+}
