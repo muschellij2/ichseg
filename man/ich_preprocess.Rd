@@ -2,6 +2,7 @@
 % Please edit documentation in R/ich_preprocess.R
 \name{ich_preprocess}
 \alias{ich_preprocess}
+\alias{ich_cnn_preprocess}
 \title{Preprocess data for ICH Segmentation}
 \usage{
 ich_preprocess(img, skull_strip = TRUE, robust = TRUE, mask = NULL,
@@ -10,6 +11,10 @@ ich_preprocess(img, skull_strip = TRUE, robust = TRUE, mask = NULL,
   "ichseg"), outprefix = NULL, typeofTransform = c("Rigid", "Affine"),
   interpolator = "Linear", outfile = NULL, verbose = TRUE,
   shiny = FALSE, roi = NULL, ...)
+
+ich_cnn_preprocess(...,
+  template.file = system.file("scct_unsmooth_SS_0.01_128x128x128.nii.gz",
+  package = "ichseg"))
 }
 \arguments{
 \item{img}{CT image, object of class \code{nifti} or
