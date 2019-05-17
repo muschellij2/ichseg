@@ -16,6 +16,8 @@
 #' @param shiny Should shiny progress be called?
 #' @param roi Filename of ROI, which will be transformed
 #' @param erode_mask Should the brain mask be eroded?
+#' @param outfile filename for native-space, smoothed,
+#' thresholded image.
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output prediction/probability images
@@ -25,7 +27,8 @@ ich_segment = function(img,
                        ...,
                        verbose = TRUE,
                        shiny = FALSE,
-                       model = c("rf", "logistic", "big_rf")) {
+                       model = c("rf", "logistic", "big_rf"),
+                       outfile = NULL) {
 
   model = match.arg(model)
 
@@ -61,7 +64,8 @@ ich_segment = function(img,
                   verbose = verbose,
                   transformlist = preprocess$invtransforms,
                   interpolator = preprocess$interpolator,
-                  shiny = shiny)
+                  shiny = shiny,
+                  outfile = outfile)
   L$preprocess = preprocess
   if (shiny) {
     shiny::setProgress(value = 3/3)

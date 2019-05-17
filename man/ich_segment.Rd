@@ -6,7 +6,7 @@
 \title{Predict ICH Segmentation}
 \usage{
 ich_segment(img, ..., verbose = TRUE, shiny = FALSE, model = c("rf",
-  "logistic", "big_rf"))
+  "logistic", "big_rf"), outfile = NULL)
 
 ich_process_predictors(img, mask = NULL, save_imgs = FALSE,
   outdir = NULL, stub = NULL, verbose = TRUE, shiny = FALSE,
@@ -24,6 +24,9 @@ character filename}
 
 \item{model}{model to use for prediction,
 either the random forest (rf) or logistic}
+
+\item{outfile}{filename for native-space, smoothed,
+thresholded image.}
 
 \item{mask}{binary brain mask, object of class \code{nifti} or
 character filename}

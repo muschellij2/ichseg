@@ -23,6 +23,10 @@
 #' but only expert use.
 #' @param smoothed_cutoffs A list with an element
 #' \code{mod.dice.coef}, only expert use.
+#' @param outfile filename for output file.
+#' We write the smoothed, thresholded image.  If \code{native = TRUE},
+#' then the file will be native space, otherwise in registered
+#' space
 #' @param ... Additional options passsed to \code{\link{ich_preprocess}}
 #'
 #' @return List of output registered and native space
@@ -44,12 +48,16 @@ ich_predict = function(df,
                        shiny = FALSE,
                        model_list = NULL,
                        smoothed_cutoffs = NULL,
+                       outfile = NULL,
                        ...) {
 
   # if (!have_matlab()) {
   #   stop("MATLAB Path not defined!")
   # }
 
+  if (is.null(outfile)) {
+    outfile = tempfile(fileext = ".nii.gz")
+  }
   cn = colnames(df)
   if (!("multiplier" %in% cn)) {
     df$multiplier = ich_candidate_voxels(df)
@@ -103,8 +111,8 @@ ich_predict = function(df,
                           newdata = df[ df$multiplier, ],
                           type = "prob")[, "1"],
              big_rf = predict(mod,
-                          newdata = df[ df$multiplier, ],
-                          type = "prob")[, "1"],
+                              newdata = df[ df$multiplier, ],
+                              type = "prob")[, "1"],
              logistic = predict(mod,
                                 df[ df$multiplier, ],
                                 type = "response"))
@@ -112,6 +120,7 @@ ich_predict = function(df,
   if (verbose) {
     message(msg)
   }
+  nim = check_nifti(nim)
   mult_img = niftiarr(nim, df$multiplier)
 
   # p = predict(mod, df[ df$multiplier, ], type = "response")
@@ -180,11 +189,15 @@ ich_predict = function(df,
     native_res$prediction_image = neurobase::datatyper(
       native_res$prediction_image > native_thresh
     )
+    writenii(native_res$smoothed_prediction_image, outfile)
+  } else {
+    writenii(res$smoothed_prediction_image, outfile)
   }
   res$cutoff = cutoff
   res$smoothed_cutoff = smoothed_cutoff
 
-  L = list(registered_prediction = res,
-           native_prediction = native_res)
+  L = list(registered_prediction = res)
+  L$native_prediction = native_res
+  L$outfile = outfile
   return(L)
 }

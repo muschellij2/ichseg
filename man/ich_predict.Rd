@@ -7,7 +7,8 @@
 ich_predict(df, nim, model = c("rf", "logistic", "big_rf"),
   verbose = TRUE, native = TRUE, native_img = NULL,
   transformlist = NULL, interpolator = NULL, native_thresh = 0.5,
-  shiny = FALSE, model_list = NULL, smoothed_cutoffs = NULL, ...)
+  shiny = FALSE, model_list = NULL, smoothed_cutoffs = NULL,
+  outfile = NULL, ...)
 }
 \arguments{
 \item{df}{\code{\link{data.frame}} of predictors.  If \code{multiplier}
@@ -42,6 +43,11 @@ but only expert use.}
 
 \item{smoothed_cutoffs}{A list with an element
 \code{mod.dice.coef}, only expert use.}
+
+\item{outfile}{filename for output file.
+We write the smoothed, thresholded image.  If \code{native = TRUE},
+then the file will be native space, otherwise in registered
+space}
 
 \item{...}{Additional options passsed to \code{\link{ich_preprocess}}}
 }
