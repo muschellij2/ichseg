@@ -30,22 +30,23 @@
 #' @importFrom neurobase check_nifti mask_img window_img
 #' @importFrom extrantsr registration ants_apply_transforms bias_correct
 #' @export
-ich_preprocess = function(img,
-                          skull_strip = TRUE,
-                          robust = TRUE,
-                          mask = NULL,
-                          n4_correct = FALSE,
-                          template.file = system.file(
-                            "scct_unsmooth_SS_0.01.nii.gz",
-                            package = "ichseg"),
-                          outprefix = NULL,
-                          typeofTransform = c("Rigid", "Affine"),
-                          interpolator = "Linear",
-                          outfile = NULL,
-                          verbose = TRUE,
-                          shiny = FALSE,
-                          roi = NULL,
-                          ...) {
+ich_preprocess = function(
+  img,
+  skull_strip = TRUE,
+  robust = TRUE,
+  mask = NULL,
+  n4_correct = FALSE,
+  template.file = system.file(
+    "scct_unsmooth_SS_0.01.nii.gz",
+    package = "ichseg"),
+  outprefix = NULL,
+  typeofTransform = c("Rigid", "Affine"),
+  interpolator = "Linear",
+  outfile = NULL,
+  verbose = TRUE,
+  shiny = FALSE,
+  roi = NULL,
+  ...) {
 
   if (skull_strip & is.null(mask)) {
     if (shiny) {
@@ -127,4 +128,38 @@ ich_preprocess = function(img,
 
   return(res)
 
+}
+
+#' @export
+#' @rdname ich_preprocess
+ich_cnn_preprocess = function(
+  ...,
+  template.file = system.file(
+    "scct_unsmooth_SS_0.01_128x128x128.nii.gz",
+    package = "ichseg")
+) {
+  args = list(...)
+  nargs = names(args)
+  if ("skull_strip" %in% nargs) {
+    skull_strip = args$robust
+    if (!skull_strip) {
+      warning("ich_cnn_preprocess needs skull_strip = TRUE")
+    }
+    args$skull_strip = TRUE
+  }
+  if ("robust" %in% nargs) {
+    robust = args$robust
+    if (!robust) {
+      warning("ich_cnn_preprocess needs robust = TRUE")
+    }
+    args$robust = TRUE
+  }
+  args$template.file = template.file
+  args$smooth_before_threshold = TRUE
+  args$smooth.factor = 1
+  args$remove.neck = TRUE
+  args$recog = FALSE
+  args$nvoxels = 0
+  res = do.call(ich_preprocess, args = args)
+  return(res)
 }

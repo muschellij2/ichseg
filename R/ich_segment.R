@@ -108,11 +108,11 @@ ich_process_predictors = function(
     }
   }
 
-  if (save_imgs){
+  if (save_imgs) {
     stopifnot(!is.null(outdir))
     stopifnot(!is.null(stub))
   }
-  if (is.null(outdir)){
+  if (is.null(outdir)) {
     outdir = tempdir()
   }
 
