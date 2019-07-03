@@ -7,13 +7,21 @@ output: github_document
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = "",
   fig.path = "man/figures/README-"
 )
 ```
 # ichseg
 
 The goal of ichseg is to perform preprocessing on computed tomography (CT) scans, including skull stripping. Computes predictors of intracerebral hemorrhage (ICH) and uses these to predict a binary hemorrhage mask from the data.
+
+## Citing
+
+To cite `ichseg`, you can run:
+
+```{r}
+citation("ichseg")
+```
 
 ## Installation
 

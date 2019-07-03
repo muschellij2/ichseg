@@ -1,0 +1,21 @@
+structure(list(
+  muschelli2017pitchperfect = structure(list(
+    title = "{PItcHPERFeCT}: Primary Intracranial Hemorrhage Probability Estimation using Random Forests on {CT}",
+    author = structure(list(
+      list(given = "John", family = "Muschelli", role = NULL,
+           email = NULL, comment = NULL),
+      list(given = c("Elizabeth", "M"), family = "Sweeney", role = NULL,
+           email = NULL, comment = NULL),
+      list(given = c("Natalie", "L"), family = "Ullman", role = NULL,
+           email = NULL, comment = NULL),
+      list(given = "Paul", family = "Vespa",
+           role = NULL, email = NULL, comment = NULL),
+      list(given = c("Daniel", "F"), family = "Hanley", role = NULL,
+           email = NULL, comment = NULL),
+      list(given = c("Ciprian", "M"), family = "Crainiceanu", role = NULL,
+           email = NULL, comment = NULL)), class = "person"),
+    journal = "NeuroImage: Clinical",
+    volume = "14", pages = "379--390", year = "2017",
+    publisher = "Elsevier"), bibtype = "Article",
+    key = "muschelli2017pitchperfect")), class = "bibentry",
+  strings = structure(character(0), .Names = character(0)))
