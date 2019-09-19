@@ -5,6 +5,8 @@
 #' @param merge_files Should files be merged, passed do \code{\link{dcm2nii}}
 #' options
 #' @param verbose print diagnostic messages
+#' @param drop_dim passed to \code{\link{readnii}} for dropping empty
+#' dimensions
 #' @param ... Additional parameters passed to \code{\link{dcm2nii}}
 #'
 #' @return A list or singular \code{nifti} image
@@ -13,7 +15,8 @@
 #' @importFrom dcm2niir dcm2nii check_dcm2nii
 #' @importFrom neurobase rescale_img check_nifti
 ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
-                      verbose = TRUE, ...) {
+                      verbose = TRUE,
+                      drop_dim = TRUE, ...) {
   out = dcm2nii(basedir, merge_files = TRUE, verbose = verbose,
                 ...)
   res = check_dcm2nii(out)
@@ -21,12 +24,13 @@ ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
     if (verbose) {
       message("# reading in image")
     }
-    img = check_nifti(res)
+    img = check_nifti(res, drop_dim = drop_dim)
     if (verbose) {
       message("# rescaling data")
     }
     img = rescale_img(img, min.val = -1024,
-                      max.val = 3071)
+                      max.val = 3071,
+                      drop_dim = drop_dim)
   })
   if (length(res) == 1) {
     img = img[[1]]

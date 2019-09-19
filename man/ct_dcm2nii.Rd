@@ -4,7 +4,8 @@
 \alias{ct_dcm2nii}
 \title{CT DICOM to NIfTI conversion}
 \usage{
-ct_dcm2nii(basedir = ".", merge_files = TRUE, verbose = TRUE, ...)
+ct_dcm2nii(basedir = ".", merge_files = TRUE, verbose = TRUE,
+  drop_dim = TRUE, ...)
 }
 \arguments{
 \item{basedir}{(character) directory to get files}
@@ -13,6 +14,9 @@ ct_dcm2nii(basedir = ".", merge_files = TRUE, verbose = TRUE, ...)
 options}
 
 \item{verbose}{print diagnostic messages}
+
+\item{drop_dim}{passed to \code{\link{readnii}} for dropping empty
+dimensions}
 
 \item{...}{Additional parameters passed to \code{\link{dcm2nii}}}
 }
