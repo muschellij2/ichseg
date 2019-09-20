@@ -17,7 +17,7 @@ Imports:
     stats,
     extrantsr (>= 3.1),
     oro.nifti,
-    neurobase (>= 1.20.5),
+    neurobase (>= 1.27.11.1),
     fslr (>= 2.4),
     magic,
     randomForest,
