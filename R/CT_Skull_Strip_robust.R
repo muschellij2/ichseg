@@ -42,6 +42,8 @@
 #' \code{\link{remove_neck}}.
 #' @param recog Re-estimate the center of gravity (COG) and
 #' skull strip.
+#' @param mask_to_background When masking, should the values outside the
+#' mask be set to 0 (default) or -1024 (when TRUE)
 #' @return Skull-stripped \code{nifti} object
 #' @note This function first thresholds an image, runs a rigid
 #' registration
@@ -81,6 +83,7 @@ CT_Skull_Strip_robust <- function(
   recog = TRUE,
   verbose = TRUE,
   opts = NULL,
+  mask_to_background = FALSE,
   template.file =
     system.file("scct_unsmooth_SS_0.01.nii.gz",
                 package = "ichseg"),
@@ -136,7 +139,11 @@ CT_Skull_Strip_robust <- function(
   } else {
     neck_mask = niftiarr(img, array(1, dim = dim(img)))
   }
-  noneck = mask_img(img, neck_mask)
+  add_value = 0
+  if (mask_to_background) {
+    add_value = 1024
+  }
+  noneck = mask_img(img + add_value, neck_mask) - add_value
   noneck = drop_img_dim(noneck)
   noneck = checkimg(noneck)
 
@@ -194,8 +201,8 @@ CT_Skull_Strip_robust <- function(
                      nvoxels = nvoxels,
                      verbose = verbose)
   }
+  ss = mask_img(ss + add_value, ssmask) - add_value
 
-  ss = mask_img(img, ssmask)
   ss = drop_img_dim(ss)
 
   writenii(ss,
@@ -242,6 +249,7 @@ CT_Skull_Strip_register <- function(
   uthresh = 100,
   remove.neck = TRUE,
   verbose = TRUE,
+  mask_to_background = FALSE,
   ...
 ){
 
@@ -301,7 +309,11 @@ CT_Skull_Strip_register <- function(
   } else {
     neck_mask = niftiarr(img, array(1, dim = dim(img)))
   }
-  noneck = mask_img(img, neck_mask)
+  add_value = 0
+  if (mask_to_background) {
+    add_value = 1024
+  }
+  noneck = mask_img(img + add_value, neck_mask) - add_value
   noneck = drop_img_dim(noneck)
   noneck = checkimg(noneck)
 
@@ -351,7 +363,7 @@ CT_Skull_Strip_register <- function(
   writenii(ssmask, maskfile)
   rm(template_ssmask)
 
-  ss = mask_img(img, ssmask)
+  ss = mask_img(img + add_value, ssmask) - add_value
   ss = drop_img_dim(ss)
 
   writenii(ss, filename = outfile)

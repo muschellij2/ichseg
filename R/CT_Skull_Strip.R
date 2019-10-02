@@ -104,7 +104,7 @@ CT_Skull_Strip <- function(
   if (remask) {
     if (verbose) {
       message(paste0("# Absolute value so fslmaths -bin keeps all mask",
-                     " even if lthres < 0\n"))
+                     " even if lthresh < 0\n"))
     }
     absfile = tempfile()
     run = fslmaths(tfile, outfile = absfile,

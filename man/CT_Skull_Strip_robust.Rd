@@ -10,6 +10,7 @@ CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
   maskfile = NULL, retimg = TRUE, reorient = FALSE, int = "0.01",
   lthresh = 0, uthresh = 100, nvoxels = 5, remove.neck = TRUE,
   smooth.factor = 2, recog = TRUE, verbose = TRUE, opts = NULL,
+  mask_to_background = FALSE,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
   "ichseg"),
   template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
@@ -17,7 +18,8 @@ CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
 
 CT_Skull_Strip_register(img, outfile = NULL, keepmask = TRUE,
   maskfile = NULL, retimg = TRUE, reorient = FALSE, lthresh = 0,
-  uthresh = 100, remove.neck = TRUE, verbose = TRUE, ...)
+  uthresh = 100, remove.neck = TRUE, verbose = TRUE,
+  mask_to_background = FALSE, ...)
 
 CT_Skull_Strip_smooth(img, ..., smooth_before_threshold = TRUE,
   smooth.factor = 1, remove.neck = TRUE, recog = FALSE,
@@ -69,6 +71,9 @@ skull strip.}
 \item{verbose}{(logical) Should diagnostic output be printed?}
 
 \item{opts}{Not used}
+
+\item{mask_to_background}{When masking, should the values outside the
+mask be set to 0 (default) or -1024 (when TRUE)}
 
 \item{template.file}{Template to warp to original image
 space, passed to
