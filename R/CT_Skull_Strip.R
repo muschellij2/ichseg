@@ -190,6 +190,8 @@ CT_Skull_Strip <- function(
   if (verbose) {
     message(paste0("copied file: ", tcopy))
     file.copy(tfile, tcopy)
+    file.copy(paste0(tfile, ".nii"), tcopy, overwrite = FALSE)
+    file.copy(paste0(tfile, ".nii.gz"), tcopy, overwrite = FALSE)
   }
 
   #### Different options for bet
