@@ -78,10 +78,10 @@ CT_Skull_Strip <- function(
     }
     pm_file = tempfile()
     result = fslsmooth(img,
-                    outfile = pm_file,
-                    sigma = sigma,
-                    retimg = FALSE,
-                    verbose = verbose)
+                       outfile = pm_file,
+                       sigma = sigma,
+                       retimg = FALSE,
+                       verbose = verbose)
     img = pm_file
   }
 
@@ -91,6 +91,7 @@ CT_Skull_Strip <- function(
   }
 
   tfile = tempfile()
+  tcopy = tempfile(fileext = ".nii.gz")
   outfile = nii.stub(outfile)
   run = fslthresh(img, thresh = lthresh, uthresh = uthresh,
                   outfile = tfile,
@@ -185,7 +186,10 @@ CT_Skull_Strip <- function(
       }
 
     }
-
+  }
+  if (verbose) {
+    message(paste0("copied file: ", tcopy))
+    file.copy(tfile, tcopy)
   }
 
   #### Different options for bet
