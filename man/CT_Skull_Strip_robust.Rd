@@ -23,7 +23,7 @@ CT_Skull_Strip_register(img, outfile = NULL, keepmask = TRUE,
 
 CT_Skull_Strip_smooth(img, ..., smooth_before_threshold = TRUE,
   smooth.factor = 1, remove.neck = TRUE, recog = FALSE,
-  nvoxels = 0)
+  nvoxels = 0, add_1024 = FALSE)
 }
 \arguments{
 \item{img}{(character) File to be skull stripped or object of class
@@ -89,6 +89,10 @@ to \code{\link{remove_neck}}}
 
 \item{smooth_before_threshold}{Should the image be smoothed before
 thresholding?  This can be useful for bone-window scans.}
+
+\item{add_1024}{Adding 1024 to the image *before* running the skull
+stripping.  The values are subtracted after.  This has interplay with
+\code{mask_to_background}}
 }
 \value{
 Skull-stripped \code{nifti} object
