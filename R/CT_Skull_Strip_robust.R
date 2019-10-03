@@ -393,18 +393,79 @@ CT_Skull_Strip_register <- function(
 #' @export
 #' @param smooth_before_threshold Should the image be smoothed before
 #' thresholding?  This can be useful for bone-window scans.
-CT_Skull_Strip_smooth = function(img, ...,
-                                 smooth_before_threshold = TRUE,
-                                 smooth.factor = 1,
-                                 remove.neck = TRUE,
-                                 recog = FALSE,
-                                 nvoxels = 0) {
-  CT_Skull_Strip_robust(
-    img = img,
-    smooth_before_threshold = smooth_before_threshold,
-    smooth.factor = smooth.factor,
-    remove.neck = remove.neck,
-    recog = recog,
-    nvoxels = nvoxels,
-    ...)
+#' @param add_1024 Adding 1024 to the image *before* running the skull
+#' stripping.  The values are subtracted after.  This has interplay with
+#' \code{mask_to_background}
+CT_Skull_Strip_smooth = function(
+  img, ...,
+  smooth_before_threshold = TRUE,
+  smooth.factor = 1,
+  remove.neck = TRUE,
+  recog = FALSE,
+  nvoxels = 0,
+  add_1024 = FALSE) {
+  # grab all the args
+  args = list(...)
+  args$smooth_before_threshold = smooth_before_threshold
+  args$smooth.factor = smooth.factor
+  args$remove.neck = remove.neck
+  args$recog = recog
+  args$nvoxels = nvoxels
+
+  # read in the image, and add 1024, adjust the lthresh/uthresh
+  if (add_1024) {
+    val = 1024
+    img = check_nifti(img, allow.array = TRUE)
+    img = img + val
+    args$lthresh = args$lthresh + val
+    args$uthresh = args$uthresh + val
+    mb = args$mask_to_background
+    if (!is.null(mb)) {
+      if (mb) {
+        warning(paste0("add_1024 is TRUE, but mask_to_background ",
+                       "TRUE, setting to FALSE"))
+      }
+    } else {
+      mb = FALSE
+    }
+    # now 0 is truly 0
+    args$mask_to_background = FALSE
+  }
+  args$img = img
+
+  # make sure you return an image and now we know for sure the outfile
+  if (add_1024) {
+    retimg = args$retimg
+    # always return an image
+    if (is.null(retimg)) {
+      retimg = TRUE
+    }
+    args$retimg = TRUE
+    outfile = args$outfile
+    if (is.null(outfile)) {
+      outfile = tempfile(fileext = ".nii.gz")
+    }
+    args$outfile = outfile
+  }
+  # run the ss
+  ss = do.call(CT_Skull_Strip_robust, args = args)
+  # read in the mask
+  if (add_1024) {
+    mask = sub("[.]nii", "_Mask.nii", outfile)
+    mask = readnii(mask)
+    # remove the 1024
+    if (mb) {
+      # background values are -1024
+      ss = mask_img(img, mask) - val
+    } else {
+      # background values are 0
+      ss = mask_img(img - val, mask)
+    }
+    writenii(ss, outfile)
+  }
+  if (retimg) {
+    return(ss)
+  } else {
+    return(outfile)
+  }
 }
