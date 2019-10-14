@@ -85,8 +85,12 @@ ich_preprocess = function(
   if (is.null(outprefix)) {
     outprefix = tempfile()
   }
+  msg = "# Rigid-Body Registration"
+  if (verbose) {
+    message(msg)
+  }
   if (shiny) {
-    shiny::incProgress(message = "Rigid-Body Registration")
+    shiny::incProgress(message = msg)
   }
   typeofTransform = match.arg(typeofTransform)
   res = registration(
