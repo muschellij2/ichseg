@@ -241,7 +241,7 @@ make_predictors <- function(img, mask, roi = NULL,
 
   if (sum(mask) == 0) {
     msg = paste0(
-      "Eroded mask is empty! Somethign went wrong with eroding ",
+      "Eroded mask is empty! Something went wrong with eroding ",
       "or Skull stripping")
     stop(msg)
   }

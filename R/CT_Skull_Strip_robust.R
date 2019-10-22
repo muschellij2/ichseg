@@ -173,7 +173,7 @@ CT_Skull_Strip_robust <- function(
     if (verbose){
       message(paste0("# Skull Stripping with new cog\n"))
     }
-    ss = CT_Skull_Strip(noneck, outfile = tfile, retimg = TRUE,
+    tmp_out = CT_Skull_Strip(noneck, outfile = tfile, retimg = TRUE,
                         opts = paste("-f ", int,
                                      ifelse(verbose, "-v", ""),
                                      "-w ", smooth.factor,
@@ -184,7 +184,7 @@ CT_Skull_Strip_robust <- function(
                         reorient = reorient,
                         verbose = verbose,
                         ...)
-    rm(ss)
+    rm(tmp_out)
     ssmask = readNIfTI(maskfile,
                        reorient = reorient)
   }
