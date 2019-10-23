@@ -313,7 +313,8 @@ CT_Skull_Strip_register <- function(
   if (mask_to_background) {
     add_value = 1024
   }
-  noneck = mask_img(img + add_value, neck_mask) - add_value
+  noneck = check_nifti(img)
+  noneck = mask_img(noneck + add_value, neck_mask) - add_value
   noneck = drop_img_dim(noneck)
   noneck = checkimg(noneck)
 
