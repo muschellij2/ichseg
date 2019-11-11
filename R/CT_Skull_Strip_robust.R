@@ -115,6 +115,9 @@ CT_Skull_Strip_robust <- function(
   #############################
   img = check_nifti(img, reorient = reorient)
   thresh_img = niftiarr(img, img * (img > lthresh & img < uthresh))
+  if (!any(c(thresh_img) > 0)) {
+    stop("No positive values in the thresholded output!")
+  }
 
   thresh_img = drop_img_dim(thresh_img)
   thresh = checkimg(thresh_img)

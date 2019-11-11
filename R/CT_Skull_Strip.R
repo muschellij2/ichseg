@@ -98,6 +98,9 @@ CT_Skull_Strip <- function(
                   retimg = FALSE,
                   intern = FALSE,
                   verbose = verbose)
+  if (!any(c(RNifti::readNifti(tfile)) > 0)) {
+    stop("No positive values in the thresholded output!")
+  }
   if (verbose) {
     message(paste0("# Thresholding return: ", run, "\n"))
   }
