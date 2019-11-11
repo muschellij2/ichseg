@@ -2,8 +2,8 @@ Package: ichseg
 Type: Package
 Title: Intracerebral Hemorrhage Segmentation of X-Ray Computed Tomography (CT)
     Images
-Version: 0.17.2
-Date: 2019-10-21
+Version: 0.17.3
+Date: 2019-11-11
 Authors@R: c(person(given = "John", family = "Muschelli", email = "muschellij2@gmail.com",
   role = c("aut", "cre")))
 Description: Performs preprocessing on computed tomography (CT) scans, including
