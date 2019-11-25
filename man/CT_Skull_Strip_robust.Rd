@@ -9,7 +9,8 @@
 CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
   maskfile = NULL, retimg = TRUE, reorient = FALSE, int = "0.01",
   lthresh = 0, uthresh = 100, nvoxels = 5, remove.neck = TRUE,
-  smooth.factor = 2, recog = TRUE, verbose = TRUE, opts = NULL,
+  remover = c("remove_neck", "double_remove_neck"), smooth.factor = 2,
+  recog = TRUE, verbose = TRUE, opts = NULL,
   mask_to_background = FALSE,
   template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
   "ichseg"),
@@ -18,12 +19,14 @@ CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
 
 CT_Skull_Strip_register(img, outfile = NULL, keepmask = TRUE,
   maskfile = NULL, retimg = TRUE, reorient = FALSE, lthresh = 0,
-  uthresh = 100, remove.neck = TRUE, verbose = TRUE,
-  mask_to_background = FALSE, ...)
+  uthresh = 100, remove.neck = TRUE, remover = c("remove_neck",
+  "double_remove_neck"), verbose = TRUE, mask_to_background = FALSE,
+  ...)
 
 CT_Skull_Strip_smooth(img, ..., smooth_before_threshold = TRUE,
-  smooth.factor = 1, remove.neck = TRUE, recog = FALSE,
-  nvoxels = 0, add_1024 = FALSE)
+  smooth.factor = 1, remove.neck = TRUE, remover = c("remove_neck",
+  "double_remove_neck"), recog = FALSE, nvoxels = 0,
+  add_1024 = FALSE)
 }
 \arguments{
 \item{img}{(character) File to be skull stripped or object of class
@@ -60,6 +63,9 @@ If \code{nvoxels = 0}, then no smoothing is done.}
 \item{remove.neck}{Run \code{\link{remove_neck}} to register
 the template to a
 thresholded image to remove neck slices.}
+
+\item{remover}{if \code{remove.neck = TRUE}, then which function
+would you like to use to remove the neck}
 
 \item{smooth.factor}{Smoothing factor for \code{\link{fslbet}}.
 See \code{-w}

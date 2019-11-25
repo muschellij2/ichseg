@@ -26,6 +26,8 @@
 #' @param remove.neck Run \code{\link{remove_neck}} to register
 #' the template to a
 #' thresholded image to remove neck slices.
+#' @param remover if \code{remove.neck = TRUE}, then which function
+#' would you like to use to remove the neck
 #' @param smooth.factor Smoothing factor for \code{\link{fslbet}}.
 #' See \code{-w}
 #' option in \code{fslbet.help()}.
@@ -79,6 +81,7 @@ CT_Skull_Strip_robust <- function(
   uthresh = 100,
   nvoxels = 5,
   remove.neck = TRUE,
+  remover = c("remove_neck", "double_remove_neck"),
   smooth.factor = 2,
   recog = TRUE,
   verbose = TRUE,
@@ -131,14 +134,25 @@ CT_Skull_Strip_robust <- function(
     if (verbose) {
       message(paste0("# Removing Neck\n"))
     }
-    neck_mask = remove_neck(thresh,
-                            rep.value = 0,
-                            template.file = template.file,
-                            template.mask = template.mask,
-                            ret_mask = TRUE,
-                            swapdim = TRUE,
-                            verbose = verbose,
-                            ...)
+    L = list(
+      file = thresh,
+      template.file = template.file,
+      template.mask = template.mask,
+      rep.value = 0,
+      verbose = verbose,
+      ret_mask = TRUE,
+      swapdim = TRUE,
+      ...)
+    remover = match.arg(remover)
+    neck_mask = do.call(remover, args = L)
+    # neck_mask = remove_neck(thresh,
+    #                         rep.value = 0,
+    #                         template.file = template.file,
+    #                         template.mask = template.mask,
+    #                         ret_mask = TRUE,
+    #                         swapdim = TRUE,
+    #                         verbose = verbose,
+    #                         ...)
   } else {
     neck_mask = niftiarr(img, array(1, dim = dim(img)))
   }
@@ -251,6 +265,7 @@ CT_Skull_Strip_register <- function(
   lthresh = 0,
   uthresh = 100,
   remove.neck = TRUE,
+  remover = c("remove_neck", "double_remove_neck"),
   verbose = TRUE,
   mask_to_background = FALSE,
   ...
@@ -301,14 +316,25 @@ CT_Skull_Strip_register <- function(
     if (verbose) {
       message(paste0("# Removing Neck\n"))
     }
-    neck_mask = remove_neck(thresh,
-                            rep.value = 0,
-                            template.file = template.file,
-                            template.mask = template.mask,
-                            ret_mask = TRUE,
-                            swapdim = TRUE,
-                            verbose = verbose,
-                            ...)
+    L = list(
+      file = thresh,
+      template.file = template.file,
+      template.mask = template.mask,
+      rep.value = 0,
+      verbose = verbose,
+      ret_mask = TRUE,
+      swapdim = TRUE,
+      ...)
+    remover = match.arg(remover)
+    neck_mask = do.call(remover, args = L)
+    # neck_mask = remove_neck(thresh,
+    #                         rep.value = 0,
+    #                         template.file = template.file,
+    #                         template.mask = template.mask,
+    #                         ret_mask = TRUE,
+    #                         swapdim = TRUE,
+    #                         verbose = verbose,
+    #                         ...)
   } else {
     neck_mask = niftiarr(img, array(1, dim = dim(img)))
   }
@@ -405,6 +431,7 @@ CT_Skull_Strip_smooth = function(
   smooth_before_threshold = TRUE,
   smooth.factor = 1,
   remove.neck = TRUE,
+  remover = c("remove_neck", "double_remove_neck"),
   recog = FALSE,
   nvoxels = 0,
   add_1024 = FALSE) {
@@ -412,7 +439,8 @@ CT_Skull_Strip_smooth = function(
   args = list(...)
   args$smooth_before_threshold = smooth_before_threshold
   args$smooth.factor = smooth.factor
-  args$remove.neck = remove.neck
+  args$remove.neck = match.arg(remove.neck)
+  args$remover = remover
   args$recog = recog
   args$nvoxels = nvoxels
 
