@@ -465,13 +465,13 @@ CT_Skull_Strip_smooth = function(
   }
   args$img = img
 
+  retimg = args$retimg
+  # always return an image
+  if (is.null(retimg)) {
+    retimg = TRUE
+  }
   # make sure you return an image and now we know for sure the outfile
   if (add_1024) {
-    retimg = args$retimg
-    # always return an image
-    if (is.null(retimg)) {
-      retimg = TRUE
-    }
     args$retimg = TRUE
     outfile = args$outfile
     if (is.null(outfile)) {
