@@ -439,8 +439,8 @@ CT_Skull_Strip_smooth = function(
   args = list(...)
   args$smooth_before_threshold = smooth_before_threshold
   args$smooth.factor = smooth.factor
-  args$remove.neck = match.arg(remove.neck)
-  args$remover = remover
+  args$remove.neck = remove.neck
+  args$remover = match.arg(remover)
   args$recog = recog
   args$nvoxels = nvoxels
 
