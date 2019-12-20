@@ -6,27 +6,56 @@
 \alias{CT_Skull_Strip_smooth}
 \title{Robust CT Skull Stripping}
 \usage{
-CT_Skull_Strip_robust(img, outfile = NULL, keepmask = TRUE,
-  maskfile = NULL, retimg = TRUE, reorient = FALSE, int = "0.01",
-  lthresh = 0, uthresh = 100, nvoxels = 5, remove.neck = TRUE,
-  remover = c("remove_neck", "double_remove_neck"), smooth.factor = 2,
-  recog = TRUE, verbose = TRUE, opts = NULL,
+CT_Skull_Strip_robust(
+  img,
+  outfile = NULL,
+  keepmask = TRUE,
+  maskfile = NULL,
+  retimg = TRUE,
+  reorient = FALSE,
+  int = "0.01",
+  lthresh = 0,
+  uthresh = 100,
+  nvoxels = 5,
+  remove.neck = TRUE,
+  remover = c("remove_neck", "double_remove_neck"),
+  smooth.factor = 2,
+  recog = TRUE,
+  verbose = TRUE,
+  opts = NULL,
   mask_to_background = FALSE,
-  template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package =
-  "ichseg"),
-  template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
-  package = "ichseg"), ...)
+  template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package = "ichseg"),
+  template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz", package = "ichseg"),
+  ...
+)
 
-CT_Skull_Strip_register(img, outfile = NULL, keepmask = TRUE,
-  maskfile = NULL, retimg = TRUE, reorient = FALSE, lthresh = 0,
-  uthresh = 100, remove.neck = TRUE, remover = c("remove_neck",
-  "double_remove_neck"), verbose = TRUE, mask_to_background = FALSE,
-  ...)
+CT_Skull_Strip_register(
+  img,
+  outfile = NULL,
+  keepmask = TRUE,
+  maskfile = NULL,
+  retimg = TRUE,
+  reorient = FALSE,
+  lthresh = 0,
+  uthresh = 100,
+  remove.neck = TRUE,
+  remover = c("remove_neck", "double_remove_neck"),
+  verbose = TRUE,
+  mask_to_background = FALSE,
+  ...
+)
 
-CT_Skull_Strip_smooth(img, ..., smooth_before_threshold = TRUE,
-  smooth.factor = 1, remove.neck = TRUE, remover = c("remove_neck",
-  "double_remove_neck"), recog = FALSE, nvoxels = 0,
-  add_1024 = FALSE)
+CT_Skull_Strip_smooth(
+  img,
+  ...,
+  smooth_before_threshold = TRUE,
+  smooth.factor = 1,
+  remove.neck = TRUE,
+  remover = c("remove_neck", "double_remove_neck"),
+  recog = FALSE,
+  nvoxels = 0,
+  add_1024 = FALSE
+)
 }
 \arguments{
 \item{img}{(character) File to be skull stripped or object of class

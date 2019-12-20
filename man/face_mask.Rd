@@ -6,16 +6,29 @@
 \alias{mri_face_mask}
 \title{Create Mask of the Face}
 \usage{
-ct_face_mask(file, skull_strip = TRUE, mask = NULL, robust = TRUE,
-  template.file = system.file(ifelse(skull_strip,
-  "scct_unsmooth_SS_0.01.nii.gz", "scct_unsmooth.nii.gz"), package =
-  "ichseg"), template.face_mask = NULL,
+ct_face_mask(
+  file,
+  skull_strip = TRUE,
+  mask = NULL,
+  robust = TRUE,
+  template.file = system.file(ifelse(skull_strip, "scct_unsmooth_SS_0.01.nii.gz",
+    "scct_unsmooth.nii.gz"), package = "ichseg"),
+  template.face_mask = NULL,
   template.face_mask_inds = list(50:130, 170:217, 1:15),
-  extend_mask = TRUE, typeofTransform = "Affine", swapdim = TRUE,
-  verbose = TRUE, ...)
+  extend_mask = TRUE,
+  typeofTransform = "Affine",
+  swapdim = TRUE,
+  verbose = TRUE,
+  ...
+)
 
-mri_face_mask(..., skull_strip = TRUE, mask = NULL, robust = FALSE,
-  template.file = mni_fname(brain = skull_strip))
+mri_face_mask(
+  ...,
+  skull_strip = TRUE,
+  mask = NULL,
+  robust = FALSE,
+  template.file = mni_fname(brain = skull_strip)
+)
 }
 \arguments{
 \item{file}{File for face masking - either filename or class nifti}

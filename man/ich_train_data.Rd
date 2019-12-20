@@ -4,8 +4,14 @@
 \alias{ich_train_data}
 \title{Create ICH Train Data}
 \usage{
-ich_train_data(imgs, run_candidate = TRUE,
-  cutoffs = ichseg::est.cutoffs, rois = NULL, ..., verbose = TRUE)
+ich_train_data(
+  imgs,
+  run_candidate = TRUE,
+  cutoffs = ichseg::est.cutoffs,
+  rois = NULL,
+  ...,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{imgs}{CT image, object of class \code{nifti} (list) or

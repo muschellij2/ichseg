@@ -4,8 +4,10 @@
 \alias{ct_template_fname}
 \title{Get CT Template Filename}
 \usage{
-ct_template_fname(type = c("brain", "mask", "image", "cormack",
-  "stripped_cormack", "stripped_hu", "stripped_hu8"))
+ct_template_fname(
+  type = c("brain", "mask", "image", "cormack", "stripped_cormack", "stripped_hu",
+    "stripped_hu8")
+)
 }
 \arguments{
 \item{type}{Type of image.  \code{image} is the original image,

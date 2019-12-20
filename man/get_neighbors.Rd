@@ -4,8 +4,16 @@
 \alias{get_neighbors}
 \title{Calculate Moments of Neighborhood}
 \usage{
-get_neighbors(image, window = NULL, nvoxels = NULL, mask = NULL,
-  rm.value = FALSE, check.wrap = TRUE, rep.value = 0, ...)
+get_neighbors(
+  image,
+  window = NULL,
+  nvoxels = NULL,
+  mask = NULL,
+  rm.value = FALSE,
+  check.wrap = TRUE,
+  rep.value = 0,
+  ...
+)
 }
 \arguments{
 \item{image}{input image}

@@ -4,10 +4,20 @@
 \alias{local_moment}
 \title{Calculate Moments of Neighborhood}
 \usage{
-local_moment(image, window = NULL, nvoxels = NULL, moment,
-  mask = NULL, only.mask = FALSE, center = is.null(mean_image),
-  invert = FALSE, mean_image = NULL, na.rm = TRUE, remask = TRUE,
-  ...)
+local_moment(
+  image,
+  window = NULL,
+  nvoxels = NULL,
+  moment,
+  mask = NULL,
+  only.mask = FALSE,
+  center = is.null(mean_image),
+  invert = FALSE,
+  mean_image = NULL,
+  na.rm = TRUE,
+  remask = TRUE,
+  ...
+)
 }
 \arguments{
 \item{image}{input image}

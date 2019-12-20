@@ -5,12 +5,27 @@
 \alias{ich_process_predictors}
 \title{Predict ICH Segmentation}
 \usage{
-ich_segment(img, ..., verbose = TRUE, shiny = FALSE, model = c("rf",
-  "logistic", "big_rf"), outfile = NULL)
+ich_segment(
+  img,
+  ...,
+  verbose = TRUE,
+  shiny = FALSE,
+  model = c("rf", "logistic", "big_rf"),
+  outfile = NULL
+)
 
-ich_process_predictors(img, mask = NULL, save_imgs = FALSE,
-  outdir = NULL, stub = NULL, verbose = TRUE, shiny = FALSE,
-  roi = NULL, erode_mask = TRUE, ...)
+ich_process_predictors(
+  img,
+  mask = NULL,
+  save_imgs = FALSE,
+  outdir = NULL,
+  stub = NULL,
+  verbose = TRUE,
+  shiny = FALSE,
+  roi = NULL,
+  erode_mask = TRUE,
+  ...
+)
 }
 \arguments{
 \item{img}{CT image, object of class \code{nifti} or

@@ -4,11 +4,22 @@
 \alias{ich_predict}
 \title{Predict ICH Images}
 \usage{
-ich_predict(df, nim, model = c("rf", "logistic", "big_rf"),
-  verbose = TRUE, native = TRUE, native_img = NULL,
-  transformlist = NULL, interpolator = NULL, native_thresh = 0.5,
-  shiny = FALSE, model_list = NULL, smoothed_cutoffs = NULL,
-  outfile = NULL, ...)
+ich_predict(
+  df,
+  nim,
+  model = c("rf", "logistic", "big_rf"),
+  verbose = TRUE,
+  native = TRUE,
+  native_img = NULL,
+  transformlist = NULL,
+  interpolator = NULL,
+  native_thresh = 0.5,
+  shiny = FALSE,
+  model_list = NULL,
+  smoothed_cutoffs = NULL,
+  outfile = NULL,
+  ...
+)
 }
 \arguments{
 \item{df}{\code{\link{data.frame}} of predictors.  If \code{multiplier}
