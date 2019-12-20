@@ -38,4 +38,4 @@ Remotes:
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 6.1.1
-
+BugReports: https://github.com/muschellij2/ichseg/issues

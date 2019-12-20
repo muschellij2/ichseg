@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ichseg
+# ichseg <img src='man/figures/logo.png' align="right" height="139" />
 
 The goal of ichseg is to perform preprocessing on computed tomography
 (CT) scans, including skull stripping. Computes predictors of
