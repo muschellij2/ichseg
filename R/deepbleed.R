@@ -1,3 +1,29 @@
+#' DeepBleed Model
+#'
+#' @param outdir Output directory for `DeepBleed` model
+#'
+#' @note \url{https://github.com/muschellij2/deepbleed}
+#'
+#' @return A list of the output images and predictions.
+#' @export
+#' @rdname deepbleed
+#'
+#' @examples
+#' \donttest{
+#' destfile = file.path(tempdir(), "01.tar.xz")
+#' dl = download.file(
+#'   "https://archive.data.jhu.edu/api/access/datafile/1311?gbrecs=true",
+#'   destfile = destfile)
+#' res = untar(tarfile = destfile, exdir = tempdir())
+#' fname = file.path(tempdir(), "01", "BRAIN_1_Anonymized.nii.gz")
+#' tdir = tempfile()
+#' dir.create(tdir)
+#' download_deepbleed_model(outdir = tdir)
+#' mod = load_deepbleed_model(outdir = tdir)
+#' if (fslr::have_fsl()) {
+#' predict_deepbleed(fname, outdir = tdir)
+#' }
+#' }
 download_deepbleed_model = function(outdir = NULL) {
   if (is.null(outdir)) {
     outdir = system.file(package = "ichseg")
@@ -13,12 +39,13 @@ download_deepbleed_model = function(outdir = NULL) {
     tfile = tempfile(fileext = ".zip")
     dl = utils::download.file(url, destfile = tfile)
 
-    ofiles_list = utils::unzip(tfile,
-                        exdir = outdir,
-                        list = TRUE,
-                        junkpaths = TRUE)
+    ofiles_list = utils::unzip(
+      tfile,
+      exdir = outdir,
+      list = TRUE,
+      junkpaths = TRUE)
     ofiles = utils::unzip(tfile, exdir = outdir, junkpaths = TRUE)
-    stopifnot(all(basename(ofiles)== fnames))
+    stopifnot(all(basename(ofiles) == fnames))
     file.rename(ofiles, outfiles)
   }
   stopifnot(all(file.exists(outfiles)))
@@ -31,7 +58,9 @@ download_deepbleed_model = function(outdir = NULL) {
   return(outdir)
 }
 
-load_deepbleed_model = function(outdir= NULL) {
+#' @rdname deepbleed
+#' @export
+load_deepbleed_model = function(outdir = NULL) {
   outdir = download_deepbleed_model(outdir)
   path = system.file("deepbleed", package = "ichseg")
   if (!requireNamespace("reticulate", quietly = TRUE)) {
@@ -43,6 +72,12 @@ load_deepbleed_model = function(outdir= NULL) {
   vnet
 }
 
+#' @rdname deepbleed
+#' @param image image to segment using `DeepBleed` model
+#' @param mask brain mask image
+#' @param ... additional arguments to send to
+#' \code{\link{CT_Skull_Stripper_mask}}
+#' @export
 predict_deepbleed = function(image,
                              mask = NULL,
                              ...,
@@ -52,6 +87,7 @@ predict_deepbleed = function(image,
   image = check_nifti(image)
   if (is.null(mask)) {
     mask = CT_Skull_Stripper_mask(image, ...)
+    mask = mask$mask
   }
   mask = check_nifti(mask)
   ss = mask_img(image, mask)
@@ -76,6 +112,7 @@ predict_deepbleed = function(image,
     transformlist = reg$invtransforms,
     whichtoinvert = 1)
   L = list(
+    brain_mask = mask,
     skull_stripped = ss,
     template_space = image,
     template_prediction = arr,

@@ -7,3 +7,4 @@ README\.md
 ^icon\.png$
 ^sticker\.R$
 ^sticker\.png$
+^requirements\.txt$
