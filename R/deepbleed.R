@@ -11,13 +11,13 @@ download_deepbleed_model = function(outdir = NULL) {
     url = paste0("https://www.dropbox.com/s/v2ptd9mfpo13gcb/",
                  "mistie_2-20200122T175000Z-001.zip?dl=1")
     tfile = tempfile(fileext = ".zip")
-    dl = download.file(url, destfile = tfile)
+    dl = utils::download.file(url, destfile = tfile)
 
-    ofiles_list = unzip(tfile,
+    ofiles_list = utils::unzip(tfile,
                         exdir = outdir,
                         list = TRUE,
                         junkpaths = TRUE)
-    ofiles = unzip(tfile, exdir = outdir, junkpaths = TRUE)
+    ofiles = utils::unzip(tfile, exdir = outdir, junkpaths = TRUE)
     stopifnot(all(basename(ofiles)== fnames))
     file.rename(ofiles, outfiles)
   }

@@ -21,7 +21,8 @@ Imports:
     fslr (>= 2.4),
     magic,
     randomForest,
-    shiny
+    shiny,
+    utils
 Suggests:
     dcmtk,
     tractor.base,
