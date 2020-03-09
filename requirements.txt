@@ -1,0 +1,4 @@
+numpy
+nibabel
+h5py>=2.9
+tensorflow

@@ -26,7 +26,8 @@ Suggests:
     dcmtk,
     tractor.base,
     dplyr,
-    knitr
+    knitr,
+    reticulate
 LazyData: TRUE
 Remotes: 
     ANTsX/ANTsRCore, 
@@ -37,5 +38,5 @@ Remotes:
     muschellij2/dcm2niir
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.0.1
+RoxygenNote: 7.0.2
 BugReports: https://github.com/muschellij2/ichseg/issues
