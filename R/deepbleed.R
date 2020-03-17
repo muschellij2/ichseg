@@ -100,6 +100,7 @@ predict_deepbleed = function(image,
     typeofTransform = "Rigid",
     affSampling = 64)
   image = reg$outfile
+  temp_space = image
   image = array(image, dim = c(1L, dim(image), 1L))
   prediction = vnet$predict(image)
 
@@ -114,7 +115,7 @@ predict_deepbleed = function(image,
   L = list(
     brain_mask = mask,
     skull_stripped = ss,
-    template_space = image,
+    template_space = temp_space,
     template_prediction = arr,
     native_prediction = native)
   return(L)
