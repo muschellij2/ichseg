@@ -87,7 +87,51 @@ predict_deepbleed = function(image,
   if (verbose) {
     message("Loading DeepBleed Model")
   }
+  L = register_deepbleed(
+    image = image,
+    mask = mask,
+    verbose = verbose,
+    ...)
+  image = L$template_space
+  reg = L$registration
+  ss = L$skull_stripped
+  image = array(image, dim = c(1L, dim(image), 1L))
+
+
   vnet = load_deepbleed_model(outdir = outdir)
+  if (verbose) {
+    message("Prediction")
+  }
+
+  prediction = vnet$predict(image)
+
+  arr = drop(prediction)
+  arr = neurobase::copyNIfTIHeader(arr =  arr, image)
+  if (verbose) {
+    message("Projecting back into Native Space")
+  }
+  native = extrantsr::ants_apply_transforms(
+    fixed = ss,
+    moving = arr,
+    interpolator = "nearestNeighbor",
+    transformlist = reg$invtransforms,
+    verbose = verbose > 1,
+    whichtoinvert = 1)
+  L$registration_matrix = reg$fwdtransforms
+  L$registration = NULL
+  L$native_prediction = native
+  L$template_prediction = arr
+  return(L)
+
+}
+
+#' @rdname predict_deepbleed
+#' @export
+register_deepbleed = function(
+  image,
+  mask = NULL,
+  verbose = TRUE, ...) {
+
   image = check_nifti(image)
   if (is.null(mask)) {
     if (verbose) {
@@ -113,32 +157,12 @@ predict_deepbleed = function(image,
     typeofTransform = "Rigid",
     affSampling = 64,
     verbose = verbose > 1)
-  image = reg$outfile
-  temp_space = image
-  image = array(image, dim = c(1L, dim(image), 1L))
-  if (verbose) {
-    message("Prediction")
-  }
-  prediction = vnet$predict(image)
+  temp_space = reg$outfile
 
-  arr = drop(prediction)
-  arr = neurobase::copyNIfTIHeader(arr =  arr, reg$outfile)
-  if (verbose) {
-    message("Projecting back into Native Space")
-  }
-  native = extrantsr::ants_apply_transforms(
-    fixed = ss,
-    moving = arr,
-    interpolator = "nearestNeighbor",
-    transformlist = reg$invtransforms,
-    verbose = verbose > 1,
-    whichtoinvert = 1)
   L = list(
-    brain_mask = mask,
     skull_stripped = ss,
+    brain_mask = mask,
     template_space = temp_space,
-    template_prediction = arr,
-    native_prediction = native)
-  return(L)
-
+    registration = reg
+  )
 }
