@@ -16,13 +16,12 @@
 #'   destfile = destfile)
 #' res = untar(tarfile = destfile, exdir = tempdir())
 #' fname = file.path(tempdir(), "01", "BRAIN_1_Anonymized.nii.gz")
+#' mask = file.path(tempdir(), "01", "BRAIN_1_Anonymized_Mask.nii.gz")
 #' tdir = tempfile()
 #' dir.create(tdir)
 #' download_deepbleed_model(outdir = tdir)
 #' mod = load_deepbleed_model(outdir = tdir)
-#' if (fslr::have_fsl()) {
-#' predict_deepbleed(fname, outdir = tdir)
-#' }
+#' predict_deepbleed(fname, mask = mask, outdir = tdir)
 #' }
 download_deepbleed_model = function(outdir = NULL) {
   if (is.null(outdir)) {
