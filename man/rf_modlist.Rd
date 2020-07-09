@@ -5,7 +5,8 @@
 \alias{rf_modlist}
 \alias{big_rf_modlist}
 \title{Estimated Random Forest Model List for ICH}
-\format{A list with 7 elements, which are:
+\format{
+A list with 7 elements, which are:
 \describe{
 \item{mod.pauc}{the partial AUC estimated with the training data }
 \item{mod.pauc.cutoff}{the sens/spec for partial AUC cutoff }
@@ -14,7 +15,10 @@
 \item{mod.acc}{the accuracy and cutoff estimated with the training data}
 \item{mod}{the model object of class \code{randomForest} }
 \item{mod.time}{the time it took to train the model }
-}}
+}
+
+An object of class \code{list} of length 7.
+}
 \usage{
 rf_modlist
 

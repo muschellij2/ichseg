@@ -4,14 +4,16 @@
 \name{smoothed_logistic_cutoffs}
 \alias{smoothed_logistic_cutoffs}
 \title{Estimated Logistic Model List of Cutoffs for Smoothed Data for ICH}
-\format{A list with 7 elements, which are:
+\format{
+A list with 7 elements, which are:
 \describe{
 \item{mod.pauc}{the partial AUC estimated with the training data }
 \item{mod.pauc.cutoff}{the sens/spec for partial AUC cutoff }
 \item{mod.sens.cutoff}{the sensitivity and cutoff estimated with the training datan }
 \item{mod.dice.cutoff}{the Dice Similarity Index and cutoff estimated with the training data }
 \item{mod.acc}{the accuracy and cutoff estimated with the training data}
-}}
+}
+}
 \usage{
 smoothed_logistic_cutoffs
 }

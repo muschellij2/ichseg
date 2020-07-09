@@ -4,7 +4,8 @@
 \name{logistic_modlist}
 \alias{logistic_modlist}
 \title{Estimated Logistic Model List for ICH}
-\format{A list with 7 elements, which are:
+\format{
+A list with 7 elements, which are:
 \describe{
 \item{mod.pauc}{the partial AUC estimated with the training data }
 \item{mod.pauc.cutoff}{the sens/spec for partial AUC cutoff }
@@ -13,7 +14,8 @@
 \item{mod.acc}{the accuracy and cutoff estimated with the training data}
 \item{mod}{the model object of class \code{glm} }
 \item{mod.time}{the time it took to train the model }
-}}
+}
+}
 \usage{
 logistic_modlist
 }

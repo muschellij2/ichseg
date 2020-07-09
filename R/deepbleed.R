@@ -112,7 +112,8 @@ predict_deepbleed = function(image,
     ss,
     template.file = template.file,
     typeofTransform = "Rigid",
-    affSampling = 64)
+    affSampling = 64,
+    verbose = verbose > 1)
   image = reg$outfile
   temp_space = image
   image = array(image, dim = c(1L, dim(image), 1L))
@@ -131,6 +132,7 @@ predict_deepbleed = function(image,
     moving = arr,
     interpolator = "nearestNeighbor",
     transformlist = reg$invtransforms,
+    verbose = verbose > 1,
     whichtoinvert = 1)
   L = list(
     brain_mask = mask,

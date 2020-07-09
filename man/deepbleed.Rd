@@ -10,7 +10,7 @@ download_deepbleed_model(outdir = NULL)
 
 load_deepbleed_model(outdir = NULL)
 
-predict_deepbleed(image, mask = NULL, ..., outdir = NULL)
+predict_deepbleed(image, mask = NULL, verbose = TRUE, ..., outdir = NULL)
 }
 \arguments{
 \item{outdir}{Output directory for `DeepBleed` model}
@@ -18,6 +18,8 @@ predict_deepbleed(image, mask = NULL, ..., outdir = NULL)
 \item{image}{image to segment using `DeepBleed` model}
 
 \item{mask}{brain mask image}
+
+\item{verbose}{print diagnostic messages}
 
 \item{...}{additional arguments to send to
 \code{\link{CT_Skull_Stripper_mask}}}

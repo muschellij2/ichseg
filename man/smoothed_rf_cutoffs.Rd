@@ -5,14 +5,18 @@
 \alias{smoothed_rf_cutoffs}
 \alias{smoothed_big_rf_cutoffs}
 \title{Estimated Random Forest List of Cutoffs for Smoothed Data for ICH}
-\format{A list with 7 elements, which are:
+\format{
+A list with 7 elements, which are:
 \describe{
 \item{mod.pauc}{the partial AUC estimated with the training data }
 \item{mod.pauc.cutoff}{the sens/spec for partial AUC cutoff }
 \item{mod.sens.cutoff}{the sensitivity and cutoff estimated with the training datan }
 \item{mod.dice.cutoff}{the Dice Similarity Index and cutoff estimated with the training data }
 \item{mod.acc}{the accuracy and cutoff estimated with the training data}
-}}
+}
+
+An object of class \code{list} of length 5.
+}
 \usage{
 smoothed_rf_cutoffs
 

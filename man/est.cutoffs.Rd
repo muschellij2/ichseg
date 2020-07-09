@@ -5,8 +5,12 @@
 \alias{est.cutoffs}
 \alias{big_est.cutoffs}
 \title{Estimated Cutoffs for ICH}
-\format{A matrix with 2 rows and 18 variables, each are descriptors, which
-are relevant to those made by \code{\link{make_predictors}}}
+\format{
+A matrix with 2 rows and 18 variables, each are descriptors, which
+are relevant to those made by \code{\link{make_predictors}}
+
+An object of class \code{matrix} (inherits from \code{array}) with 2 rows and 18 columns.
+}
 \usage{
 est.cutoffs
 
