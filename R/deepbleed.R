@@ -75,25 +75,39 @@ load_deepbleed_model = function(outdir = NULL) {
 #' @rdname deepbleed
 #' @param image image to segment using `DeepBleed` model
 #' @param mask brain mask image
+#' @param verbose print diagnostic messages
 #' @param ... additional arguments to send to
 #' \code{\link{CT_Skull_Stripper_mask}}
 #' @export
 predict_deepbleed = function(image,
                              mask = NULL,
+                             verbose = TRUE,
                              ...,
                              outdir = NULL) {
 
+  if (verbose) {
+    message("Loading DeepBleed Model")
+  }
   vnet = load_deepbleed_model(outdir = outdir)
   image = check_nifti(image)
   if (is.null(mask)) {
-    mask = CT_Skull_Stripper_mask(image, ...)
+    if (verbose) {
+      message("Skull Stripping")
+    }
+    mask = CT_Skull_Stripper_mask(image, verbose = verbose, ...)
     mask = mask$mask
   }
   mask = check_nifti(mask)
+  if (verbose) {
+    message("Masking Image")
+  }
   ss = mask_img(image, mask)
   template.file = system.file(
     'scct_unsmooth_SS_0.01_128x128x128.nii.gz',
     package = 'ichseg')
+  if (verbose) {
+    message("Registration")
+  }
   reg = extrantsr::registration(
     ss,
     template.file = template.file,
@@ -102,10 +116,16 @@ predict_deepbleed = function(image,
   image = reg$outfile
   temp_space = image
   image = array(image, dim = c(1L, dim(image), 1L))
+  if (verbose) {
+    message("Prediction")
+  }
   prediction = vnet$predict(image)
 
   arr = drop(prediction)
   arr = neurobase::copyNIfTIHeader(arr =  arr, reg$outfile)
+  if (verbose) {
+    message("Projecting back into Native Space")
+  }
   native = extrantsr::ants_apply_transforms(
     fixed = ss,
     moving = arr,

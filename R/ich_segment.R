@@ -48,7 +48,7 @@ ich_segment = function(img,
   ##############################################################
   # Making prediction images
   ##############################################################
-  # grabbing the evnironment to extract exported stuff
+  # grabbing the environment to extract exported stuff
   if (verbose) {
     msg = "# Running ich_predict"
     message(msg)
