@@ -106,7 +106,7 @@ predict_deepbleed = function(image,
   prediction = vnet$predict(image)
 
   arr = drop(prediction)
-  arr = neurobase::copyNIfTIHeader(arr =  arr, image)
+  arr = neurobase::copyNIfTIHeader(arr =  arr, img = L$template_space)
   if (verbose) {
     message("Projecting back into Native Space")
   }
