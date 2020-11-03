@@ -4,6 +4,7 @@
 \alias{download_deepbleed_model}
 \alias{load_deepbleed_model}
 \alias{predict_deepbleed}
+\alias{register_deepbleed}
 \title{DeepBleed Model}
 \usage{
 download_deepbleed_model(outdir = NULL)
@@ -11,6 +12,8 @@ download_deepbleed_model(outdir = NULL)
 load_deepbleed_model(outdir = NULL)
 
 predict_deepbleed(image, mask = NULL, verbose = TRUE, ..., outdir = NULL)
+
+register_deepbleed(image, mask = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{outdir}{Output directory for `DeepBleed` model}

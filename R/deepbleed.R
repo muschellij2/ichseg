@@ -125,7 +125,7 @@ predict_deepbleed = function(image,
 
 }
 
-#' @rdname predict_deepbleed
+#' @rdname deepbleed
 #' @export
 register_deepbleed = function(
   image,
