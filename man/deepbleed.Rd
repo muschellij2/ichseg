@@ -13,7 +13,13 @@ load_deepbleed_model(outdir = NULL)
 
 predict_deepbleed(image, mask = NULL, verbose = TRUE, ..., outdir = NULL)
 
-register_deepbleed(image, mask = NULL, verbose = TRUE, ...)
+register_deepbleed(
+  image,
+  mask = NULL,
+  verbose = TRUE,
+  interpolator = "Linear",
+  ...
+)
 }
 \arguments{
 \item{outdir}{Output directory for `DeepBleed` model}
@@ -26,6 +32,8 @@ register_deepbleed(image, mask = NULL, verbose = TRUE, ...)
 
 \item{...}{additional arguments to send to
 \code{\link{CT_Skull_Stripper_mask}}}
+
+\item{interpolator}{interpolation done for antsApplyTransforms}
 }
 \value{
 A list of the output images and predictions.

@@ -126,11 +126,14 @@ predict_deepbleed = function(image,
 }
 
 #' @rdname deepbleed
+#' @param interpolator interpolation done for antsApplyTransforms
 #' @export
 register_deepbleed = function(
   image,
   mask = NULL,
-  verbose = TRUE, ...) {
+  verbose = TRUE,
+  interpolator = "Linear",
+  ...) {
 
   image = check_nifti(image)
   if (is.null(mask)) {
@@ -156,6 +159,7 @@ register_deepbleed = function(
     template.file = template.file,
     typeofTransform = "Rigid",
     affSampling = 64,
+    interpolator = interpolator,
     verbose = verbose > 1)
   temp_space = reg$outfile
 
