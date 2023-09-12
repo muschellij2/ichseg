@@ -65,7 +65,7 @@
 #' fill holes using a box kernel with the number of voxels
 #' \code{nvoxels} in
 #' all 3 directions.
-#' @importFrom extrantsr remove_neck
+#' @importFrom extrantsr remove_neck double_remove_neck
 #' @importFrom neurobase check_outfile readnii writenii cog
 #' @importFrom oro.nifti readNIfTI drop_img_dim
 #' @export

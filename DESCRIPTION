@@ -2,8 +2,7 @@ Package: ichseg
 Type: Package
 Title: Intracerebral Hemorrhage Segmentation of X-Ray Computed Tomography (CT)
     Images
-Version: 0.17.5
-Date: 2020-07-09
+Version: 0.18.0
 Authors@R: c(person(given = "John", family = "Muschelli", email = "muschellij2@gmail.com",
   role = c("aut", "cre")))
 Description: Performs preprocessing on computed tomography (CT) scans, including
@@ -39,5 +38,5 @@ Remotes:
     muschellij2/dcm2niir
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 BugReports: https://github.com/muschellij2/ichseg/issues
