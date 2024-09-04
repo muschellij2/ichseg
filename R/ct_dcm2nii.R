@@ -17,6 +17,14 @@
 ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
                       verbose = TRUE,
                       drop_dim = TRUE, ...) {
+  if (!merge_files) {
+    warning(
+      paste0(
+      "ichseg < v0.19.0 had overridden merge_files = FALSE (bug),",
+      " please be aware for reproducibility."
+      )
+    )
+  }
   out = dcm2nii(basedir, merge_files = merge_files, verbose = verbose,
                 ...)
   res = check_dcm2nii(out)

@@ -268,7 +268,7 @@ scl_inter(img) = 0
 aux_file(img) = ""
 descrip(img) = ""
 writenii(img, filename = res_file)
-````
+```
 
 ## ICH Segmentation
 
