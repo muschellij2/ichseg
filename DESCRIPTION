@@ -38,5 +38,5 @@ Remotes:
     muschellij2/dcm2niir
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 BugReports: https://github.com/muschellij2/ichseg/issues

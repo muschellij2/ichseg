@@ -19,6 +19,8 @@ ich_preprocess(
   verbose = TRUE,
   shiny = FALSE,
   roi = NULL,
+  ss.template.file = system.file("scct_unsmooth_SS_0.01.nii.gz", package = "ichseg"),
+  ss.template.mask = system.file("scct_unsmooth_SS_0.01_Mask.nii.gz", package = "ichseg"),
   ...
 )
 
@@ -62,6 +64,12 @@ the output transformations}
 \item{shiny}{Should shiny progress be called?}
 
 \item{roi}{Filename of ROI, which will be transformed}
+
+\item{ss.template.file}{Template file to pass to
+\code{\link{CT_Skull_Strip_robust}} robust registration/neck removal}
+
+\item{ss.template.mask}{Template mask to pass to
+\code{\link{CT_Skull_Strip_robust}} robust registration/neck removal}
 
 \item{...}{Additional options passsed to \code{\link{CT_Skull_Strip_robust}}
 or \code{\link{CT_Skull_Strip}}}

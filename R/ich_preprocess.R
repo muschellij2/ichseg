@@ -24,6 +24,10 @@
 #' @param roi Filename of ROI, which will be transformed
 #' @param n4_correct Should N4 bias-field correction be done after
 #' skull-stripping
+#' @param ss.template.file Template file to pass to
+#' \code{\link{CT_Skull_Strip_robust}} robust registration/neck removal
+#' @param ss.template.mask Template mask to pass to
+#' \code{\link{CT_Skull_Strip_robust}} robust registration/neck removal
 #'
 #'
 #' @return List of output images and transformations
@@ -46,6 +50,12 @@ ich_preprocess = function(
   verbose = TRUE,
   shiny = FALSE,
   roi = NULL,
+  ss.template.file =
+    system.file("scct_unsmooth_SS_0.01.nii.gz",
+                package = "ichseg"),
+  ss.template.mask =
+    system.file("scct_unsmooth_SS_0.01_Mask.nii.gz",
+                package = "ichseg"),
   ...) {
 
   if (skull_strip & is.null(mask)) {
@@ -53,7 +63,9 @@ ich_preprocess = function(
       shiny::incProgress(message = "Skull Stripping Image")
     }
     if (robust) {
-      ss = CT_Skull_Strip_robust(img, retimg = TRUE, ...)
+      ss = CT_Skull_Strip_robust(img, retimg = TRUE, ...,
+                                 template.file = ss.template.file,
+                                 template.mask = ss.template.mask)
     } else {
       ss = CT_Skull_Strip(img, retimg = TRUE, ...)
     }

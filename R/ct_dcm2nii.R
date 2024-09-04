@@ -17,7 +17,7 @@
 ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
                       verbose = TRUE,
                       drop_dim = TRUE, ...) {
-  out = dcm2nii(basedir, merge_files = TRUE, verbose = verbose,
+  out = dcm2nii(basedir, merge_files = merge_files, verbose = verbose,
                 ...)
   res = check_dcm2nii(out)
   img = lapply(res, function(x){
