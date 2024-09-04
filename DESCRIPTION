@@ -29,6 +29,7 @@ Suggests:
     knitr,
     reticulate
 LazyData: TRUE
+LazyDataCompression: xz
 Remotes: 
     ANTsX/ANTsRCore, 
     muschellij2/neurobase, 

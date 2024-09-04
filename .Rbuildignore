@@ -8,3 +8,7 @@ README\.md
 ^sticker\.R$
 ^sticker\.png$
 ^requirements\.txt$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^__pycache__$
