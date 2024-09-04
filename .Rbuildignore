@@ -11,4 +11,5 @@ README\.md
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^.*\.py$
 ^__pycache__$
