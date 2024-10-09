@@ -10,7 +10,8 @@ ct_dcm2nii(
   verbose = TRUE,
   drop_dim = TRUE,
   ...,
-  ignore_roi_if_multiple = FALSE
+  ignore_roi_if_multiple = FALSE,
+  fail_on_error = FALSE
 )
 }
 \arguments{
