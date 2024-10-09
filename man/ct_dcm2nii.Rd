@@ -9,7 +9,8 @@ ct_dcm2nii(
   merge_files = TRUE,
   verbose = TRUE,
   drop_dim = TRUE,
-  ...
+  ...,
+  ignore_roi_if_multiple = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ options}
 dimensions}
 
 \item{...}{Additional parameters passed to \code{\link{dcm2nii}}}
+
+\item{ignore_roi_if_multiple}{additional argument to pass to
+\code{\link{check_dcm2nii}} to remove ROI overlays if present}
 }
 \value{
 A list or singular \code{nifti} image

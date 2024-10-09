@@ -8,6 +8,8 @@
 #' @param drop_dim passed to \code{\link{readnii}} for dropping empty
 #' dimensions
 #' @param ... Additional parameters passed to \code{\link{dcm2nii}}
+#' @param ignore_roi_if_multiple additional argument to pass to
+#' \code{\link{check_dcm2nii}} to remove ROI overlays if present
 #'
 #' @return A list or singular \code{nifti} image
 #' @export
@@ -16,7 +18,9 @@
 #' @importFrom neurobase rescale_img check_nifti
 ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
                       verbose = TRUE,
-                      drop_dim = TRUE, ...) {
+                      drop_dim = TRUE, ...,
+                      ignore_roi_if_multiple = FALSE,
+                      fail_on_error = FALSE) {
   if (!merge_files) {
     warning(
       paste0(
@@ -27,7 +31,10 @@ ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
   }
   out = dcm2nii(basedir, merge_files = merge_files, verbose = verbose,
                 ...)
-  res = check_dcm2nii(out)
+  if (fail_on_error && out$result > 0) {
+    stop("Error in result from dcm2nii and fail_on_error = TRUE")
+  }
+  res = check_dcm2nii(out, ignore_roi_if_multiple = ignore_roi_if_multiple)
   img = lapply(res, function(x){
     if (verbose) {
       message("# reading in image")
@@ -43,5 +50,6 @@ ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
   if (length(res) == 1) {
     img = img[[1]]
   }
+  attr(img, "dcm2nii_result") = out$result
   return(img)
 }
