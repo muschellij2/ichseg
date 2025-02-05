@@ -218,7 +218,7 @@ CT_Skull_Strip_robust <- function(
                      nvoxels = nvoxels,
                      verbose = verbose)
   }
-  ss = mask_img(ss + add_value, ssmask) - add_value
+  ss = mask_img(img + add_value, ssmask) - add_value
 
   ss = drop_img_dim(ss)
 
