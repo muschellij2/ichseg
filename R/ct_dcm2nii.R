@@ -9,7 +9,10 @@
 #' dimensions
 #' @param ... Additional parameters passed to \code{\link{dcm2nii}}
 #' @param ignore_roi_if_multiple additional argument to pass to
-#' \code{\link{check_dcm2nii}} to remove ROI overlays if present
+#' [dcm2niir::check_dcm2nii()] to remove ROI overlays if present
+#' @param uncorrected passed to [dcm2niir::check_dcm2nii()] to grab the
+#' "uncorrected" scan.  Do not use unless you understand the `dcm2niix`
+#' correction process.
 #'
 #' @return A list or singular \code{nifti} image
 #' @export
@@ -20,12 +23,13 @@ ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
                       verbose = TRUE,
                       drop_dim = TRUE, ...,
                       ignore_roi_if_multiple = FALSE,
-                      fail_on_error = FALSE) {
+                      fail_on_error = FALSE,
+                      uncorrected = FALSE) {
   if (!merge_files) {
     warning(
       paste0(
-      "ichseg < v0.19.0 had overridden merge_files = FALSE (bug),",
-      " please be aware for reproducibility."
+        "ichseg < v0.19.0 had overridden merge_files = FALSE (bug),",
+        " please be aware for reproducibility."
       )
     )
   }
@@ -34,7 +38,8 @@ ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
   if (fail_on_error && out$result > 0) {
     stop("Error in result from dcm2nii and fail_on_error = TRUE")
   }
-  res = check_dcm2nii(out, ignore_roi_if_multiple = ignore_roi_if_multiple)
+  res = check_dcm2nii(out, ignore_roi_if_multiple = ignore_roi_if_multiple,
+                      uncorrected = uncorrected)
   img = lapply(res, function(x){
     if (verbose) {
       message("# reading in image")
