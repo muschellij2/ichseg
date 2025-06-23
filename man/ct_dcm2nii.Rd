@@ -11,7 +11,8 @@ ct_dcm2nii(
   drop_dim = TRUE,
   ...,
   ignore_roi_if_multiple = FALSE,
-  fail_on_error = FALSE
+  fail_on_error = FALSE,
+  uncorrected = FALSE
 )
 }
 \arguments{
@@ -28,7 +29,11 @@ dimensions}
 \item{...}{Additional parameters passed to \code{\link{dcm2nii}}}
 
 \item{ignore_roi_if_multiple}{additional argument to pass to
-\code{\link{check_dcm2nii}} to remove ROI overlays if present}
+[dcm2niir::check_dcm2nii()] to remove ROI overlays if present}
+
+\item{uncorrected}{passed to [dcm2niir::check_dcm2nii()] to grab the
+"uncorrected" scan.  Do not use unless you understand the `dcm2niix`
+correction process.}
 }
 \value{
 A list or singular \code{nifti} image
