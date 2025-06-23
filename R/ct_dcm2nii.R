@@ -13,6 +13,8 @@
 #' @param uncorrected passed to [dcm2niir::check_dcm2nii()] to grab the
 #' "uncorrected" scan.  Do not use unless you understand the `dcm2niix`
 #' correction process.
+#' @param fail_on_error if the exit code from [dcm2niir::dcm2nii] is not
+#' `0` and `fail_on_error = TRUE`, function will error out
 #'
 #' @return A list or singular \code{nifti} image
 #' @export
