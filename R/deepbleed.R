@@ -9,7 +9,7 @@
 #' @rdname deepbleed
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' destfile = file.path(tempdir(), "01.tar.xz")
 #' dl = download.file(
 #'   "https://archive.data.jhu.edu/api/access/datafile/1311?gbrecs=true",

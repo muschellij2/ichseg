@@ -31,6 +31,9 @@ dimensions}
 \item{ignore_roi_if_multiple}{additional argument to pass to
 [dcm2niir::check_dcm2nii()] to remove ROI overlays if present}
 
+\item{fail_on_error}{if the exit code from [dcm2niir::dcm2nii] is not
+`0` and `fail_on_error = TRUE`, function will error out}
+
 \item{uncorrected}{passed to [dcm2niir::check_dcm2nii()] to grab the
 "uncorrected" scan.  Do not use unless you understand the `dcm2niix`
 correction process.}
