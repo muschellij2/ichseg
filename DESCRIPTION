@@ -2,7 +2,7 @@ Package: ichseg
 Type: Package
 Title: Intracerebral Hemorrhage Segmentation of X-Ray Computed Tomography (CT)
     Images
-Version: 0.20.4
+Version: 0.20.5
 Authors@R: c(person(given = "John", family = "Muschelli", email = "muschellij2@gmail.com",
   role = c("aut", "cre")))
 Description: Performs preprocessing on computed tomography (CT) scans, including
@@ -21,7 +21,8 @@ Imports:
     magic,
     randomForest,
     shiny,
-    utils
+    utils,
+    rmarkdown
 Suggests:
     dcmtk,
     tractor.base,
