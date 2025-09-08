@@ -42,11 +42,12 @@ ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
   }
   res = check_dcm2nii(out, ignore_roi_if_multiple = ignore_roi_if_multiple,
                       uncorrected = uncorrected)
+  names(res) = res
   img = lapply(res, function(x){
     if (verbose) {
       message("# reading in image")
     }
-    img = check_nifti(res, drop_dim = drop_dim)
+    img = check_nifti(res, drop_dim = drop_dim, fast = TRUE)
     if (verbose) {
       message("# rescaling data")
     }
@@ -56,7 +57,9 @@ ct_dcm2nii = function(basedir = ".", merge_files = TRUE,
   })
   if (length(res) == 1) {
     img = img[[1]]
+    names(img) = res
   }
   attr(img, "dcm2nii_result") = out$result
+  attr(img, "files") = res
   return(img)
 }
