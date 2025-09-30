@@ -117,6 +117,8 @@ ct_ear_mask = function(
         zs = unique(ind$dim3)
         run_inds = expand.grid(xs, ys, zs)
         run_inds = as.matrix(run_inds)
+      } else {
+        run_inds = NULL
       }
       inds = rbind(inds, run_inds)
 
@@ -127,6 +129,8 @@ ct_ear_mask = function(
         zs = unique(ind$dim3)
         run_inds = expand.grid(xs, ys, zs)
         run_inds = as.matrix(run_inds)
+      } else {
+        run_inds = NULL
       }
       inds = rbind(inds, run_inds)
 
