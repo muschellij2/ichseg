@@ -2,6 +2,7 @@
 % Please edit documentation in R/ct_dcm2nii.R
 \name{ct_dcm2nii}
 \alias{ct_dcm2nii}
+\alias{ct_process_dcm2nii}
 \title{CT DICOM to NIfTI conversion}
 \usage{
 ct_dcm2nii(
@@ -10,6 +11,17 @@ ct_dcm2nii(
   verbose = TRUE,
   drop_dim = TRUE,
   ...,
+  cleanup = FALSE,
+  ignore_roi_if_multiple = FALSE,
+  fail_on_error = FALSE,
+  uncorrected = FALSE
+)
+
+ct_process_dcm2nii(
+  out,
+  verbose = TRUE,
+  drop_dim = TRUE,
+  cleanup = FALSE,
   ignore_roi_if_multiple = FALSE,
   fail_on_error = FALSE,
   uncorrected = FALSE
@@ -28,6 +40,9 @@ dimensions}
 
 \item{...}{Additional parameters passed to \code{\link{dcm2nii}}}
 
+\item{cleanup}{delete any temporary directories created during conversion,
+overrides `dcm2nii` cleanup option.}
+
 \item{ignore_roi_if_multiple}{additional argument to pass to
 [dcm2niir::check_dcm2nii()] to remove ROI overlays if present}
 
@@ -37,6 +52,8 @@ dimensions}
 \item{uncorrected}{passed to [dcm2niir::check_dcm2nii()] to grab the
 "uncorrected" scan.  Do not use unless you understand the `dcm2niix`
 correction process.}
+
+\item{out}{output from [ct_dcm2nii]}
 }
 \value{
 A list or singular \code{nifti} image
